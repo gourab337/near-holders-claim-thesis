@@ -9,9 +9,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v5
-      - name: Rebuild every number from data/raw/ (offline)
-        run: make
-      - name: Rebuild must match the committed files
-        run: git diff --exit-code
+      - name: Rebuild from data/raw/ (offline) and compare with the committed outputs
+        run: make check
       - name: Tests
         run: make test

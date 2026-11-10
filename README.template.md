@@ -1,6 +1,6 @@
 # After NEAR Intents froze funds, its volume held. Its public record didn't.
 
-[![check](https://github.com/gourab337/near-intents-freeze-thesis/actions/workflows/check.yml/badge.svg)](https://github.com/gourab337/near-intents-freeze-thesis/actions/workflows/check.yml) (on every push GitHub rebuilds every number from the committed raw data, fails if anything differs from what is committed, and runs the tests)
+[![check](https://github.com/gourab337/near-intents-freeze-thesis/actions/workflows/check.yml/badge.svg)](https://github.com/gourab337/near-intents-freeze-thesis/actions/workflows/check.yml) (on every push GitHub rebuilds every number from the committed raw data on Linux, checks it reproduces the committed thesis, and runs the tests)
 
 NEAR HACKATHON 2026 · **Investment Thesis track** · **Live dashboard:** https://gourab337.github.io/near-intents-freeze-thesis/ · **Demo video (96 s, narrated):** [`docs/demo.mp4`](docs/demo.mp4)
 
@@ -36,7 +36,8 @@ Requires [uv](https://docs.astral.sh/uv/) (it installs Python 3.12 and the pinne
 
 | Do | See |
 |---|---|
-| `make` | It prints `H1 abnormal volume, 28 days from {{events.T}}: {{H1.stat_pct|pct}}  placebo-in-time p = {{H1.p_placebo_time|p}}  ->  {{H1.verdict}}`, and rewrites `data/processed/results.json`, `docs/data.js`, `THESIS.md`, `docs/thesis.html` and this `README.md` from `data/raw/`. `git status` shows no change, because the build is deterministic. |
+| `make` | It prints `H1 abnormal volume, 28 days from {{events.T}}: {{H1.stat_pct|pct}}  placebo-in-time p = {{H1.p_placebo_time|p}}  ->  {{H1.verdict}}`, and rewrites `data/processed/results.json`, `docs/data.js`, `THESIS.md`, `docs/thesis.html` and this `README.md` from `data/raw/`. On macOS `git status` then shows no change. On Linux `results.json` and `docs/data.js` can differ in the 12th significant digit, because numpy's linear algebra rounds differently there; the thesis and README text stay identical. |
+| `make check` | Rebuilds, then prints `Rebuild matches the commit: ...`: the README, thesis and thesis page are byte-identical to the committed ones, and `results.json` matches to 1e-9 relative. GitHub runs this and `make test` on every push (badge above). |
 | `make test` | 12 tests pass: raw files match the hashes in `data/raw/MANIFEST.json`; the timestamp proofs commit to `PREREGISTRATION.md` and `PREDICTIONS.md`, each with a Bitcoin attestation; the estimators recover known answers on synthetic data; verdicts and tripwires follow their written rules; the thesis and this README have no unfilled numbers; the dashboard data equals `results.json`. |
 | `python3 -m http.server -d docs 8000`, then open http://localhost:8000 | The dashboard: verdict, tripwires, predictions and eight exhibits, each with the function in `src/build.py` that produced it. |
 | `make fetch` (optional, needs network) | Re-downloads every series into `data/raw/` and rewrites the manifest. The numbers will move, because the sources keep updating. |
