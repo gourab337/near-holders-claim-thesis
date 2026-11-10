@@ -1,0 +1,106 @@
+{
+ "intents_volume": {
+  "url": "https://api.llama.fi/summary/dexs/near-intents?dataType=dailyVolume",
+  "fetched_at": "2026-11-10T09:46:33Z",
+  "sha256": "8ae77f71a76380ca38dccaffea2f755c30586a266f0ddce812a5594c2dd9db96",
+  "bytes": 50434
+ },
+ "intents_fees": {
+  "url": "https://api.llama.fi/summary/fees/near-intents?dataType=dailyFees",
+  "fetched_at": "2026-11-10T09:46:34Z",
+  "sha256": "3e6684eaff6f23002ce1462d68e336faa7b4a47945f9a7633c37c5b877fd4ee7",
+  "bytes": 38927
+ },
+ "intents_revenue": {
+  "url": "https://api.llama.fi/summary/fees/near-intents?dataType=dailyRevenue",
+  "fetched_at": "2026-11-10T09:46:34Z",
+  "sha256": "6a4e9fbaa4da4131031b95a2c4b59230e1d3962b04d43832bc012f687d7f59a5",
+  "bytes": 36522
+ },
+ "intents_balances": {
+  "url": "https://api.llama.fi/protocol/near-intents",
+  "fetched_at": "2026-11-10T09:46:36Z",
+  "sha256": "a59239d637334dc54f1977851b2641eae3026fe92604c1e12e305b01872fc061",
+  "bytes": 3116776
+ },
+ "donor_thorchain-dex": {
+  "url": "https://api.llama.fi/summary/dexs/thorchain-dex?dataType=dailyVolume",
+  "fetched_at": "2026-11-10T09:46:37Z",
+  "sha256": "0286c13ff7eaac8244702af3f80e589fb485ba9b8b40d6e44922f1c803f516fb",
+  "bytes": 157856
+ },
+ "donor_chainflip-amm": {
+  "url": "https://api.llama.fi/summary/dexs/chainflip-amm?dataType=dailyVolume",
+  "fetched_at": "2026-11-10T09:46:40Z",
+  "sha256": "69bd6cf30e767a1769183fc411ebf904578a0b144d4a1083a71280b471c0038f",
+  "bytes": 69494
+ },
+ "donor_maya-protocol": {
+  "url": "https://api.llama.fi/summary/dexs/maya-protocol?dataType=dailyVolume",
+  "fetched_at": "2026-11-10T09:46:42Z",
+  "sha256": "54b35c6cf6f1fe542ccacace78ac556e2ac72143a2a9b8087ccd43c4440abaad",
+  "bytes": 36124
+ },
+ "donor_li.fi-bridge-aggregator": {
+  "url": "https://api.llama.fi/summary/bridge-aggregators/li.fi-bridge-aggregator?dataType=dailyBridgeVolume",
+  "fetched_at": "2026-11-10T09:46:46Z",
+  "sha256": "5820f05b64736ea983c0ddce1fac7fb1826cb6b09b9dae0a02a65071989e2c00",
+  "bytes": 1597842
+ },
+ "donor_socket-protocol": {
+  "url": "https://api.llama.fi/summary/bridge-aggregators/socket-protocol?dataType=dailyBridgeVolume",
+  "fetched_at": "2026-11-10T09:46:48Z",
+  "sha256": "a0555916d92d3538bcb305b1a211419911935d074c8f6918cb91dc43864dd903",
+  "bytes": 280943
+ },
+ "donor_jumper-bridge-aggregator": {
+  "url": "https://api.llama.fi/summary/bridge-aggregators/jumper-bridge-aggregator?dataType=dailyBridgeVolume",
+  "fetched_at": "2026-11-10T09:46:51Z",
+  "sha256": "02bc23ade0640158256a713557d141949ca3aff9b0ae74ac49f346f17cd4e16c",
+  "bytes": 1623883
+ },
+ "donor_0x-bridge-aggregator": {
+  "url": "https://api.llama.fi/summary/bridge-aggregators/0x-bridge-aggregator?dataType=dailyBridgeVolume",
+  "fetched_at": "2026-11-10T09:46:54Z",
+  "sha256": "8034d43cd8af6190641c368a8b29a64a74cf26440d031a93c20d570839bd1ff1",
+  "bytes": 238697
+ },
+ "donor_rango": {
+  "url": "https://api.llama.fi/summary/bridge-aggregators/rango?dataType=dailyBridgeVolume",
+  "fetched_at": "2026-11-10T09:46:57Z",
+  "sha256": "d9c27ba9401a534806c06c2a313822254581d8f2c3fdeeaf018da56bb03427cf",
+  "bytes": 755426
+ },
+ "market_near": {
+  "url": "https://api.coingecko.com/api/v3/coins/near/market_chart?vs_currency=usd&days=365&interval=daily",
+  "fetched_at": "2026-11-10T09:46:58Z",
+  "sha256": "867241ec137743b6f6f572081a9079b25dd3d100634426480ca6ce3bc6fc0c29",
+  "bytes": 37949
+ },
+ "market_zcash": {
+  "url": "https://api.coingecko.com/api/v3/coins/zcash/market_chart?vs_currency=usd&days=365&interval=daily",
+  "fetched_at": "2026-11-10T09:47:01Z",
+  "sha256": "a0c730968f0930df505606583b1d65981b5e5e5f1fa5b3cc69db24da10cd3ea1",
+  "bytes": 37716
+ },
+ "market_bitcoin": {
+  "url": "https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=365&interval=daily",
+  "fetched_at": "2026-11-10T09:47:04Z",
+  "sha256": "940377a73af5cf6bd82b649a3c38bf791c946fcda6bc8499130941c64829e734",
+  "bytes": 37755
+ },
+ "bq_intents_signers_daily": {
+  "file": "bq_intents_signers_daily.csv",
+  "url": "bigquery:sql/intents_signers_daily.sql",
+  "fetched_at": "2026-11-10T13:54:30Z",
+  "sha256": "af1cee2a78bed326dc5aba926574b24d6954694784c07dfedcc92359e4da93d4",
+  "bytes": 1628306
+ },
+ "bq_circulating_supply": {
+  "file": "bq_circulating_supply.csv",
+  "url": "bigquery:sql/circulating_supply.sql",
+  "fetched_at": "2026-11-10T13:54:32Z",
+  "sha256": "f71f340d861fc700b33d907bde9eb014c8fbdaa52198538d79a6d2c61476e4e3",
+  "bytes": 20348
+ }
+}

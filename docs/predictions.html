@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NEAR Intents Predictions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="band"><div class="in"><span>Digital Assets Research · Investment Thesis</span><span>NEAR Hackathon 2026 · Investment Thesis Track</span></div></div>
+<main class="prose">
+<p class="back"><a href="index.html">← Dashboard</a></p>
+<h1>Predictions: what this thesis says will happen next</h1>
+<p>Written 2026-11-11, after the analysis and before any of the data that will score them exists. The SHA-256 of this file is timestamped with OpenTimestamps (<code>PREDICTIONS.md.ots</code>). Each prediction is scored from the same pipeline: <code>make fetch &amp;&amp; make fetch-bq &amp;&amp; make</code>.</p>
+<p>The thesis is: NEAR Intents' order flow survives trust shocks, so the long-term case for NEAR rests on Intents growing again. These three predictions are what that thesis commits to. If any one fails, the thesis is wrong in the way the prediction names.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Prediction</th>
+<th>Resolves</th>
+<th>Scored from</th>
+<th>If it fails</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>P1</td>
+<td><strong>Flow stays durable.</strong> In every 28-day window ending from 2026-12-08 to 2027-03-31 (so every day scored is after 2026-11-10), Intents volume stays above the calm-period limit against the pre-registered model (abnormal volume above −29.5%).</td>
+<td>2027-03-31</td>
+<td>the order-flow tripwire in <code>src/build.py</code></td>
+<td>Trust shocks or rivals are taking share: the durability half of the thesis fails.</td>
+</tr>
+<tr>
+<td>P2</td>
+<td><strong>Growth comes back.</strong> Intents sets a new monthly volume record, above September 2026's $4.80B, in at least one calendar month from December 2026 to March 2027 (November is excluded because its first days are already observed).</td>
+<td>2027-03-31</td>
+<td>DefiLlama monthly volume, as in Exhibit 2</td>
+<td>Growth has stalled for 18 months: the growth half of the thesis fails.</td>
+</tr>
+<tr>
+<td>P3</td>
+<td><strong>Price holds.</strong> In every 28-day window ending from 2026-12-08 to 2027-03-31 (so every day scored is after 2026-11-10), the take rate stays above the calm-period average of 13.6 bps.</td>
+<td>2027-03-31</td>
+<td>the take-rate tripwire in <code>src/build.py</code></td>
+<td>Intents is buying volume with price, and revenue per dollar falls.</td>
+</tr>
+</tbody>
+</table>
+<h2>Position</h2>
+<p><strong>Long NEAR.</strong> One of the three tripwires (Zcash balances) is broken now. The position moves to neutral if a second tripwire breaks, or if P2 fails on 2027-03-31.</p>
+</main>
+</body>
+</html>
