@@ -549,17 +549,10 @@ def main():
     R["position"] = {"n_broken": n_broken, "n": len(R["tripwires"]),
                      "label": "Long" if n_broken == 0 else "Long, one tripwire broken" if n_broken == 1 else "Neutral"}
 
-    # 12 significant digits: macOS and Linux BLAS differ in the last digits, and the committed files must rebuild identically on both.
-    def sig12(x):
-        if isinstance(x, float): return float(f"{x:.12g}")
-        if isinstance(x, dict): return {k: sig12(v) for k, v in x.items()}
-        if isinstance(x, list): return [sig12(v) for v in x]
-        return x
-    out = sig12(R)
     os.makedirs(os.path.join(ROOT, "data", "processed"), exist_ok=True)
     with open(os.path.join(ROOT, "data", "processed", "results.json"), "w") as f:
-        json.dump(out, f, indent=1)
-    write(os.path.join(ROOT, "docs", "data.js"), "window.RESULTS = " + json.dumps(out, separators=(",", ":")) + ";\n")
+        json.dump(R, f, indent=1)
+    write(os.path.join(ROOT, "docs", "data.js"), "window.RESULTS = " + json.dumps(R, separators=(",", ":")) + ";\n")
     render(R)
     return R
 
