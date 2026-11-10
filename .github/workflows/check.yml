@@ -1,0 +1,17 @@
+name: check
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+jobs:
+  rebuild-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+      - name: Rebuild every number from data/raw/ (offline)
+        run: make
+      - name: Rebuild must match the committed files
+        run: git diff --exit-code
+      - name: Tests
+        run: make test

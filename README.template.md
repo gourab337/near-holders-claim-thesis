@@ -1,6 +1,10 @@
 # After NEAR Intents froze funds, its volume held. Its public record didn't.
 
+[![check](https://github.com/gourab337/near-intents-freeze-thesis/actions/workflows/check.yml/badge.svg)](https://github.com/gourab337/near-intents-freeze-thesis/actions/workflows/check.yml) (on every push GitHub rebuilds every number from the committed raw data, fails if anything differs from what is committed, and runs the tests)
+
 NEAR HACKATHON 2026 · **Investment Thesis track** · **Live dashboard:** https://gourab337.github.io/near-intents-freeze-thesis/ · **Demo video (96 s, narrated):** [`docs/demo.mp4`](docs/demo.mp4)
+
+> **In 30 seconds.** In September NEAR Intents showed it can freeze users' funds. If users cared most about trustlessness, they should have left. They didn't: reported volume held ({{H1.stat_pct|pct}} against a model of rival venues). What changed is what anyone can check: the share of volume visible as public swaps on NEAR's chain fell from {{privacy.windows.after_ga|share0}} in the summer to {{privacy.windows.after|share0}} by November, and on that public slice the same model reads {{privacy.h1_public_pct|pct}} (not significant). **Position: {{position.label}}.** That is my judgment, not a pre-registered output; its two exits are timestamped in Bitcoin before the data that will test them exists.
 
 - **The bear case.** A cross-chain venue whose operator can freeze funds is not trustless, so users will leave the first time it uses that power.
 - **The test.** Two freeze stories reached the public three weeks apart: a Zcash user's $589k held for 50 days ({{events.E0}}), then SHIELD blocking more than $50M of transfers tied to the Bitget hackers and freezing $503k mid-swap (reported {{events.T}}). Then a $3.8M exploit paused the contract ({{events.E2}}; funds returned the next day).
