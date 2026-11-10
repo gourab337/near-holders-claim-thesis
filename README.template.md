@@ -11,7 +11,7 @@ NEAR HACKATHON 2026 · **Investment Thesis track** · **Live dashboard:** https:
 The tests and decision rules are in [`PREREGISTRATION.md`](PREREGISTRATION.md). Its OpenTimestamps proof anchors it in Bitcoin block 975284 (10:15 UTC, 2026-11-10), half an hour after the data download began. The thesis states exactly what that proves and what it does not.
 
 - **Thesis:** [`THESIS.md`](THESIS.md) (also rendered as `docs/thesis.html`)
-- **Predictions:** [`PREDICTIONS.md`](PREDICTIONS.md), three dated calls to 2027-03-31, scored on future data only and timestamped with OpenTimestamps
+- **Predictions:** [`PREDICTIONS.md`](PREDICTIONS.md), three dated calls to 2027-03-31, scored on future data only and timestamped in Bitcoin block 975308
 - **Live dashboard:** https://gourab337.github.io/near-intents-freeze-thesis/ (source: [`docs/index.html`](docs/index.html), a static page that reads `docs/data.js`)
 
 ## The evidence (snapshot to {{last_day}})
@@ -33,7 +33,7 @@ Requires [uv](https://docs.astral.sh/uv/) (it installs Python 3.12 and the pinne
 | Do | See |
 |---|---|
 | `make` | It prints `H1 abnormal volume, 28 days from {{events.T}}: {{H1.stat_pct|pct}}  placebo-in-time p = {{H1.p_placebo_time|p}}  ->  {{H1.verdict}}`, and rewrites `data/processed/results.json`, `docs/data.js`, `THESIS.md`, `docs/thesis.html` and this `README.md` from `data/raw/`. `git status` shows no change, because the build is deterministic. |
-| `make test` | 11 tests pass: raw files match the hashes in `data/raw/MANIFEST.json`; the timestamp proofs commit to `PREREGISTRATION.md` (with a Bitcoin attestation) and `PREDICTIONS.md`; the estimators recover known answers on synthetic data; verdicts and tripwires follow their written rules; the thesis and this README have no unfilled numbers; the dashboard data equals `results.json`. |
+| `make test` | 11 tests pass: raw files match the hashes in `data/raw/MANIFEST.json`; the timestamp proofs commit to `PREREGISTRATION.md` (with a Bitcoin attestation) and `PREDICTIONS.md` (both with Bitcoin attestations); the estimators recover known answers on synthetic data; verdicts and tripwires follow their written rules; the thesis and this README have no unfilled numbers; the dashboard data equals `results.json`. |
 | `python3 -m http.server -d docs 8000`, then open http://localhost:8000 | The dashboard: verdict, tripwires and eight exhibits, each with the function in `src/build.py` that produced it. |
 | `make fetch` (optional, needs network) | Re-downloads every series into `data/raw/` and rewrites the manifest. The numbers will move, because the sources keep updating. |
 | `make fetch-bq` (optional, needs `gcloud` login and a billing project) | Re-runs `sql/` on NEAR's public BigQuery dataset (about 15 GB, inside the free tier) and rewrites those entries in the manifest. |
@@ -43,7 +43,7 @@ Requires [uv](https://docs.astral.sh/uv/) (it installs Python 3.12 and the pinne
 | Path | What it is |
 |---|---|
 | `PREREGISTRATION.md` | The plan, with its OpenTimestamps proof (`.ots`, Bitcoin block 975284) |
-| `PREDICTIONS.md` | Three dated, falsifiable calls to 2027-03-31, with their OpenTimestamps proof |
+| `PREDICTIONS.md` | Three dated, falsifiable calls to 2027-03-31, with their OpenTimestamps proof (Bitcoin block 975308) |
 | `src/fetch.py` | Downloads every series; records URL, time and SHA-256 in `data/raw/MANIFEST.json` |
 | `src/fetch_bigquery.py`, `sql/` | The NEAR chain queries (BigQuery) and the script that runs them |
 | `src/build.py` | All analysis. Every number in the thesis and on the dashboard comes from here |

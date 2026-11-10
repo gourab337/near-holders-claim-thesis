@@ -45,7 +45,7 @@ I wrote the tests and decision rules in `PREREGISTRATION.md` before downloading 
 
 **Position: {{position.label}}.** This is my judgment, not an output of the pre-registered rules (deviation 6). Long NEAR, with two exits: neutral if a second tripwire breaks, or if Intents has not set a new monthly volume record by 2027-03-31. {{position.n_broken}} of {{position.n}} tripwires is broken now.
 
-**Predictions.** `PREDICTIONS.md` commits the thesis to three dated, falsifiable calls to 2027-03-31, scored only on data after 2026-11-10 and timestamped with OpenTimestamps (`PREDICTIONS.md.ots`): order flow stays above its limit, Intents sets a new monthly volume record, and the take rate stays above its calm-period average.
+**Predictions.** `PREDICTIONS.md` commits the thesis to three dated, falsifiable calls to 2027-03-31, scored only on data after 2026-11-10 and timestamped with OpenTimestamps in Bitcoin block 975308 (`PREDICTIONS.md.ots`): order flow stays above its limit, Intents sets a new monthly volume record, and the take rate stays above its calm-period average.
 
 ## Evidence
 

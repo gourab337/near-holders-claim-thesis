@@ -26,6 +26,7 @@ class Snapshot(unittest.TestCase):
         """PREDICTIONS.md is frozen: its timestamp proof must commit to the file as it is now."""
         ots = pathlib.Path(ROOT, "PREDICTIONS.md.ots").read_bytes()
         self.assertIn(hashlib.sha256(pathlib.Path(ROOT, "PREDICTIONS.md").read_bytes()).digest(), ots)
+        self.assertIn(bytes.fromhex("0588960d73d71901"), ots)  # Bitcoin block 975308
 
 
 class Method(unittest.TestCase):
