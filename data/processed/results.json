@@ -8492,6 +8492,7 @@
   "visible_event_vs_summer": 0.7000075081053957,
   "visible_after_vs_summer": 0.31737372829614113,
   "events": {
+   "deposit_change_pct": -0.12157111010316446,
    "from": "2026-08-01",
    "deploys": [
     "2026-10-02",

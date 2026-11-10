@@ -141,7 +141,7 @@ summary { cursor: pointer; color: var(--s1); font-weight: 500; }
 
 /* "what the freeze bears got right and wrong" panel */
 .bears { margin-top: 40px; }
-.bgrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; border-top: 1px solid var(--hair); }
+.bgrid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; border-top: 1px solid var(--hair); }
 .bgrid div { padding: 14px 18px 6px 0; font-size: 13px; color: var(--ink-2); }
 .bgrid div + div { padding-left: 18px; border-left: 1px solid var(--hair); }
 .bgrid b { display: inline-block; font-size: 10px; letter-spacing: .12em; text-transform: uppercase; padding: 3px 6px; margin-bottom: 8px; color: #fff; }

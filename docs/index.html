@@ -19,8 +19,8 @@
     <div><b>The bear case</b>A venue that can freeze funds isn't trustless. Users leave the first time it does.</div>
     <div><b>The test</b>Two freeze stories three weeks apart ($589k held; $50M blocked, $503k frozen), then a $3.8M exploit.</div>
     <div><b>The result</b>Reported volume held. The share visible onchain fell from three-fifths to under a fifth.</div>
-    <div><b>The catch</b>Onchain, public volume fell <span id="stPub"></span> vs model. Why the record left is unknown.</div>
-    <div><b>The bet</b>Trusted beats trustless, but most flow can no longer be checked onchain. Revenue must grow about <span id="stNeed"></span>.</div>
+    <div><b>The catch</b>Onchain, public volume came in <span id="stPub"></span> vs model (not significant). Why the record left is unknown.</div>
+    <div><b>The bet</b>My read: trusted beats trustless. But most flow can no longer be checked onchain. Revenue must grow about <span id="stNeed"></span>.</div>
   </div>
   <div class="byline"><span><b>Method</b> Pre-registered event study, timestamped with OpenTimestamps</span><span><b>Sources</b> DefiLlama, CoinGecko, NEAR BigQuery</span><span><a href="thesis.html">Read the full thesis →</a></span><span><a href="predictions.html">Predictions to Mar 2027 →</a></span></div>
 
@@ -64,9 +64,10 @@
   <section class="bears">
     <h2>What the freeze bears got right and wrong</h2>
     <div class="bgrid">
-      <div><b class="w">Wrong</b><strong>The reported flow leaves.</strong><span id="bWrong"></span> What left was its public record: intents kept executing while public swaps fell (Exhibit 1).</div>
-      <div><b class="r">Partly right</b><strong>Some users and the momentum leave.</strong><span id="bRight"></span></div>
-      <div><b class="n">Not shown</b><strong>Why the flow stayed.</strong>The data shows flow stayed after a freeze, not why. Most flow is relayed swaps routed by integrators, which would explain it too. "Trusted, not trustless" is the author's reading.</div>
+      <div><b class="w">Wrong</b><strong>The reported flow leaves.</strong><span id="bWrong"></span></div>
+      <div><b class="n">Missed</b><strong>The public record leaves.</strong>The share of volume visible as public swaps fell from about three-fifths to under a fifth; from late October public swaps fell while executed intents doubled (Exhibit 1).</div>
+      <div><b class="r">Partly right</b><strong>Public activity weakens.</strong><span id="bRight"></span></div>
+      <div><b class="n">Not shown</b><strong>Why the record left.</strong>Confidential Intents, the October upgrades and a change in how solvers settle all fit; the data does not separate them.</div>
     </div>
   </section>
 
@@ -115,7 +116,7 @@
 
   <div class="two">
     <section class="exhibit">
-      <div class="hd"><span class="no">Exhibit 5</span><h3>The real result looks like an ordinary month, not a shock</h3></div>
+      <div class="hd"><span class="no">Exhibit 5</span><h3>Against the full calm period the result is ordinary; against the summer it is weak</h3></div>
       <p class="sub">The same test run at every calm-period date, <span id="plcFrom"></span> – <span id="plcTo"></span>.</p>
       <div class="chart" id="cPlc"></div>
       <p class="note" id="plcNote"></p>
@@ -178,7 +179,7 @@ const last = R.daily[R.daily.length - 1];
 text("lastday", fmtDate(R.last_day) + " " + R.last_day.slice(0, 4));
 text("hero", `${(100 * R.privacy.windows.after_ga).toFixed(0)}% → ${(100 * R.privacy.windows.after).toFixed(0)}%`);
 text("heroMeta", `Summer to November, from NEAR BigQuery. Meanwhile reported total volume came in ${pct(H1.stat_pct)} against its model (p = ${H1.p_placebo_time.toFixed(2)}; detection threshold ${pct(H1.mde_pct)}).`);
-text("stPub", pct(R.privacy.h1_public_pct).replace("−", ""));
+text("stPub", pct(R.privacy.h1_public_pct));
 text("posLabel", R.position.label);
 text("gridN", R.grid.n);
 text("gridNote", `Every estimate below −15% includes 0x, whose mean daily volume in the event window was ${R.grid.zero_x_growth.toFixed(1)}× its estimation-window mean. That reading was made after seeing the results.`);
@@ -190,11 +191,11 @@ const mon = m => new Date(m + "-01T00:00:00Z").toLocaleDateString("en-GB", { mon
 text("stNeed", LT.growth_needed.toFixed(1) + "×");
 text("ltSub", `Monthly totals, ${mon(LT.first_month)} to ${mon(LT.last_month)}; revenue from when DefiLlama began reporting it. Shaded: the months of the freeze and the exploit.`);
 const EW = R.privacy.events.windows;
-text("privNote", `Public swaps fell from ${Math.round(EW.before.token_diff / 1000)}k a day in August to ${Math.round(EW.between.token_diff / 1000)}k after the first freeze story and ${Math.round(EW.after.token_diff / 1000)}k from late October, while executed intents went from ${Math.round(EW.before.intents_executed / 1000)}k to ${Math.round(EW.after.intents_executed / 1000)}k and deposits held. The July launch moved the visible share ${pct(R.privacy.chg.ga.pct)}, an ordinary change. Where the swaps went is not identified.`);
+text("privNote", `Public swaps fell from ${Math.round(EW.before.token_diff / 1000)}k a day in August to ${Math.round(EW.between.token_diff / 1000)}k after the first freeze story and ${Math.round(EW.after.token_diff / 1000)}k from late October, while executed intents went from ${Math.round(EW.before.intents_executed / 1000)}k to ${Math.round(EW.after.intents_executed / 1000)}k and deposits dipped ${Math.abs(100 * R.privacy.events.deposit_change_pct).toFixed(0)}%. The July launch moved the visible share ${pct(R.privacy.chg.ga.pct)}, an ordinary change. Where the swaps went is not identified.`);
 const takeaways = [
   ["The public record left.", `The share of volume visible as public swaps went from ${(100 * R.privacy.windows.after_ga).toFixed(0)}% in the summer to ${(100 * R.privacy.windows.after).toFixed(0)}% by November. From late October public swaps fell while executed intents doubled; why is not identified.`],
   ["The engine is uneven.", `${mon(LT.last_month)} volume was ${usd(LT.last_month_volume)}: ${LT.volume_yoy.toFixed(1)}× a year earlier, when Intents was still ramping, but only ${LT.last_vs_first_peak.toFixed(2)}× its ${mon(LT.first_peak_month)} peak.`],
-  ["Reported volume held; public volume fell.", `DefiLlama's total: ${pct(H1.stat_pct)} against the model (pre-registered verdict: ${H1.prereg_outcome}). Public onchain volume: ${pct(R.privacy.h1_public_pct)} (p = ${R.privacy.h1_public_p.toFixed(2)}).`],
+  ["Reported volume held; public volume weakened.", `DefiLlama's total: ${pct(H1.stat_pct)} against the model (pre-registered verdict: ${H1.prereg_outcome}). Public onchain volume: ${pct(R.privacy.h1_public_pct)} (p = ${R.privacy.h1_public_p.toFixed(2)}, not significant).`],
   ["But the momentum stopped.", `All summer Intents beat its model by ${pct(R.onchain_check.volume.placebo_min_pct, 0)} to ${pct(R.onchain_check.volume.placebo_max_pct, 0)}; in the event window it only matched it. Onchain relayed transactions show the same.`],
   ["No price cuts.", `Take rate ${W0.between.take_rate_bps.toFixed(1)} bps in the three weeks before the shocks, ${W0.event.take_rate_bps.toFixed(1)} bps during them.`],
   ["The growth target.", `At most ${(100 * LT.buyback_coverage).toFixed(0)}% of new NEAR supply (${(LT.supply_growth_yr / 1e6).toFixed(1)}M a year) could be bought back with today's revenue. Covering all of it takes about ${LT.growth_needed.toFixed(1)}× more (${LT.growth_needed_calm_price.toFixed(0)}× to ${LT.growth_needed_calm_capture.toFixed(0)}× under calm-period price or fee share).`],
@@ -402,7 +403,7 @@ function barChart(id, rows, key, color, fmt, height = 220) {
 }
 
 text("bWrong", `Volume came in ${pct(H1.stat_pct)} against the model over 28 days. Zcash holders, the users most exposed to a freeze, did not pull out that month (${pct(R.H4.after_T_28d.zec_pct)}, within normal variation).`);
-text("bRight", `All summer Intents beat its model by ${pct(R.onchain_check.volume.placebo_min_pct, 0)} to ${pct(R.onchain_check.volume.placebo_max_pct, 0)}; in the event window it only matched it. ${(100 * R.H5.cohorts.returning.rate).toFixed(0)}% of accounts that had used Intents before September came back, against ${(100 * R.H5.cohorts.returning.placebo_p50).toFixed(0)}% in calm periods. Zcash balances drained a month later.`);
+text("bRight", `Public onchain volume came in ${pct(R.privacy.h1_public_pct)} against the model (p = ${R.privacy.h1_public_p.toFixed(2)}, not significant). All summer Intents beat its model by ${pct(R.onchain_check.volume.placebo_min_pct, 0)} to ${pct(R.onchain_check.volume.placebo_max_pct, 0)}; in the event window it only matched it. ${(100 * R.H5.cohorts.returning.rate).toFixed(0)}% of accounts that had used Intents before September came back, against ${(100 * R.H5.cohorts.returning.placebo_p50).toFixed(0)}% in calm periods. Zcash balances drained a month later.`);
 const zoomRows = (() => {
   const s = H1.series, out = [];
   s.forEach((r, i) => { if (i < 6) return; const w = s.slice(i - 6, i + 1); out.push({ d: r.d, actual: w.reduce((a, x) => a + x.actual, 0) / 7, predicted: w.reduce((a, x) => a + x.predicted, 0) / 7 }); });

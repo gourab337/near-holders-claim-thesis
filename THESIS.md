@@ -6,17 +6,17 @@ NEAR HACKATHON 2026 · Investment Thesis track · data snapshot to 2026-11-09 ·
 >
 > **The test.** Two freeze stories reached the public three weeks apart. On 2026-09-08 a Zcash user reported $589k held for 50 days. After the Bitget hack, SHIELD blocked more than $50M of transfers tied to the hackers and froze $503k mid-swap (reported 2026-09-29). Then a $3.8M exploit paused the contract (2026-10-01); the funds were returned the next day.
 >
-> **The result.** Total volume held: +1.0% against a model built from rival venues and the market, and deposits held. Its public record did not. On NEAR's chain the share of volume visible as public swaps went from 59% in the summer to 19% by November, and from late October public swap events fell to a fifth of August's level while executed intents doubled.
+> **The result.** Total volume held: +1.0% against a model built from rival venues and the market, and deposits dipped 12.2%. Its public record did not. On NEAR's chain the share of volume visible as public swaps went from 59% in the summer to 19% by November, and from late October public swap events fell to a fifth of August's level while executed intents doubled.
 >
-> **The catch.** Total volume is DefiLlama's figure, and most of it can no longer be checked onchain: run on public onchain volume, the same pre-registered test gives -28.6% (p = 0.20), close to the detection threshold of -29.5%. Why the swaps left public view is not identified: Confidential Intents, contract upgrades on 2026-10-02 and 2026-10-07, and a change in how solvers settle all fit. Intents' summer momentum stopped, and Zcash balances drained a month later.
+> **The catch.** Total volume is DefiLlama's figure, and most of it can no longer be checked onchain: run after the fact on public onchain volume, the same model gives -28.6% (p = 0.20, not significant). Why the swaps left public view is not identified: Confidential Intents, contract upgrades on 2026-10-02 and 2026-10-07, and a change in how solvers settle all fit. Intents' summer momentum stopped, and Zcash balances drained a month later.
 >
 > **The bet.** The freeze bears were wrong about the reported flow. My reading: being trusted, not trustless, is NEAR's edge. But an investor can no longer check most of Intents' volume on the chain, so the case rests on reported numbers, and revenue must still grow about 5.2× for buybacks to offset new NEAR supply. Position: **Long, one tripwire broken**.
 
 ## What the freeze bears got right and wrong
 
-- **Wrong, on reported volume: the flow leaves.** DefiLlama's total tracked its model, which is built from rival venues and spot volume, through both events, and deposits held. The pre-registered freeze-channel test (H4) found no Zcash flight in the month after the freeze.
+- **Wrong, on reported volume: the flow leaves.** DefiLlama's total tracked its model, which is built from rival venues and spot volume, through both events, and deposits dipped 12.2%. The pre-registered freeze-channel test (H4) found no Zcash flight in the month after the freeze.
 - **Missed: the public record leaves.** The share of volume visible as public swaps fell from about three-fifths to under a fifth, and from late October public swaps fell while executed intents doubled (section 7). Less of the flow can be seen.
-- **Partly right: public activity weakens.** On public onchain volume the model gives -28.6%. Accounts that had used Intents publicly before September came back less than in any calm period (section 6); they may have left or moved to a less visible route. Intents' summer momentum stopped (section 1). Zcash balances fell past their calm-period limit a month later.
+- **Partly right: public activity weakens.** On public onchain volume the model gives -28.6%, weaker though not significant (p = 0.20). Accounts that had used Intents publicly before September came back less than in any calm period (section 6); they may have left or moved to a less visible route. Intents' summer momentum stopped (section 1). Zcash balances fell past their calm-period limit a month later.
 - **Not shown: why.** The data does not separate users choosing Confidential Intents, the October upgrades and a change in solver settlement.
 
 ## The long-term case
@@ -39,13 +39,13 @@ Both hit the thing that makes Intents revenue worth a multiple: users trusting i
 
 ## Rules fixed in advance
 
-I wrote the tests and decision rules in `PREREGISTRATION.md` before downloading any daily series. That ordering is my statement. What can be checked is the OpenTimestamps proof (`PREREGISTRATION.md.ots`): it anchors the file in Bitcoin block 975284, mined at 10:15 UTC on 2026-11-10. The download began 29 minutes earlier (09:46 UTC, `data/raw/MANIFEST.json`). So the plan was frozen within half an hour of the download and could not have been revised after the results. The proof alone does not show the plan came first.
+I wrote the tests and decision rules in `PREREGISTRATION.md` before downloading any daily series. That ordering is my statement. What can be checked is the OpenTimestamps proof (`PREREGISTRATION.md.ots`): it anchors the file in Bitcoin block 975284, mined at 10:15 UTC on 2026-11-10. The download began 29 minutes earlier (09:46 UTC, `data/raw/MANIFEST.json`). So the plan was frozen within half an hour of the download: any revision after seeing the data had at most that long. The proof alone does not show the plan came first.
 
 **Pre-registered verdict: no collapse, but too imprecise to clear the 25% bar.** 28-day volume came in +1.0% against the model (placebo p = 0.50). The detection threshold is -29.5%: a loss must be at least that large just to reach p = 0.10. The pre-registration required a threshold under 25% before calling the durability objection weakened, so I do not make that claim.
 
 **Position: Long, one tripwire broken.** This is my judgment, not an output of the pre-registered rules (deviation 6). Long NEAR, with two exits: neutral if a second tripwire breaks, or if Intents has not set a new monthly volume record by 2027-03-31. 1 of 3 tripwires is broken now.
 
-**Predictions.** `PREDICTIONS.md` commits the thesis to three dated, falsifiable calls to 2027-03-31, scored only on data after 2026-11-10 and timestamped with OpenTimestamps in Bitcoin block 975308 (`PREDICTIONS.md.ots`): order flow stays above its limit, Intents sets a new monthly volume record, and the take rate stays above its calm-period average.
+**Predictions.** `PREDICTIONS.md` was timestamped at 14:41 UTC on 2026-11-10 (Bitcoin block 975308), before the BigQuery data behind sections 6 and 7 was fetched (14:55 UTC), so it predates the onchain findings. It commits the thesis to three dated, falsifiable calls to 2027-03-31, scored only on data after 2026-11-10 and timestamped with OpenTimestamps in Bitcoin block 975308 (`PREDICTIONS.md.ots`): order flow stays above its limit, Intents sets a new monthly volume record, and the take rate stays above its calm-period average.
 
 ## Evidence
 
@@ -172,7 +172,7 @@ Two measures built from the same `intents.near` events in NEAR's public BigQuery
 | NEAR market cap, 2026-11-09 | $4.75B |
 | Market cap ÷ annualised Intents revenue | 213× |
 
-At 213× revenue, durability of today's flow cannot justify the price. The price needs Intents to keep growing. What this study adds is that the two most likely interruptions to that growth have now happened once, and neither stopped it.
+At 213× revenue, durability of today's flow cannot justify the price. The price needs Intents to keep growing. What this study adds is that the two most likely interruptions to that growth have now happened once, and neither caused a collapse.
 
 ## Tripwires: when this thesis is wrong
 
@@ -195,7 +195,7 @@ Each is recomputed on every build, over the latest 28 days, with limits fixed by
 3. **On-chain sample (H5) replaced.** The keyless block archive was too slow for the planned random block sample. H5 instead uses every transaction to `intents.near` from NEAR's public BigQuery dataset, which is a census rather than a sample. The 2-day and 5-day user tiers are post hoc. The withdrawal-to-deposit ratio was not computed.
 4. **Scroll and Plasma** are not reported by DefiLlama, so H3 uses nine of the eleven paused networks.
 5. **Added after seeing results:** the robustness grid, the NEAR/ZEC/other balance decomposition, the long-term section, the public-visibility analysis (section 7), the rival comparison, the hack-date sensitivity, the new/returning account split, the valuation multiple, the fee-timing check in H2 and the tripwires. None of these change a pre-registered verdict.
-6. **Position.** `PREDICTIONS.md` contains one error that cannot be edited without breaking its timestamp: P2's failure note says growth would have "stalled for 18 months"; if P2 fails in March 2027, the last record will be six months old and the first peak sixteen. The pre-registration maps outcomes to a position only when the detection threshold is under 25%. It was not, so the position (Long, one tripwire broken), its tripwire rule and the predictions in `PREDICTIONS.md` are my judgment, set after seeing the results.
+6. **Position.** `PREDICTIONS.md` names `make fetch && make fetch-bq && make` as its scorer; scoring later also needs the end date set: `make fetch && END_DATE=2027-03-31 make fetch-bq && LAST_DAY=2027-03-31 make` (only `make fetch` is strictly required, since P1 to P3 use DefiLlama). It also contains one error that cannot be edited without breaking its timestamp: P2's failure note says growth would have "stalled for 18 months"; if P2 fails in March 2027, the last record will be six months old and the first peak sixteen. The pre-registration maps outcomes to a position only when the detection threshold is under 25%. It was not, so the position (Long, one tripwire broken), its tripwire rule and the predictions in `PREDICTIONS.md` are my judgment, set after seeing the results.
 
 ## Reproduce
 

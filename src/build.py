@@ -142,6 +142,8 @@ def main():
     panel["near_vol"], panel["zec_vol"] = near.volume, zec.volume
     panel["near_price"], panel["zec_price"], panel["btc_price"] = near.price, zec.price, btc.price
     panel = panel[(panel.index >= near.index.min()) & (panel.index <= LAST_DAY)]
+    # Fail fast: a short or stale download must not be scored as if it reached LAST_DAY.
+    assert panel["volume"].index.max() == LAST_DAY and panel["volume"].notna().all(), f"DefiLlama volume does not reach {LAST_DAY.date()}"
 
     est = (panel.index >= EST_START) & (panel.index <= EST_END)
     evt = (panel.index >= T) & (panel.index < T + pd.Timedelta(days=HORIZON))
@@ -451,7 +453,8 @@ def main():
     v_new = ecl[(ecl.event == "token_diff") & ~ecl.version.str.startswith("0.3")].block_date.min()
     ec_win = {"before": (ec.index.min(), E0 - day), "between": (E0, T - day), "after_upgrade": (deploys.max() + day, T + pd.Timedelta(days=HORIZON - 1)),
               "after": (T + pd.Timedelta(days=HORIZON), LAST_DAY)}
-    R["privacy"]["events"] = {
+    deposit_change = float(ec.loc[ec_win["after"][0]:ec_win["after"][1], "mt_mint"].mean() / ec.loc[ec_win["before"][0]:ec_win["before"][1], "mt_mint"].mean() - 1)
+    R["privacy"]["events"] = {"deposit_change_pct": deposit_change,
         "from": str(ec.index.min().date()), "deploys": [str(d.date()) for d in deploys], "new_format_from": str(v_new.date()),
         "windows": {k: {"from": str(a.date()), "to": str(b.date()), **{c: float(ec.loc[a:b, c].mean()) for c in ("token_diff", "intents_executed", "transfer", "mt_mint")}}
                     for k, (a, b) in ec_win.items()},
@@ -475,7 +478,7 @@ def main():
     monthly = monthly[monthly.index < month_end]
     chain_supply = pd.read_csv(os.path.join(RAW, "bq_circulating_supply.csv"), parse_dates=["block_date"]).set_index("block_date") / 1e24
     supply = chain_supply.total_tokens_supply  # NEAR's own supply table (BigQuery): issuance net of burns
-    s1 = LAST_DAY
+    s1 = min(LAST_DAY, supply.index.max())  # supply needs BigQuery; scoring predictions later does not
     s0 = s1 - pd.Timedelta(days=365)
     supply_growth_yr = float(supply[s1] - supply[s0])
     buyback_yr = R["stake"]["revenue_annualised"] / float(near.price[LAST_DAY])  # upper bound: all revenue buys NEAR
@@ -528,11 +531,12 @@ def main():
     def window(e):
         return slice(e - pd.Timedelta(days=HORIZON - 1), e)
 
+    assert all(ab[window(e)].notna().sum() == HORIZON for e in ends), "a prediction window has missing days"
     p1 = [pct(ab[window(e)].mean()) > -0.295 for e in ends]
     p3 = [1e4 * panel.loc[window(e), "fees"].sum() / panel.loc[window(e), "volume"].sum() > 13.6 for e in ends]
     months = panel["volume"].resample("MS").sum()
     done = [m for m in months.index if pd.Timestamp("2026-12-01") <= m <= pd.Timestamp("2027-03-01") and m + pd.offsets.MonthEnd(0) <= LAST_DAY]
-    record = any(months[m] > 4.80e9 for m in done)
+    record = any(months[m] > months[pd.Timestamp("2026-09-01")] for m in done)  # "above September 2026's" volume, unrounded
     over = LAST_DAY >= P_TO
 
     def every(ok):
