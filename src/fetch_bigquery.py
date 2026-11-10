@@ -1,14 +1,15 @@
 """Run the queries in sql/ against NEAR's public BigQuery dataset and save each result to data/raw/.
 
 Needs the Google Cloud CLI (`bq`), a login (`gcloud auth login`) and a project with billing enabled
-(`gcloud config set project <id>`). The two queries scan about 15 GB together, inside BigQuery's free tier.
+(`gcloud config set project <id>`). The queries scan about 990 GB together, most of it the stablecoin-volume query;
+BigQuery's free tier is 1 TB a month.
 Adds or replaces each result's entry in data/raw/MANIFEST.json (query file, run time, SHA-256).
 """
 import hashlib, json, os, subprocess, time
 
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..")
 RAW = os.path.join(ROOT, "data", "raw")
-QUERIES = ["intents_signers_daily", "circulating_supply"]
+QUERIES = ["intents_signers_daily", "circulating_supply", "intents_stable_volume_daily", "intents_event_counts_daily", "intents_deploys"]
 
 
 def main():

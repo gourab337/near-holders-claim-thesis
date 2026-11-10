@@ -413,6 +413,61 @@ def main():
     R["onchain_check"]["usd_per_tx_aug"] = float(usd_per_tx["2026-08-01"])
     R["onchain_check"]["usd_per_tx_sep"] = float(usd_per_tx["2026-09-01"])
 
+    # ---- The flow went private (exploratory, added after the pre-registration) -------------------
+    # Public onchain swap volume: the stablecoin leg of every dip4 token_diff event (BigQuery). Its ratio to
+    # DefiLlama's total Intents volume falls when flow moves to execution that is not logged as public swaps
+    # (Confidential Intents, generally available to every app from 2026-07-08).
+    sv = pd.read_csv(os.path.join(RAW, "bq_intents_stable_volume_daily.csv"), parse_dates=["block_date"])
+    public = sv.groupby("block_date").usd.sum()
+    GA = pd.Timestamp("2026-07-08")
+
+    def share(a, b):
+        return float(public[a:b].sum() / panel["volume"][a:b].sum())
+
+    def share_chg(t):
+        return float(np.log(share(t, t + pd.Timedelta(days=HORIZON - 1)) / share(t - pd.Timedelta(days=HORIZON), t - pd.Timedelta(days=1))))
+
+    priv_plc = pd.date_range(public.index.min() + pd.Timedelta(days=HORIZON), E0 - pd.Timedelta(days=HORIZON))
+    plc = np.array([share_chg(t) for t in priv_plc])
+    day = pd.Timedelta(days=1)
+    R["privacy"] = {
+        "ga_date": str(GA.date()), "n_placebo": int(len(plc)), "placebo_from": str(priv_plc[0].date()),
+        "placebo_p50_pct": pct(np.median(plc)), "placebo_min_pct": pct(plc.min()),
+        "windows": {k: share(a, b) for k, (a, b) in {
+            "before_ga": (EST_START, GA - day), "after_ga": (GA, E0 - day), "between": (E0, T - day),
+            "event": (T, T + pd.Timedelta(days=HORIZON - 1)), "after": (T + pd.Timedelta(days=HORIZON), LAST_DAY)}.items()},
+        "chg": {k: {"pct": pct(share_chg(t)), "p": float((plc <= share_chg(t)).mean())}
+                for k, t in {"freeze": T, "forum": E0, "ga": GA}.items()},
+        "daily": [{"d": str(d.date()), "share": float(v)} for d, v in
+                  (public.rolling(7).sum() / panel["volume"].reindex(public.index).rolling(7).sum()).dropna()[EST_START:].items()],
+    }
+    w = R["privacy"]["windows"]
+    R["privacy"]["visible_event_vs_summer"] = w["event"] / w["after_ga"]
+    R["privacy"]["visible_after_vs_summer"] = w["after"] / w["after_ga"]
+    # Onchain only, no DefiLlama: every event intents.near logs, by name and format version, plus code deploys.
+    ecl = pd.read_csv(os.path.join(RAW, "bq_intents_event_counts_daily.csv"), parse_dates=["block_date"])
+    ec = ecl.pivot_table(index="block_date", columns="event", values="n", aggfunc="sum").fillna(0)
+    deploys = pd.read_csv(os.path.join(RAW, "bq_intents_deploys.csv"), parse_dates=["block_date"]).block_date
+    v_new = ecl[(ecl.event == "token_diff") & ~ecl.version.str.startswith("0.3")].block_date.min()
+    ec_win = {"before": (ec.index.min(), E0 - day), "between": (E0, T - day), "after_upgrade": (deploys.max() + day, T + pd.Timedelta(days=HORIZON - 1)),
+              "after": (T + pd.Timedelta(days=HORIZON), LAST_DAY)}
+    R["privacy"]["events"] = {
+        "from": str(ec.index.min().date()), "deploys": [str(d.date()) for d in deploys], "new_format_from": str(v_new.date()),
+        "windows": {k: {"from": str(a.date()), "to": str(b.date()), **{c: float(ec.loc[a:b, c].mean()) for c in ("token_diff", "intents_executed", "transfer", "mt_mint")}}
+                    for k, (a, b) in ec_win.items()},
+        "daily": [{"d": str(d.date()), "swaps": float(r.token_diff), "executed": float(r.intents_executed), "transfers": float(r.transfer)}
+                  for d, r in ec[["token_diff", "intents_executed", "transfer"]].rolling(7).mean().dropna().iterrows()],
+    }
+    # H1 on public onchain volume (same pre-registered design, outcome swapped)
+    on = panel.copy()
+    on["public"] = public
+    st = event_stat(on, "public", donors, T)[0]
+    on_plc = np.array([event_stat(on, "public", donors, t)[0] for t in placebo_dates])
+    R["privacy"]["n_lower"] = int((plc < share_chg(T)).sum())
+    R["privacy"]["n_independent"] = len(priv_plc) // (2 * HORIZON) + 1  # non-overlapping 56-day before/after pairs
+    R["privacy"]["h1_public_pct"] = pct(st)
+    R["privacy"]["h1_public_p"] = float((on_plc <= st).mean())
+
     # ---- long-term view (added after the pre-registration) ------------------------------
     vol_all, rev_all = llama_series("intents_volume"), llama_series("intents_revenue")
     month_end = LAST_DAY.to_period("M").start_time  # first day of the current, incomplete month
@@ -485,7 +540,7 @@ def render(R):
     fmts = {"pct": lambda v: f"{100 * v:+.1f}%", "pct0": lambda v: f"{100 * v:+.0f}%", "upct": lambda v: f"{100 * abs(v):.1f}%",
             "share": lambda v: f"{100 * v:.1f}%", "p": lambda v: f"{v:.2f}", "usd_m": lambda v: f"${v / 1e6:,.1f}M",
             "usd_b": lambda v: f"${v / 1e9:,.2f}B", "usd_k": lambda v: f"${v / 1e3:,.0f}k", "bps": lambda v: f"{v:.1f}",
-            "n": lambda v: f"{v:,.0f}", "f2": lambda v: f"{v:.2f}", "x": lambda v: f"{v:.1f}×", "share0": lambda v: f"{100 * v:.0f}%", "month": lambda v: pd.Timestamp(v + "-01").strftime("%b %Y"), "m_near": lambda v: f"{v / 1e6:,.1f}M", "list": lambda v: ", ".join(v), "s": str}
+            "n": lambda v: f"{v:,.0f}", "f2": lambda v: f"{v:.2f}", "x": lambda v: f"{v:.1f}×", "share0": lambda v: f"{100 * v:.0f}%", "share_inv": lambda v: f"{100 * (1 - v):.0f}%", "month": lambda v: pd.Timestamp(v + "-01").strftime("%b %Y"), "m_near": lambda v: f"{v / 1e6:,.1f}M", "list": lambda v: ", ".join(v), "s": str}
 
     def sub(m):
         path, _, fmt = m.group(1).partition("|")

@@ -1,12 +1,12 @@
-# NEAR Intents blocked $50M of hacker money, then got hacked itself. Its volume kept pace with the market.
+# After NEAR Intents froze funds, its flow didn't leave. It vanished from public view.
 
-NEAR HACKATHON 2026 · **Investment Thesis track**
+NEAR HACKATHON 2026 · **Investment Thesis track** · **Live dashboard:** https://gourab337.github.io/near-intents-freeze-thesis/
 
 - **The bear case.** A cross-chain venue whose operator can freeze funds is not trustless, so users will leave the first time it uses that power.
-- **The test.** In one week NEAR Intents used that power, then lost the other kind of trust. After the Bitget hack, its SHIELD system blocked more than $50M tied to the hackers and froze $503k mid-swap (reported 2026-09-29). Then a $3.8M exploit paused the contract (2026-10-01); the funds were returned the next day.
-- **The result.** No collapse: over 28 days, volume came in +1.0% against a model built from rival venues and NEAR and ZEC spot volume. Raw volume fell, but the market fell with it. Zcash holders, the users most exposed to a freeze, did not pull out that month.
-- **The catch.** The test cannot see a loss smaller than about 29.5%, and dating the shock from the hack gives -8.6%. All summer Intents had beaten its model by +7% to +26%; in the event window it only matched it, so its momentum stopped. Established accounts came back less than in any calm period. Zcash balances drained a month later.
-- **The bet.** My reading: being trusted, not trustless, is NEAR's edge. Next, Intents has to grow again. Outside September, volume has been flat for a year, and revenue must grow about 5.2× (2.7× to 9.6× depending on price and fee share) for buybacks to offset new NEAR supply. **Position: Long, one tripwire broken; neutral if a second breaks, or if Intents sets no new monthly volume record by 2027-03-31.**
+- **The test.** NEAR Intents used that power twice in three weeks, then lost the other kind of trust: a Zcash user's $589k held for 50 days (2026-09-08), SHIELD blocking more than $50M tied to the Bitget hackers and freezing $503k mid-swap (reported 2026-09-29), then a $3.8M exploit that paused the contract (2026-10-01; funds returned the next day).
+- **The result.** The flow stayed: total volume came in +1.0% against a model built from rival venues and the market, and deposits held. Its public record did not. On NEAR's chain (BigQuery), public swap events fell from 119,511 a day in August to 24,689 by November while executed intents doubled; the share of volume visible as public swaps went from 59% to 19%.
+- **The catch.** Why the swaps left public view is not identified: Confidential Intents, a contract upgrade (2026-10-02, 2026-10-07) and a change in solver settlement each fit. The total-volume test cannot see a loss smaller than about 29.5%. Intents' summer momentum stopped, and Zcash balances drained a month later.
+- **The bet.** The freeze bears were wrong about the flow; my reading is that being trusted, not trustless, is NEAR's edge. But most of Intents' volume can no longer be checked on the chain, and revenue must still grow about 5.2× for buybacks to offset new NEAR supply. **Position: Long, one tripwire broken; neutral if a second breaks, or if Intents sets no new monthly volume record by 2027-03-31.**
 
 The tests and decision rules are in [`PREREGISTRATION.md`](PREREGISTRATION.md). Its OpenTimestamps proof anchors it in Bitcoin block 975284 (10:15 UTC, 2026-11-10), half an hour after the data download began. The thesis states exactly what that proves and what it does not.
 
@@ -16,6 +16,7 @@ The tests and decision rules are in [`PREREGISTRATION.md`](PREREGISTRATION.md). 
 
 ## The evidence (snapshot to 2026-11-09)
 
+- **The public record vanished (onchain).** Public swap events: 119,511 a day in August, 78,240 after the first freeze story, 24,689 from late October. Executed intents: 46,107 to 89,934. Deposits: 29,216 to 25,665. The decline began three weeks before the SHIELD freeze and two months after Confidential Intents opened to every app.
 - **No collapse.** 28-day volume was +1.0% against the model (placebo p = 0.50). The pre-registered verdict is "no collapse, but too imprecise to clear the 25% bar": a loss would need to reach about 29.5% to be detected. The position is my judgment beyond that, listed as a deviation.
 - **The momentum stopped.** BigQuery data covers 44 calm windows since 2026-03-01. In all of them Intents beat its model by +7% to +26%; the event window ranks below every one, for volume and for onchain relayed transactions.
 - **No outperformance.** Against the 28 days before the shocks, Intents changed -16% and the rival median -33%. Against August, before rivals' much bigger September rally, Intents changed +47% and the rival median +89%. The model, which controls for rivals, says Intents kept pace.

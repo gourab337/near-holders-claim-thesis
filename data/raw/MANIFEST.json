@@ -92,15 +92,36 @@
  "bq_intents_signers_daily": {
   "file": "bq_intents_signers_daily.csv",
   "url": "bigquery:sql/intents_signers_daily.sql",
-  "fetched_at": "2026-11-10T13:54:30Z",
+  "fetched_at": "2026-11-10T14:55:22Z",
   "sha256": "af1cee2a78bed326dc5aba926574b24d6954694784c07dfedcc92359e4da93d4",
   "bytes": 1628306
  },
  "bq_circulating_supply": {
   "file": "bq_circulating_supply.csv",
   "url": "bigquery:sql/circulating_supply.sql",
-  "fetched_at": "2026-11-10T13:54:32Z",
+  "fetched_at": "2026-11-10T14:55:24Z",
   "sha256": "f71f340d861fc700b33d907bde9eb014c8fbdaa52198538d79a6d2c61476e4e3",
   "bytes": 20348
+ },
+ "bq_intents_stable_volume_daily": {
+  "file": "bq_intents_stable_volume_daily.csv",
+  "url": "bigquery:sql/intents_stable_volume_daily.sql",
+  "fetched_at": "2026-11-10T14:55:26Z",
+  "sha256": "3cb7b84ff39f6b067402a932789439436a5506f0b63a46d00a65784a662b4d07",
+  "bytes": 314941
+ },
+ "bq_intents_event_counts_daily": {
+  "file": "bq_intents_event_counts_daily.csv",
+  "url": "bigquery:sql/intents_event_counts_daily.sql",
+  "fetched_at": "2026-11-10T14:55:32Z",
+  "sha256": "f49501f8a9cec488661366364426e0ebf71d97a65ffc65a98aaf15f55bc52f8a",
+  "bytes": 53712
+ },
+ "bq_intents_deploys": {
+  "file": "bq_intents_deploys.csv",
+  "url": "bigquery:sql/intents_deploys.sql",
+  "fetched_at": "2026-11-10T14:55:35Z",
+  "sha256": "c13dd79388661ec60f7e514930ca84a6f694b7c92cc9f533237e02e1e79e198a",
+  "bytes": 131
  }
 }
