@@ -9278,6 +9278,13 @@
    "status": "broken"
   }
  ],
+ "predictions": {
+  "windows_checked": 0,
+  "months_checked": 0,
+  "P1": "pending",
+  "P3": "pending",
+  "P2": "pending"
+ },
  "position": {
   "n_broken": 1,
   "n": 3,

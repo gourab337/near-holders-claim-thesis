@@ -1,14 +1,16 @@
 """Run the queries in sql/ against NEAR's public BigQuery dataset and save each result to data/raw/.
 
 Needs the Google Cloud CLI (`bq`), a login (`gcloud auth login`) and a project with billing enabled
-(`gcloud config set project <id>`). The queries scan about 990 GB together, most of it the stablecoin-volume query;
-BigQuery's free tier is 1 TB a month.
+(`gcloud config set project <id>`). The queries scan about 990 GB together, most of it the stablecoin-volume
+query. BigQuery's free tier is 1 TB a month; beyond it, queries cost about $6 per TB.
+Set END_DATE=YYYY-MM-DD to extend every query past the 2026-11-09 snapshot (for scoring PREDICTIONS.md).
 Adds or replaces each result's entry in data/raw/MANIFEST.json (query file, run time, SHA-256).
 """
 import hashlib, json, os, subprocess, time
 
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..")
 RAW = os.path.join(ROOT, "data", "raw")
+END_DATE = os.environ.get("END_DATE", "2026-11-09")
 QUERIES = ["intents_signers_daily", "circulating_supply", "intents_stable_volume_daily", "intents_event_counts_daily", "intents_deploys"]
 
 
@@ -20,6 +22,7 @@ def main():
         sql_file = os.path.join("sql", name + ".sql")
         with open(os.path.join(ROOT, sql_file)) as f:
             sql = "\n".join(line for line in f if not line.startswith("--"))  # bq reads "--" lines as flags
+        sql = sql.replace("2026-11-09", END_DATE)  # every query ends on the snapshot day unless END_DATE is set
         body = subprocess.run(["bq", "query", "--use_legacy_sql=false", "--format=csv", "--max_rows=5000000", "--quiet", sql],
                               check=True, capture_output=True).stdout
         out = "bq_" + name + ".csv"

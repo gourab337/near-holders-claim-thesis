@@ -19,7 +19,7 @@ RAW = os.path.join(ROOT, "data", "raw")
 E0, T, E2 = pd.Timestamp("2026-09-08"), pd.Timestamp("2026-09-29"), pd.Timestamp("2026-10-01")
 EST_START, EST_END = pd.Timestamp("2026-06-01"), pd.Timestamp("2026-09-07")
 EST_LEN, GAP, HORIZON = 99, 21, 28  # days: estimation window, gap before event, event window
-LAST_DAY = pd.Timestamp("2026-11-09")  # last complete UTC day in the snapshot
+LAST_DAY = pd.Timestamp(os.environ.get("LAST_DAY", "2026-11-09"))  # last complete UTC day; set LAST_DAY=YYYY-MM-DD after a refetch
 PAUSED = ["Binance", "Polygon", "TON", "Optimism", "Avalanche", "Stellar", "Monad", "X Layer", "ADI"]  # Scroll, Plasma: not reported by DefiLlama
 DONORS_PREREG = ["thorchain-dex", "chainflip-amm", "maya-protocol", "li.fi-bridge-aggregator",
                  "socket-protocol", "jumper-bridge-aggregator", "0x-bridge-aggregator", "rango"]
@@ -413,7 +413,7 @@ def main():
     R["onchain_check"]["usd_per_tx_aug"] = float(usd_per_tx["2026-08-01"])
     R["onchain_check"]["usd_per_tx_sep"] = float(usd_per_tx["2026-09-01"])
 
-    # ---- The flow went private (exploratory, added after the pre-registration) -------------------
+    # ---- Public visibility of Intents swaps (exploratory, added after the pre-registration) --------
     # Public onchain swap volume: the stablecoin leg of every dip4 token_diff event (BigQuery). Its ratio to
     # DefiLlama's total Intents volume falls when flow moves to execution that is not logged as public swaps
     # (Confidential Intents, generally available to every app from 2026-07-08).
@@ -521,6 +521,25 @@ def main():
     ]
     for t in R["tripwires"]:
         t["status"] = "holding" if t["value"] >= t["limit"] else "broken"
+    # ---- PREDICTIONS.md, scored with the literal thresholds written there (frozen, not recomputed) ----
+    P_FROM, P_TO = pd.Timestamp("2026-12-08"), pd.Timestamp("2027-03-31")
+    ends = pd.date_range(P_FROM, min(P_TO, LAST_DAY))
+
+    def window(e):
+        return slice(e - pd.Timedelta(days=HORIZON - 1), e)
+
+    p1 = [pct(ab[window(e)].mean()) > -0.295 for e in ends]
+    p3 = [1e4 * panel.loc[window(e), "fees"].sum() / panel.loc[window(e), "volume"].sum() > 13.6 for e in ends]
+    months = panel["volume"].resample("MS").sum()
+    done = [m for m in months.index if pd.Timestamp("2026-12-01") <= m <= pd.Timestamp("2027-03-01") and m + pd.offsets.MonthEnd(0) <= LAST_DAY]
+    record = any(months[m] > 4.80e9 for m in done)
+    over = LAST_DAY >= P_TO
+
+    def every(ok):
+        return "failed" if not all(ok) else ("met" if over else "pending")
+
+    R["predictions"] = {"windows_checked": len(ends), "months_checked": len(done),
+                        "P1": every(p1), "P3": every(p3), "P2": "met" if record else ("failed" if over else "pending")}
     n_broken = sum(t["status"] == "broken" for t in R["tripwires"])
     # Position rule, set after seeing results (deviation 6): long while all hold, under review at one break, neutral at two.
     R["position"] = {"n_broken": n_broken, "n": len(R["tripwires"]),

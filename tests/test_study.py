@@ -92,6 +92,11 @@ class Outputs(unittest.TestCase):
         self.assertNotIn("{{", page)
         self.assertIn("<h1>", page)
 
+    def test_predictions_scored_only_after_their_start(self):
+        """On the snapshot no prediction window has ended yet, so every call is pending, not met or failed."""
+        if self.R["last_day"] < "2026-12-08":
+            self.assertEqual({self.R["predictions"][k] for k in ("P1", "P2", "P3")}, {"pending"})
+
     def test_dashboard_data_matches_results(self):
         js = pathlib.Path(ROOT, "docs", "data.js").read_text()
         results = json.loads(pathlib.Path(ROOT, "data", "processed", "results.json").read_text())

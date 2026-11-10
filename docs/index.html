@@ -14,13 +14,13 @@
 <div class="band"><div class="in"><span>Digital Assets Research · Event Study</span><span>NEAR Hackathon 2026 · Investment Thesis Track</span></div></div>
 <main>
   <p class="kicker"><b>NEAR Protocol (NEAR)</b> · Cross-chain infrastructure · Data to <span id="lastday"></span></p>
-  <h1>After NEAR Intents froze funds, its flow didn't leave. It vanished from public view.</h1>
+  <h1>After NEAR Intents froze funds, its volume held. Its public record didn't.</h1>
   <div class="story">
     <div><b>The bear case</b>A venue that can freeze funds isn't trustless. Users leave the first time it does.</div>
-    <div><b>The test</b>Two freezes in three weeks (a Zcash user's $589k, then $50M tied to the Bitget hack), then a $3.8M exploit.</div>
-    <div><b>The result</b>The flow stayed, but its public record didn't: public swaps fell to a fifth while executed intents doubled.</div>
-    <div><b>The catch</b>Why is unknown: privacy, a contract upgrade or solver settlement. Momentum stopped; Zcash drained.</div>
-    <div><b>The bet</b>Trusted beats trustless, but the chain no longer shows most of the flow. Revenue must grow about <span id="stNeed"></span>.</div>
+    <div><b>The test</b>Two freeze stories three weeks apart ($589k held; $50M blocked, $503k frozen), then a $3.8M exploit.</div>
+    <div><b>The result</b>Reported volume held. The share visible onchain fell from three-fifths to under a fifth.</div>
+    <div><b>The catch</b>Onchain, public volume fell <span id="stPub"></span> vs model. Why the record left is unknown.</div>
+    <div><b>The bet</b>Trusted beats trustless, but most flow can no longer be checked onchain. Revenue must grow about <span id="stNeed"></span>.</div>
   </div>
   <div class="byline"><span><b>Method</b> Pre-registered event study, timestamped with OpenTimestamps</span><span><b>Sources</b> DefiLlama, CoinGecko, NEAR BigQuery</span><span><a href="thesis.html">Read the full thesis →</a></span><span><a href="predictions.html">Predictions to Mar 2027 →</a></span></div>
 
@@ -28,7 +28,7 @@
     <section>
       <div class="hero">
         <div class="big" id="hero"></div>
-        <div class="lab"><b>28-day abnormal volume</b><span id="heroMeta"></span></div>
+        <div class="lab"><b>Share of Intents volume visible as public onchain swaps</b><span id="heroMeta"></span></div>
       </div>
       <h2>Key takeaways</h2>
       <ol class="takeaways" id="takeaways"></ol>
@@ -42,7 +42,7 @@
   </div>
 
   <section class="exhibit">
-    <div class="hd"><span class="no">Exhibit 1</span><h3>The volume held; its public record vanished</h3></div>
+    <div class="hd"><span class="no">Exhibit 1</span><h3>Reported volume held; its public record didn't</h3></div>
     <p class="sub">Share of Intents volume visible as public onchain swaps (7-day). Numerator: the stablecoin side of every <code>token_diff</code> swap logged by <code>intents.near</code> (NEAR BigQuery). Denominator: DefiLlama's total. Right: the same shift with no DefiLlama at all, from the events <code>intents.near</code> logs. Confidential Intents opened to every app on 8 Jul; the contract was upgraded on 2 and 7 Oct.</p>
     <div class="legend"><span><i class="key" style="color:var(--s3)"></i>Share visible as public swaps</span></div>
     <div class="two" style="gap:40px">
@@ -64,7 +64,7 @@
   <section class="bears">
     <h2>What the freeze bears got right and wrong</h2>
     <div class="bgrid">
-      <div><b class="w">Wrong</b><strong>The flow leaves.</strong><span id="bWrong"></span> What left was its public record: intents kept executing while public swaps vanished (Exhibit 1).</div>
+      <div><b class="w">Wrong</b><strong>The reported flow leaves.</strong><span id="bWrong"></span> What left was its public record: intents kept executing while public swaps fell (Exhibit 1).</div>
       <div><b class="r">Partly right</b><strong>Some users and the momentum leave.</strong><span id="bRight"></span></div>
       <div><b class="n">Not shown</b><strong>Why the flow stayed.</strong>The data shows flow stayed after a freeze, not why. Most flow is relayed swaps routed by integrators, which would explain it too. "Trusted, not trustless" is the author's reading.</div>
     </div>
@@ -104,16 +104,7 @@
   </section>
 
   <section class="exhibit">
-    <div class="hd"><span class="no">Exhibit 4</span><h3>Volume dipped in week one, then tracked the model through both shocks</h3></div>
-    <p class="sub">Model: comparison venues plus NEAR and ZEC spot volume, fitted 1 Jun – 7 Sep. Shaded: the pre-registered 28-day event window.</p>
-    <div class="legend"><span><i class="key" style="color:var(--s1)"></i>Actual</span><span><i class="key dash" style="color:var(--s2)"></i>Model</span></div>
-    <div class="chart" id="cVol"></div>
-    <p class="src">Source: DefiLlama, CoinGecko, author's calculations · Code: <code>src/build.py</code>, <code>event_stat()</code></p>
-    <details><summary>Show data</summary><div class="tbl" id="tVol"></div></details>
-  </section>
-
-  <section class="exhibit">
-    <div class="hd"><span class="no">Exhibit 5</span><h3>Onchain: established accounts pulled back; new and heavy users did not</h3></div>
+    <div class="hd"><span class="no">Exhibit 4</span><h3>Onchain: established accounts pulled back; new and heavy users did not</h3></div>
     <p class="sub" id="h5Sub"></p>
     <div class="two" style="gap:40px">
       <div><table class="kv" id="h5Tbl" style="margin-top:6px"></table><p class="note" id="h5Note"></p></div>
@@ -124,7 +115,7 @@
 
   <div class="two">
     <section class="exhibit">
-      <div class="hd"><span class="no">Exhibit 6</span><h3>The real result looks like an ordinary month, not a shock</h3></div>
+      <div class="hd"><span class="no">Exhibit 5</span><h3>The real result looks like an ordinary month, not a shock</h3></div>
       <p class="sub">The same test run at every calm-period date, <span id="plcFrom"></span> – <span id="plcTo"></span>.</p>
       <div class="chart" id="cPlc"></div>
       <p class="note" id="plcNote"></p>
@@ -132,7 +123,7 @@
       <details><summary>Show data</summary><div class="tbl" id="tPlc"></div></details>
     </section>
     <section class="exhibit">
-      <div class="hd"><span class="no">Exhibit 7</span><h3>Every large negative estimate uses 0x as a comparator</h3></div>
+      <div class="hd"><span class="no">Exhibit 6</span><h3>Every large negative estimate uses 0x as a comparator</h3></div>
       <p class="sub"><span id="gridN"></span> alternative specifications: donor sets, controls, event date and horizon. Not pre-registered.</p>
       <div class="legend"><span><i class="dotkey" style="background:var(--s3)"></i>Includes 0x</span><span><i class="dotkey" style="background:var(--s1)"></i>Excludes 0x</span></div>
       <div class="chart" id="cGrid"></div>
@@ -143,7 +134,7 @@
   </div>
 
   <section class="exhibit">
-    <div class="hd"><span class="no">Exhibit 8</span><h3>Since the events, NEAR and ZEC holdings fell while everything else held</h3></div>
+    <div class="hd"><span class="no">Exhibit 7</span><h3>Since the events, NEAR and ZEC holdings fell while everything else held</h3></div>
     <p class="sub">Indexed to 28 Sep = 1.0. Units rather than dollars, so price moves cannot pose as flows.</p>
     <div class="legend"><span><i class="key" style="color:var(--s1)"></i>NEAR</span><span><i class="key" style="color:var(--s3)"></i>ZEC</span><span><i class="key dash" style="color:var(--s2)"></i>All other</span></div>
     <div class="chart" id="cBal"></div>
@@ -152,7 +143,7 @@
   </section>
 
   <section class="exhibit">
-    <div class="hd"><span class="no">Exhibit 9</span><h3>Networks paused after the exploit dipped, then recovered</h3></div>
+    <div class="hd"><span class="no">Exhibit 8</span><h3>Networks paused after the exploit dipped, then recovered</h3></div>
     <p class="sub" id="pausedMeta"></p>
     <div class="legend"><span><i class="key" style="color:var(--s1)"></i>Paused networks</span><span><i class="key dash" style="color:var(--s2)"></i>Other networks</span></div>
     <div class="chart" id="cPaused"></div>
@@ -185,8 +176,9 @@ const h = (tag, cls, s) => { const e = document.createElement(tag); if (cls) e.c
 const H1 = R.H1, S = R.stake, W0 = R.windows;
 const last = R.daily[R.daily.length - 1];
 text("lastday", fmtDate(R.last_day) + " " + R.last_day.slice(0, 4));
-text("hero", pct(H1.stat_pct));
-text("heroMeta", `vs. model, 28 days from the freeze. Placebo p = ${H1.p_placebo_time.toFixed(2)}; detection threshold ${pct(H1.mde_pct, 0)}.`);
+text("hero", `${(100 * R.privacy.windows.after_ga).toFixed(0)}% → ${(100 * R.privacy.windows.after).toFixed(0)}%`);
+text("heroMeta", `Summer to November, from NEAR BigQuery. Meanwhile reported total volume came in ${pct(H1.stat_pct)} against its model (p = ${H1.p_placebo_time.toFixed(2)}; detection threshold ${pct(H1.mde_pct)}).`);
+text("stPub", pct(R.privacy.h1_public_pct).replace("−", ""));
 text("posLabel", R.position.label);
 text("gridN", R.grid.n);
 text("gridNote", `Every estimate below −15% includes 0x, whose mean daily volume in the event window was ${R.grid.zero_x_growth.toFixed(1)}× its estimation-window mean. That reading was made after seeing the results.`);
@@ -195,17 +187,17 @@ text("plcFrom", fmtDate(H1.placebo_from)); text("plcTo", fmtDate(H1.placebo_to))
 const broken = R.tripwires.filter(t => t.status !== "holding").map(t => t.name);
 const LT = R.long_term;
 const mon = m => new Date(m + "-01T00:00:00Z").toLocaleDateString("en-GB", { month: "short", year: "numeric", timeZone: "UTC" });
-text("stNeed", LT.growth_needed.toFixed(0) + "×");
+text("stNeed", LT.growth_needed.toFixed(1) + "×");
 text("ltSub", `Monthly totals, ${mon(LT.first_month)} to ${mon(LT.last_month)}; revenue from when DefiLlama began reporting it. Shaded: the months of the freeze and the exploit.`);
 const EW = R.privacy.events.windows;
 text("privNote", `Public swaps fell from ${Math.round(EW.before.token_diff / 1000)}k a day in August to ${Math.round(EW.between.token_diff / 1000)}k after the first freeze story and ${Math.round(EW.after.token_diff / 1000)}k from late October, while executed intents went from ${Math.round(EW.before.intents_executed / 1000)}k to ${Math.round(EW.after.intents_executed / 1000)}k and deposits held. The July launch moved the visible share ${pct(R.privacy.chg.ga.pct)}, an ordinary change. Where the swaps went is not identified.`);
 const takeaways = [
-  ["The public record vanished.", `The share of volume visible as public swaps went from ${(100 * R.privacy.windows.after_ga).toFixed(0)}% in the summer to ${(100 * R.privacy.windows.after).toFixed(0)}% by November. The fall began with the first freeze story; why is not identified.`],
-  ["The engine has stalled before.", `Volume first peaked at ${usd(LT.first_peak_volume)} in ${mon(LT.first_peak_month)}. ${mon(LT.last_month)} was ${usd(LT.last_month_volume)}, only ${LT.last_vs_first_peak.toFixed(2)}× that. Outside September, it has been flat for a year.`],
-  ["No collapse.", `${pct(H1.stat_pct)} against the model over 28 days. Pre-registered verdict: ${H1.prereg_outcome}.`],
+  ["The public record left.", `The share of volume visible as public swaps went from ${(100 * R.privacy.windows.after_ga).toFixed(0)}% in the summer to ${(100 * R.privacy.windows.after).toFixed(0)}% by November. From late October public swaps fell while executed intents doubled; why is not identified.`],
+  ["The engine is uneven.", `${mon(LT.last_month)} volume was ${usd(LT.last_month_volume)}: ${LT.volume_yoy.toFixed(1)}× a year earlier, when Intents was still ramping, but only ${LT.last_vs_first_peak.toFixed(2)}× its ${mon(LT.first_peak_month)} peak.`],
+  ["Reported volume held; public volume fell.", `DefiLlama's total: ${pct(H1.stat_pct)} against the model (pre-registered verdict: ${H1.prereg_outcome}). Public onchain volume: ${pct(R.privacy.h1_public_pct)} (p = ${R.privacy.h1_public_p.toFixed(2)}).`],
   ["But the momentum stopped.", `All summer Intents beat its model by ${pct(R.onchain_check.volume.placebo_min_pct, 0)} to ${pct(R.onchain_check.volume.placebo_max_pct, 0)}; in the event window it only matched it. Onchain relayed transactions show the same.`],
   ["No price cuts.", `Take rate ${W0.between.take_rate_bps.toFixed(1)} bps in the three weeks before the shocks, ${W0.event.take_rate_bps.toFixed(1)} bps during them.`],
-  ["The growth target.", `At most ${(100 * LT.buyback_coverage).toFixed(0)}% of new NEAR supply (${(LT.supply_growth_yr / 1e6).toFixed(1)}M a year) could be bought back with today's revenue. Covering all of it takes about ${LT.growth_needed.toFixed(0)}× more (${LT.growth_needed_calm_price.toFixed(0)}× to ${LT.growth_needed_calm_capture.toFixed(0)}× under calm-period price or fee share).`],
+  ["The growth target.", `At most ${(100 * LT.buyback_coverage).toFixed(0)}% of new NEAR supply (${(LT.supply_growth_yr / 1e6).toFixed(1)}M a year) could be bought back with today's revenue. Covering all of it takes about ${LT.growth_needed.toFixed(1)}× more (${LT.growth_needed_calm_price.toFixed(0)}× to ${LT.growth_needed_calm_capture.toFixed(0)}× under calm-period price or fee share).`],
   ["Established accounts pulled back.", `Onchain, ${(100 * R.H5.cohorts.returning.rate).toFixed(0)}% of accounts seen before September came back after the shocks, against ${(100 * R.H5.cohorts.returning.placebo_p50).toFixed(0)}% in calm periods. New and heavy users came back as usual.`],
   [broken.length ? "Tripwire broken." : "All tripwires holding.", broken.length ? `${broken.join(", ")}: ${pct(R.tripwires.find(t => t.status !== "holding").value)} over 28 days, past its ${pct(R.tripwires.find(t => t.status !== "holding").limit)} limit.` : "Order flow, take rate and Zcash balances are all inside their calm-period limits."],
 ];
@@ -382,7 +374,6 @@ function gridChart() {
 }
 
 // ---- data shaping ----
-const volRows = H1.series.map(r => ({ d: r.d, actual: r.actual, predicted: r.predicted }));
 const shade = [R.windows.event.from, R.windows.event.to];
 const ev = [{ d: R.events.E0, label: "Forum post" }, { d: R.events.T, label: "Freeze + exploit" }];
 const balRows = R.balances.map(r => ({ d: r.d, near: r.near_units, zec: r.zec_units, rest: r.rest, paused: r.paused, others: r.others }));
@@ -431,8 +422,6 @@ function draw() {
     { yFmt: v => v.toFixed(0), tickFmt: v => v.toFixed(0), shade, events: ev, height: 220 });
   barChart("cLtVol", LT.monthly, "volume", "--s1", v => v === 0 ? "0" : "$" + (v / 1e9).toFixed(1) + "B");
   barChart("cLtRev", LT.monthly, "revenue", "--s3", v => v === 0 ? "0" : "$" + (v / 1e6).toFixed(1) + "M");
-  lineChart("cVol", volRows, [{ key: "actual", label: "Actual", color: "--s1" }, { key: "predicted", label: "Model", color: "--s2", dash: true }],
-    { yFmt: usdM, tickFmt: v => v === 0 ? "0" : "$" + (v / 1e6).toFixed(0) + "M", shade, events: ev });
   lineChart("cBal", balRows, [{ key: "near", label: "NEAR", color: "--s1" }, { key: "zec", label: "ZEC", color: "--s3" }, { key: "rest", label: "Other", color: "--s2", dash: true }],
     { yFmt: idx, tickFmt: v => v.toFixed(1), shade, events: ev, baseline: 1 });
   lineChart("cPaused", balRows, [{ key: "paused", label: "Paused", color: "--s1" }, { key: "others", label: "Other", color: "--s2", dash: true }],
@@ -445,7 +434,6 @@ text("h5Sub", `Every transaction to intents.near since ${mon(R.H5.from.slice(0, 
     [`${lab} · ${r.n.toLocaleString()}`, (100 * r.rate).toFixed(1) + "%", (100 * r.placebo_p50).toFixed(1) + "%", r.p.toFixed(2)].forEach(x => tr.insertCell().textContent = x); }); }
 text("h5Note", "Came back: active again in the 28 days from the freeze. p: share of calm-period windows at or below the real rate. Rows after the first were added after seeing it. Accounts include solvers and escrow contracts.");
 table("tLt", ["Month", "Volume", "Revenue"], LT.monthly.map(r => [mon(r.m), usd(r.volume), r.revenue == null ? "not reported" : usd(r.revenue)]));
-table("tVol", ["Date", "Actual", "Model"], volRows.map(r => [r.d, usdM(r.actual), usdM(r.predicted)]));
 table("tPlc", ["Pseudo-event", "Abnormal volume"], H1.placebo_stats_pct.map((v, i) => { const d = new Date(Date.parse(H1.placebo_from) + i * 864e5); return [d.toISOString().slice(0, 10), pct(v)]; }));
 table("tGrid", ["Donors", "Controls", "Event", "Days", "Estimate"], [...R.grid.specs].sort((a, b) => a.pct - b.pct).map(s => [s.donors, s.controls, s.event, s.days, pct(s.pct)]));
 table("tBal", ["Date", "NEAR", "ZEC", "Other"], balRows.map(r => [r.d, idx(r.near), idx(r.zec), idx(r.rest)]));

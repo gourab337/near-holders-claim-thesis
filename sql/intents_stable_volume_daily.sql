@@ -1,7 +1,9 @@
 -- Onchain NEAR Intents swap volume, stablecoin leg only, by day and token.
 -- Each dip4 token_diff event lists every party's balance change; summing the positive amounts of a
 -- stablecoin counts each swap's stablecoin leg once. All tokens listed have 6 decimals.
--- Dataset: NEAR public BigQuery dataset. Scans about 800 GB (dry run, 2026-11-11), so re-running costs about $5 beyond the free tier.
+-- Caveats: a stablecoin-to-stablecoin swap counts both legs; the STARTS_WITH filter relies on "standard" being the
+-- first key, which holds for dip4 versions 0.3 and 0.4.3 in this window.
+-- Dataset: NEAR public BigQuery dataset. Scans about 800 GB (dry run, 2026-11-11).
 WITH ev AS (
   SELECT block_date, l.element AS log
   FROM `bigquery-public-data.crypto_near_mainnet_us.execution_outcomes`, UNNEST(logs.list) l
