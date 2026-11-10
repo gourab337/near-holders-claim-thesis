@@ -12,7 +12,7 @@ The tests and decision rules are in [`PREREGISTRATION.md`](PREREGISTRATION.md). 
 
 - **Thesis:** [`THESIS.md`](THESIS.md) (also rendered as `docs/thesis.html`)
 - **Predictions:** [`PREDICTIONS.md`](PREDICTIONS.md), three dated calls to 2027-03-31, scored on future data only and timestamped with OpenTimestamps
-- **Dashboard:** [`docs/index.html`](docs/index.html), a static page that reads `docs/data.js`
+- **Live dashboard:** https://gourab337.github.io/near-intents-freeze-thesis/ (source: [`docs/index.html`](docs/index.html), a static page that reads `docs/data.js`)
 
 ## The evidence (snapshot to {{last_day}})
 
