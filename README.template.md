@@ -1,6 +1,6 @@
 # After NEAR Intents froze funds, its volume held. Its public record didn't.
 
-NEAR HACKATHON 2026 · **Investment Thesis track** · **Live dashboard:** https://gourab337.github.io/near-intents-freeze-thesis/ · **Demo video (48 s):** [`docs/demo.mp4`](docs/demo.mp4)
+NEAR HACKATHON 2026 · **Investment Thesis track** · **Live dashboard:** https://gourab337.github.io/near-intents-freeze-thesis/ · **Demo video (87 s, narrated):** [`docs/demo.mp4`](docs/demo.mp4)
 
 - **The bear case.** A cross-chain venue whose operator can freeze funds is not trustless, so users will leave the first time it uses that power.
 - **The test.** Two freeze stories reached the public three weeks apart: a Zcash user's $589k held for 50 days ({{events.E0}}), then SHIELD blocking more than $50M of transfers tied to the Bitget hackers and freezing $503k mid-swap (reported {{events.T}}). Then a $3.8M exploit paused the contract ({{events.E2}}; funds returned the next day).
