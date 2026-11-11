@@ -16,6 +16,9 @@ SOURCES = {
     "intents_fees": f"{LLAMA}/summary/fees/near-intents?dataType=dailyFees",
     "intents_revenue": f"{LLAMA}/summary/fees/near-intents?dataType=dailyRevenue",
     "intents_balances": f"{LLAMA}/protocol/near-intents",
+    # every protocol on NEAR that DefiLlama tracks revenue for, by day, and the chain's own revenue
+    "near_protocols_revenue": f"{LLAMA}/overview/fees/near?excludeTotalDataChart=true&excludeTotalDataChartBreakdown=false&dataType=dailyRevenue",
+    "near_chain_revenue": f"{LLAMA}/summary/fees/near?dataType=dailyRevenue",
     **{f"donor_{s}": f"{LLAMA}/summary/dexs/{s}?dataType=dailyVolume" for s in DONORS_DEX},
     **{f"donor_{s}": f"{LLAMA}/summary/bridge-aggregators/{s}?dataType=dailyBridgeVolume" for s in DONORS_AGG},
     **{f"market_{c}": f"https://api.coingecko.com/api/v3/coins/{c}/market_chart?vs_currency=usd&days=365&interval=daily" for c in COINS},

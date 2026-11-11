@@ -6,12 +6,14 @@ NEAR HACKATHON 2026 · Investment Thesis track · data to {{last_day}} · about 
 
 ## The claim
 
-The case for owning NEAR rests on one business. NEAR Intents swaps tokens across blockchains, and part of what it earns is sent back as NEAR. NEAR's market value is {{stake.mcap_to_revenue|n}} times a year of that revenue. A price like that needs two things to be true: the business keeps going, and holders share in it.
+Most of the revenue that can be measured on NEAR comes from one business. NEAR Intents swaps tokens across blockchains, and part of what it earns is sent back as NEAR. Over the last 30 days it earned {{revenue_mix.intents_share|share0}} of the revenue DefiLlama tracks on NEAR, about {{revenue_mix.intents_vs_chain|f0x}} what the NEAR chain itself earns in fees. NEAR's other lines of business, such as NEAR AI Cloud, are not in that count. NEAR's market value is {{stake.mcap_to_revenue|n}} times a year of Intents' revenue.
+
+So for a NEAR holder, two things about Intents matter most: the business keeps going, and holders share in it.
 
 The first is true. The second, so far, is not. Here is the argument in four steps.
 
 1. **The business is resilient.** Within a month Intents froze users' funds and was then hacked for $3.8M. Its volume barely moved: {{confidential.oneclick_event_vs_august|pct0}} against August.
-2. **One number looked like a loss. It was not.** On NEAR's public chain, swaps fell from {{privacy.events.windows.before.token_diff|n}} a day to {{privacy.events.windows.after.token_diff|n}}. They had not left. On 27 October Intents began settling swaps off the public chain. The business was fine, but it became harder to check.
+2. **One number looked like a loss. It was not.** From late October, swap volume visible on NEAR's public chain fell from {{confidential.windows.august.public_usd|usd_m}} a day to {{confidential.windows.after.public_usd|usd_m}}. Usage did not fall: on 27 October Intents began settling swaps off the public chain, and the big apps kept routing through it. The business was fine, but it became harder to check.
 3. **Holders get little of it.** NEAR creates {{buyback.issued_per_day|n}} new tokens a day, which dilutes holders. The wallets that receive Intents' revenue take in {{buyback.in_28d_per_day|n}} a day: {{buyback.coverage_28d|share0}} as much. To match all the new supply, the inflow would have to grow about {{buyback.growth_needed|x}}.
 4. **And no rule protects even that.** None of it is paid to holders, staked or burned. A few signers can move it.
 
@@ -52,15 +54,16 @@ So some individual users did pull back. But the customer that decides is the app
 
 ### Part 2. The drop that was not a drop
 
-**In one line: public swaps on the chain fell by about four-fifths, but the swaps had moved out of view, not away.**
+**In one line: public swap volume fell by almost two-thirds, but usage did not drop. The swaps had moved out of view, not away.**
 
-If the business held, the public chain should show it. It showed the opposite.
+If the business held, the public chain should show it. From late October, it showed the opposite.
 
-| On NEAR's public chain, a day | August | From late October |
-|---|---|---|
-| Swaps recorded | {{privacy.events.windows.before.token_diff|n}} | {{privacy.events.windows.after.token_diff|n}} |
+| Swap volume a day | August | 8 Sep to 26 Oct | From 28 Oct |
+|---|---|---|---|
+| Visible on NEAR's public chain | {{confidential.windows.august.public_usd|usd_m}} | {{confidential.windows.before.public_usd|usd_m}} | **{{confidential.windows.after.public_usd|usd_m}}** |
+| 1Click, counted through Intents' own records | {{confidential.windows.august.oneclick_usd|usd_m}} | {{confidential.windows.before.oneclick_usd|usd_m}} | **{{confidential.windows.after.oneclick_usd|usd_m}}** |
 
-On its face that is users leaving after the freeze, exactly as the critics predicted.
+Until 27 October the two moved together. (The public figure also counts swaps outside 1Click, so it starts a little higher.) After it, the public figure fell by almost two-thirds while 1Click held. Read only from the chain, that looks like users leaving after the freeze, exactly as the critics predicted.
 
 It is not. On 27 October 2026 NEAR Intents' changelog said: "From October 27, 2026, 1Click swaps settle confidentially." The swap now happens on what the changelog calls "a permissioned instance of the NEAR protocol operated by a small validator set with no public networking". The public chain shows only money going into a Treasury account and coming out again.
 
@@ -73,7 +76,9 @@ I tested this directly. I drew 300 successful swaps at random on each of five da
 
 In my samples the change was rolled out over about a week: {{confidential.trace.2026-10-28.treasury|share0}} went through the Treasury account on 28 October and {{confidential.trace.2026-11-05.treasury|share0}} by 5 November.
 
-The swaps did not stop. Counted through Intents' own records, 1Click volume was {{confidential.windows.august.oneclick_usd|usd_m}} a day in August and {{confidential.windows.after.oneclick_usd|usd_m}} a day after the switch. What disappeared is the public record of them. The sampled swaps were funded by normal public deposits, so this was a change in how 1Click settles, not users choosing privacy. Why NEAR Intents made the change, I cannot say.
+**So usage did not drop.** The swaps did not stop; what disappeared is the public record of them. The apps that route the flow kept routing it after the switch too: {{large.windows.after.august_big_still_routing}} of the {{large.august_big}} big apps from August were still sending swaps ({{large.windows.after.august_big_kept_half}} at least half their August volume), and large-swap volume was {{large.usd_after_vs_august|pct0}} against August.
+
+**The timing is what misleads.** The switch came four weeks after the freeze. Anyone reading only the public chain would see volume fall after the freeze and conclude that users left because of it. The fall is in what the chain records, not in what users do. (The number of public swap events also fell in September and October, while their dollar value held; appendix A7 has the detail.) The sampled swaps were funded by normal public deposits, so this was a change in how 1Click settles, not users choosing privacy. Why NEAR Intents made the change, I cannot say.
 
 **What it costs a holder.** The business did not shrink, but it became harder to check. The Intents volume that DefiLlama shows is read from a dataset NEAR itself publishes. Counted in dollars, public swaps were {{privacy.windows.after_ga|share0}} of that figure in the summer and {{privacy.windows.after|share0}} from late October. I have no evidence that the reported number is wrong. But a holder can no longer verify most of it without relying on the operator.
 
@@ -135,7 +140,7 @@ A holder loses wherever growth stops, and gains only if revenue compounds and th
 - **The test I planned in advance was inconclusive.** It compares Intents' reported volume, over the 28 days from the freeze, with a model built from rival venues. It could only detect a loss larger than {{H1.literal.mde_pct|upct}}. It found {{H1.literal.stat_pct|pct}} or {{H1.stat_pct|pct}}, depending on which rival venues I compare with, and neither can be told from noise. Part 1 rests on the direct counts, not on this test.
 - **Part of the good news comes from the operator's own data.** The swap counts in Parts 1 and 2 come from NEAR Intents' Explorer API. It is a second source, but not an independent one.
 - **The bull has a real point that my rule ignores.** NEAR's governance has passed a cut in maximum issuance from {{hsp029.rate_from|share}} to {{hsp029.rate_to|share}} over {{hsp029.months}} months (HSP-029). At that rate the same inflow would cover {{hsp029.coverage_28d_at_target|share0}} of new supply instead of {{buyback.coverage_28d|share0}}. The Buy level is fixed in NEAR a day so that this cannot trigger a Buy by itself: it says nothing about whether Intents sends more to NEAR.
-- **It is four weeks, and one business.** Four weeks after a shock is not the long term. And if value reaches NEAR holders some other way than Intents, this thesis does not see it.
+- **It is four weeks, and one business.** Four weeks after a shock is not the long term. And this judges NEAR by its largest measurable business. NEAR AI Cloud and other lines are not measured here; if value reaches holders through them, this thesis does not see it.
 
 The full list, with every number, is in the appendix (B6).
 

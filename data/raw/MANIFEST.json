@@ -179,5 +179,17 @@
   "fetched_at": "2026-11-11T04:35:09Z",
   "sha256": "d60b8e94bf08ee3d8e43e375fb7c3d0f35f6ae57cd18b0eaee00711884771250",
   "bytes": 198597
+ },
+ "near_protocols_revenue": {
+  "url": "https://api.llama.fi/overview/fees/near?excludeTotalDataChart=true&excludeTotalDataChartBreakdown=false&dataType=dailyRevenue",
+  "fetched_at": "2026-11-11T13:38:17Z",
+  "sha256": "efd8d8b28fa25ccf55140e4c49d6919cbe99a4c78f4595560a901d87ae6f9f44",
+  "bytes": 89804
+ },
+ "near_chain_revenue": {
+  "url": "https://api.llama.fi/summary/fees/near?dataType=dailyRevenue",
+  "fetched_at": "2026-11-11T13:38:20Z",
+  "sha256": "db036d01ba5b3ff55759c6f8950c718007eed46d748eadd8a24d7c030b52c9a1",
+  "bytes": 121505
  }
 }

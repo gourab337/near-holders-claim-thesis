@@ -330,6 +330,19 @@ def main():
                   "fees_shortfall_event_window": R["H2"]["usd_predicted_event_window"] - R["H2"]["usd_actual_event_window"],
                   "volume_shortfall_event_window": R["H1"]["usd_predicted_event_window"] - R["H1"]["usd_actual_event_window"]}
 
+    # Intents' share of the revenue DefiLlama tracks on NEAR over the same 30 days: every protocol on NEAR plus the chain's
+    # own revenue. Off-chain lines of business (NEAR AI Cloud, for example) are not tracked there, so they are not in it.
+    rev = {}
+    for t, by in raw("near_protocols_revenue")["totalDataChartBreakdown"]:
+        if last30.index[0] <= pd.Timestamp(t, unit="s").normalize() <= LAST_DAY:
+            for k, v in by.items():
+                rev[k] = rev.get(k, 0.0) + float(v)
+    chain_rev = float(llama_series("near_chain_revenue")[last30.index[0]:LAST_DAY].sum())
+    tracked = sum(rev.values()) + chain_rev
+    R["revenue_mix"] = {"intents": rev["NEAR Intents"], "chain": chain_rev, "tracked": tracked,
+                        "intents_share": rev["NEAR Intents"] / tracked, "intents_vs_chain": rev["NEAR Intents"] / chain_rev,
+                        "protocols": len(rev), "from": str(last30.index[0].date()), "to": str(LAST_DAY.date())}
+
     mcap = float(near.mcap[LAST_DAY])
     R["stake"].update({"near_mcap": mcap, "mcap_to_revenue": mcap / R["stake"]["revenue_annualised"],
                        "revenue_at_mde": -R["H1"]["mde_pct"] * R["stake"]["revenue_annualised"]})
@@ -844,7 +857,7 @@ def render(R):
     fmts = {"pct": lambda v: f"{100 * v:+.1f}%", "pct0": lambda v: f"{100 * v:+.0f}%", "upct": lambda v: f"{100 * abs(v):.1f}%",
             "share": lambda v: f"{100 * v:.1f}%", "spct0": lambda v: f"{100 * v:+,.0f}%", "pp": lambda v: f"{100 * v:.1f} points", "p": lambda v: "< 0.01" if v == 0 else "> 0.99" if v == 1 else f"{v:.2f}", "peq": lambda v: "p < 0.01" if v == 0 else "p > 0.99" if v == 1 else f"p = {v:.2f}", "usd_m": lambda v: f"${v / 1e6:,.1f}M",
             "usd_b": lambda v: f"${v / 1e9:,.2f}B", "usd_k": lambda v: f"${v / 1e3:,.0f}k", "bps": lambda v: f"{v:.1f}",
-            "n": lambda v: f"{v:,.0f}", "f2": lambda v: f"{v:.2f}", "x": lambda v: f"{v:.1f}×", "f1": lambda v: f"{v:.1f}", "f2pct": lambda v: f"{100 * v:.2f}%", "upct0": lambda v: f"{100 * v:,.0f}%", "months": lambda v: ", ".join(pd.Timestamp(x + "-01").strftime("%b %Y") for x in v), "share0": lambda v: f"{100 * v:.0f}%", "share_inv": lambda v: f"{100 * (1 - v):.0f}%", "month": lambda v: pd.Timestamp(v + "-01").strftime("%b %Y"), "m_near": lambda v: f"{v / 1e6:,.1f}M", "list": lambda v: ", ".join(v), "s": str}
+            "n": lambda v: f"{v:,.0f}", "f2": lambda v: f"{v:.2f}", "x": lambda v: f"{v:.1f}×", "f1": lambda v: f"{v:.1f}", "f0x": lambda v: f"{v:.0f} times", "f2pct": lambda v: f"{100 * v:.2f}%", "upct0": lambda v: f"{100 * v:,.0f}%", "months": lambda v: ", ".join(pd.Timestamp(x + "-01").strftime("%b %Y") for x in v), "share0": lambda v: f"{100 * v:.0f}%", "share_inv": lambda v: f"{100 * (1 - v):.0f}%", "month": lambda v: pd.Timestamp(v + "-01").strftime("%b %Y"), "m_near": lambda v: f"{v / 1e6:,.1f}M", "list": lambda v: ", ".join(v), "s": str}
 
     def sub(m):
         path, _, fmt = m.group(1).partition("|")

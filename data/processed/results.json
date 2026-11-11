@@ -6737,6 +6737,16 @@
   "mcap_to_revenue": 213.26562132444022,
   "revenue_at_mde": 6566118.085652576
  },
+ "revenue_mix": {
+  "intents": 1838057.0,
+  "chain": 110044.0,
+  "tracked": 2145991.8600000003,
+  "intents_share": 0.8565069766853635,
+  "intents_vs_chain": 16.702927919741196,
+  "protocols": 8,
+  "from": "2026-10-11",
+  "to": "2026-11-09"
+ },
  "rivals": {
   "intents_pct": -0.1595110566014919,
   "by_venue_pct": {

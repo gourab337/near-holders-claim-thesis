@@ -4,7 +4,7 @@
 
 [![check](https://github.com/gourab337/near-holders-claim-thesis/actions/workflows/check.yml/badge.svg)](https://github.com/gourab337/near-holders-claim-thesis/actions/workflows/check.yml) (on every push GitHub rebuilds every number from the committed data on Linux, checks it reproduces the committed thesis, and runs the tests)
 
-NEAR HACKATHON 2026 · **Investment Thesis track** · **Live dashboard:** https://gourab337.github.io/near-holders-claim-thesis/ · **Thesis (about ten minutes):** [`THESIS.md`](THESIS.md) · **Demo video (106 s, narrated):** [`docs/demo.mp4`](docs/demo.mp4)
+NEAR HACKATHON 2026 · **Investment Thesis track** · **Live dashboard:** https://gourab337.github.io/near-holders-claim-thesis/ · **Thesis (about ten minutes):** [`THESIS.md`](THESIS.md) · **Demo video (126 s, narrated):** [`docs/demo.mp4`](docs/demo.mp4)
 
 ## In 30 seconds
 
@@ -14,10 +14,10 @@ NEAR HACKATHON 2026 · **Investment Thesis track** · **Live dashboard:** https:
 | **The number** | NEAR Intents sends back {{buyback.coverage_28d|share0}} as much NEAR as NEAR issues. None of it is paid to holders, staked or burned. |
 | **The trigger** | Buy when the wallets that receive Intents' revenue take in {{rating.need_per_day|n}} NEAR a day for three months (the last three averaged {{buyback.last3_per_day|n}}). Avoid if the wallets shrink or two of three warning measures break. |
 
-NEAR's market value is {{stake.mcap_to_revenue|n}} times a year of one business's revenue: NEAR Intents, which swaps tokens across blockchains. That price needs the business to keep going and holders to share in it. The first is true. The second, so far, is not.
+Most of the revenue that can be measured on NEAR comes from one business: NEAR Intents, which swaps tokens across blockchains. Over the last 30 days it earned {{revenue_mix.intents_share|share0}} of the revenue DefiLlama tracks on NEAR, about {{revenue_mix.intents_vs_chain|f0x}} what the NEAR chain itself earns in fees. NEAR's other lines of business, such as NEAR AI Cloud, are not in that count. So for a holder, two things about Intents matter most: the business keeps going, and holders share in it. The first is true. The second, so far, is not.
 
 1. **The business is resilient.** Within a month Intents froze users' funds and was hacked for $3.8M. Counted swap by swap, volume on 1Click (the swap service apps plug into) in the four weeks after was {{confidential.oneclick_event_vs_august|pct0}} against August, and {{large.windows.event.august_big_kept_half}} of {{large.august_big}} large integrating apps kept at least half their volume.
-2. **One number looked like a loss. It was not.** Public swaps on NEAR's chain fell from {{privacy.events.windows.before.token_diff|n}} a day to {{privacy.events.windows.after.token_diff|n}}. The swaps had not left: since 27 October 1Click settles on a permissioned instance of NEAR with no public networking. Of the swaps I sampled, {{confidential.trace.2026-08-12.public|share0}} left a public record in August and {{confidential.trace.2026-11-05.public|share0}} in November. The business was fine, but it became harder to check.
+2. **One number looked like a loss. It was not.** From late October, swap volume visible on NEAR's public chain fell from {{confidential.windows.august.public_usd|usd_m}} a day to {{confidential.windows.after.public_usd|usd_m}}, while 1Click volume held at {{confidential.windows.after.oneclick_usd|usd_m}}. Usage had not dropped: since 27 October 1Click settles on a permissioned instance of NEAR with no public networking, and the big apps kept routing through it. Because the switch came four weeks after the freeze, the chain alone makes it look as if users left. Of the swaps I sampled, {{confidential.trace.2026-08-12.public|share0}} left a public record in August and {{confidential.trace.2026-11-05.public|share0}} in November. The business was fine, but it became harder to check.
 3. **Holders get little of it.** NEAR creates {{buyback.issued_per_day|n}} new tokens a day, which dilutes holders. The wallets that receive Intents' revenue take in {{buyback.in_28d_per_day|n}} a day: {{buyback.coverage_28d|share0}} as much. To match all the new supply, the inflow would have to grow about {{buyback.growth_needed|x}}. By month it has run from {{rating.month_min|share0}} to {{rating.month_max|share0}} with no steady rise.
 4. **And no rule protects even that.** None of it is paid to holders, staked or burned. A few signers can move it ({{control.multisig.needed}} of {{control.multisig.keys}}, {{control.oneclick.needed}} of {{control.oneclick.members}} and {{control.front_end.needed}} of {{control.front_end.members}} across the three wallets), and the front-end fund's policy sets the threshold for changing its own rules at {{control.front_end.policy_needed}} vote (read from the contract, not tested).
 
@@ -37,7 +37,8 @@ What cuts against it is in the thesis too: the statistical test I planned in adv
 | Finding | Source | Code |
 |---|---|---|
 | Large swaps and integrating apps after the freeze and the hack ({{large.n|n}} swaps of $10,000 or more) | NEAR Intents Explorer API | `src/fetch_explorer.py` |
-| Public swaps on the chain falling from {{privacy.events.windows.before.token_diff|n}} to {{privacy.events.windows.after.token_diff|n}} a day | NEAR's public BigQuery dataset | `sql/intents_event_counts_daily.sql` |
+| Public swap volume falling from {{confidential.windows.august.public_usd|usd_m}} to {{confidential.windows.after.public_usd|usd_m}} a day while 1Click held | NEAR's public BigQuery dataset, Explorer API | `sql/intents_stable_volume_daily.sql`, `src/fetch_explorer.py` |
+| Intents' share of revenue tracked on NEAR, {{revenue_mix.intents_share|share0}} | DefiLlama | `src/build.py` |
 | {{confidential.trace.2026-08-12.public|share0}} to {{confidential.trace.2026-11-05.public|share0}} of sampled swaps leaving a public record | NEAR Intents Explorer API, then BigQuery | `src/fetch_explorer.py`, `sql/intents_swap_trace.sql` |
 | Share of reported volume visible as public swaps, {{privacy.windows.after_ga|share0}} to {{privacy.windows.after|share0}} | BigQuery over DefiLlama | `sql/intents_stable_volume_daily.sql` |
 | Wallet balances, {{buyback.held|n}} NEAR; inflow against issuance | NEAR's public BigQuery dataset | `sql/revenue_wallets_daily.sql` |
