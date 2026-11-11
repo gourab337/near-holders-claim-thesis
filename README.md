@@ -2,7 +2,7 @@
 
 [![check](https://github.com/gourab337/near-holders-claim-thesis/actions/workflows/check.yml/badge.svg)](https://github.com/gourab337/near-holders-claim-thesis/actions/workflows/check.yml) (on every push GitHub rebuilds every number from the committed data on Linux, checks it reproduces the committed thesis, and runs the tests)
 
-NEAR HACKATHON 2026 · **Investment Thesis track** · **Live dashboard:** https://gourab337.github.io/near-holders-claim-thesis/ · **Thesis (about ten minutes):** [`THESIS.md`](THESIS.md) · **Demo video (99 s, narrated):** [`docs/demo.mp4`](docs/demo.mp4)
+NEAR HACKATHON 2026 · **Investment Thesis track** · **Live dashboard:** https://gourab337.github.io/near-holders-claim-thesis/ · **Thesis (about ten minutes):** [`THESIS.md`](THESIS.md) · **Demo video (101 s, narrated):** [`docs/demo.mp4`](docs/demo.mp4)
 
 ## In 30 seconds
 
@@ -15,8 +15,8 @@ NEAR HACKATHON 2026 · **Investment Thesis track** · **Live dashboard:** https:
 NEAR trades at 213 times the revenue of one business, NEAR Intents. I checked what a holder actually owns of it.
 
 - **Small.** The wallets that receive Intents' revenue gain 13,571 NEAR a day; NEAR issues 86,966. By month the share has run from 6% to 22% with no steady rise.
-- **Unsecured.** None of it is paid to holders, staked or burned. 2 of 4, 2 of 4 and 2 of 5 signers can move it, and in the front-end fund 1 vote can change the fund's own rules. No rule in code says what happens to the NEAR.
-- **Harder to check.** Since 27 October 1Click swaps settle on a private network. Of the swaps I sampled, 98% left a public record in August and 7% in November. The volume DefiLlama reports comes from NEAR's own dataset.
+- **Unsecured.** None of it is paid to holders, staked or burned. 2 of 4, 2 of 4 and 2 of 5 signers can move it, and the front-end fund's policy sets the threshold for changing its own rules at 1 vote (read from the contract, not tested). No rule in code says what happens to the NEAR.
+- **Harder to check.** Since 27 October 1Click swaps settle on a permissioned instance of NEAR with no public networking. Of the swaps I sampled, 98% left a public record in August and 7% in November. The volume DefiLlama reports comes from NEAR's own dataset.
 - **But the business held.** Within a month Intents froze users' funds and was exploited for $3.8M. Counted swap by swap, 1Click volume in the four weeks after was -5% against August, and 17 of 25 large integrating apps kept at least half their volume.
 
 What cuts against it is in the thesis too: the statistical test I planned in advance was inconclusive (-24.3% or +1.0%, depending on the comparison venues), and I changed the rating from Long to Hold a day before submitting, after measuring the wallets.

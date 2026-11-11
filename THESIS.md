@@ -41,7 +41,7 @@ My count comes to 100.4% of the revenue DefiLlama reports for the same days, so 
 |---|---|
 | Buybacks wallet | 2 of 4 keys |
 | 1Click fund | 2 of 4 members |
-| Front-end fund | 2 of 5 members. But a change to the fund's own rules passes with 1 vote. |
+| Front-end fund | 2 of 5 members. But its policy sets the threshold for changing the fund's own rules at 1 vote (read from the contract, not tested). |
 
 Nothing in code sends this NEAR to holders. Today it is a treasury that has so far been left alone: the balance fell on 2 of 367 days.
 
@@ -59,7 +59,7 @@ A holder loses wherever growth stops. A holder gains only if revenue compounds a
 
 ### Part 2. Why not Buy: it is getting harder to check
 
-Until this autumn, anyone could count Intents' swaps on NEAR's public chain. On 27 October 2026 NEAR Intents' changelog said: "From October 27, 2026, 1Click swaps settle confidentially." The swap now happens on a private, permissioned network. The public chain shows only money going into a Treasury account and coming out again.
+Until this autumn, anyone could count Intents' swaps on NEAR's public chain. On 27 October 2026 NEAR Intents' changelog said: "From October 27, 2026, 1Click swaps settle confidentially." The swap now happens on what the changelog calls "a permissioned instance of the NEAR protocol operated by a small validator set with no public networking". The public chain shows only money going into a Treasury account and coming out again.
 
 I tested this directly. I drew 300 successful swaps at random on each of five days and followed each one onto the chain (`src/fetch_explorer.py`, `sql/intents_swap_trace.sql`).
 
@@ -72,7 +72,7 @@ The swaps did not stop. What disappeared is the public record of them.
 
 This matters because of where the headline number comes from. The Intents volume that DefiLlama shows is read from a dataset NEAR itself publishes. The table above counts swaps. Counted in dollars against DefiLlama's total, public swaps were 43% of that figure in the summer and 13% from late October. Adding the 1Click swaps that now settle privately, I can account for about 33% of it.
 
-I have no evidence that the reported number is wrong. The point is narrower: a holder can no longer check most of it without relying on the operator. And the two have parted: since August DefiLlama's figure is +44%, while the 1Click volume I can count is -5%. I cannot say what the difference is made of. The sampled swaps came from ordinary deposits, so this was a change in how 1Click settles, not users choosing privacy. Why NEAR Intents made the change, I cannot say.
+I have no evidence that the reported number is wrong. The point is narrower: a holder can no longer check most of it without relying on the operator. The part I can still count swap by swap, 1Click, is only part of Intents' volume, so it cannot confirm the total either way. The sampled swaps came from ordinary deposits, so this was a change in how 1Click settles, not users choosing privacy. Why NEAR Intents made the change, I cannot say.
 
 ### Part 3. Why not Avoid: the business came through its worst month
 
