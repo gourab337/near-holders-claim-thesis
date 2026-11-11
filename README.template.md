@@ -4,7 +4,7 @@
 
 [![check](https://github.com/gourab337/near-holders-claim-thesis/actions/workflows/check.yml/badge.svg)](https://github.com/gourab337/near-holders-claim-thesis/actions/workflows/check.yml) (on every push GitHub rebuilds every number from the committed data on Linux, checks it reproduces the committed thesis, and runs the tests)
 
-NEAR HACKATHON 2026 · **Investment Thesis track** · **Live dashboard:** https://gourab337.github.io/near-holders-claim-thesis/ · **Thesis (about ten minutes):** [`THESIS.md`](THESIS.md) · **Demo video (101 s, narrated):** [`docs/demo.mp4`](docs/demo.mp4)
+NEAR HACKATHON 2026 · **Investment Thesis track** · **Live dashboard:** https://gourab337.github.io/near-holders-claim-thesis/ · **Thesis (about ten minutes):** [`THESIS.md`](THESIS.md) · **Demo video (103 s, narrated):** [`docs/demo.mp4`](docs/demo.mp4)
 
 ## In 30 seconds
 
@@ -14,12 +14,14 @@ NEAR HACKATHON 2026 · **Investment Thesis track** · **Live dashboard:** https:
 | **The number** | {{buyback.coverage_28d|share0}} of NEAR's new supply comes back from NEAR Intents into three wallets. None is paid to holders, staked or burned. |
 | **The trigger** | Buy when the wallets take in {{rating.need_per_day|n}} NEAR a day for three months (now {{buyback.last3_per_day|n}}). Avoid if the wallets shrink or the flow breaks. |
 
-NEAR trades at {{stake.mcap_to_revenue|n}} times the revenue of one business, NEAR Intents. I checked what a holder actually owns of it.
+NEAR's market value is {{stake.mcap_to_revenue|n}} times a year of one business's revenue: NEAR Intents, which swaps tokens across blockchains. That price needs the business to keep going and holders to share in it. The first is true. The second, so far, is not.
 
-- **Small.** The wallets that receive Intents' revenue gain {{buyback.in_28d_per_day|n}} NEAR a day; NEAR issues {{buyback.issued_per_day|n}}. By month the share has run from {{rating.month_min|share0}} to {{rating.month_max|share0}} with no steady rise.
-- **Unsecured.** None of it is paid to holders, staked or burned. {{control.multisig.needed}} of {{control.multisig.keys}}, {{control.oneclick.needed}} of {{control.oneclick.members}} and {{control.front_end.needed}} of {{control.front_end.members}} signers can move it, and the front-end fund's policy sets the threshold for changing its own rules at {{control.front_end.policy_needed}} vote (read from the contract, not tested). No rule in code says what happens to the NEAR.
-- **Harder to check.** Since 27 October 1Click swaps settle on a permissioned instance of NEAR with no public networking. Of the swaps I sampled, {{confidential.trace.2026-08-12.public|share0}} left a public record in August and {{confidential.trace.2026-11-05.public|share0}} in November. The volume DefiLlama reports comes from NEAR's own dataset.
-- **But the business held.** Within a month Intents froze users' funds and was exploited for $3.8M. Counted swap by swap, 1Click volume in the four weeks after was {{confidential.oneclick_event_vs_august|pct0}} against August, and {{large.windows.event.august_big_kept_half}} of {{large.august_big}} large integrating apps kept at least half their volume.
+1. **The business is resilient.** Within a month Intents froze users' funds and was hacked for $3.8M. Counted swap by swap, its 1Click volume in the four weeks after was {{confidential.oneclick_event_vs_august|pct0}} against August, and {{large.windows.event.august_big_kept_half}} of {{large.august_big}} large integrating apps kept at least half their volume.
+2. **One number looked like a loss. It was not.** Public swaps on NEAR's chain fell from {{privacy.events.windows.before.token_diff|n}} a day to {{privacy.events.windows.after.token_diff|n}}. The swaps had not left: since 27 October 1Click settles on a permissioned instance of NEAR with no public networking. Of the swaps I sampled, {{confidential.trace.2026-08-12.public|share0}} left a public record in August and {{confidential.trace.2026-11-05.public|share0}} in November. The business was fine, but it became harder to check.
+3. **Holders get little of it.** The wallets that receive Intents' revenue gain {{buyback.in_28d_per_day|n}} NEAR a day; NEAR issues {{buyback.issued_per_day|n}}. That is {{buyback.coverage_28d|share0}}, and it would have to grow about {{buyback.growth_needed|x}} to cover all of it. By month it has run from {{rating.month_min|share0}} to {{rating.month_max|share0}} with no steady rise.
+4. **And no rule protects even that.** None of it is paid to holders, staked or burned. {{control.multisig.needed}} of {{control.multisig.keys}}, {{control.oneclick.needed}} of {{control.oneclick.members}} and {{control.front_end.needed}} of {{control.front_end.members}} signers can move it, and the front-end fund's policy sets the threshold for changing its own rules at {{control.front_end.policy_needed}} vote (read from the contract, not tested).
+
+So: a resilient business is a reason not to sell, and a small share that nobody guarantees is a reason not to buy more. Hold.
 
 What cuts against it is in the thesis too: the statistical test I planned in advance was inconclusive ({{H1.literal.stat_pct|pct}} or {{H1.stat_pct|pct}}, depending on the comparison venues), and I changed the rating from Long to Hold a day before submitting, after measuring the wallets.
 
@@ -34,11 +36,12 @@ What cuts against it is in the thesis too: the statistical test I planned in adv
 
 | Finding | Source | Code |
 |---|---|---|
-| Wallet balances, {{buyback.held|n}} NEAR; inflow against issuance | NEAR's public BigQuery dataset | `sql/revenue_wallets_daily.sql` |
-| Who can move the wallets | The contracts, over a public RPC endpoint | `src/fetch_control.py` |
+| Large swaps and integrating apps after the freeze and the hack ({{large.n|n}} swaps of $10,000 or more) | NEAR Intents Explorer API | `src/fetch_explorer.py` |
+| Public swaps on the chain falling from {{privacy.events.windows.before.token_diff|n}} to {{privacy.events.windows.after.token_diff|n}} a day | NEAR's public BigQuery dataset | `sql/intents_event_counts_daily.sql` |
 | {{confidential.trace.2026-08-12.public|share0}} to {{confidential.trace.2026-11-05.public|share0}} of sampled swaps leaving a public record | NEAR Intents Explorer API, then BigQuery | `src/fetch_explorer.py`, `sql/intents_swap_trace.sql` |
 | Share of reported volume visible as public swaps, {{privacy.windows.after_ga|share0}} to {{privacy.windows.after|share0}} | BigQuery over DefiLlama | `sql/intents_stable_volume_daily.sql` |
-| Large swaps and integrating apps ({{large.n|n}} swaps of $10,000 or more) | NEAR Intents Explorer API | `src/fetch_explorer.py` |
+| Wallet balances, {{buyback.held|n}} NEAR; inflow against issuance | NEAR's public BigQuery dataset | `sql/revenue_wallets_daily.sql` |
+| Who can move the wallets | The contracts, over a public RPC endpoint | `src/fetch_control.py` |
 | Reported volume against a model of rival venues | DefiLlama, CoinGecko | `src/build.py`, `event_stat()` |
 
 ## Check it in two minutes
@@ -80,7 +83,7 @@ Requires [uv](https://docs.astral.sh/uv/) (it installs Python 3.12 and the pinne
 | Three predictions to 2027-03-31 (first version, `archive/PREDICTIONS-2026-11-10.md`; carried into `RATING.md` as P1 to P3) | Yes: scored only on later data | Bitcoin block 975308, 2026-11-10 |
 | The rating rule and two more calls, C1 and C2 (`RATING.md`) | Calls yes; the rule was written after seeing the wallet data | OpenTimestamps, 2026-11-11 |
 | The rating itself | No. Long on 2026-11-10, Hold on 2026-11-11 after the wallets were measured (appendix B7, deviation 7) | |
-| Parts 1 to 3 of the thesis (wallets, the confidential switch, integrators) and appendix A6 and A7 | No. Added after seeing results (appendix B7, deviation 5) | |
+| Parts 1 to 3 of the thesis (integrators, the confidential switch, wallets) and appendix A6 and A7 | No. Added after seeing results (appendix B7, deviation 5) | |
 
 ## Data notes
 

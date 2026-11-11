@@ -17,110 +17,86 @@
 <p><em>It came through a freeze and a hack with its volume intact. But only 16% of new supply comes back, none of it is paid to holders, and no rule in code protects it.</em></p>
 <p>NEAR HACKATHON 2026 · Investment Thesis track · data to 2026-11-09 · about ten minutes to read · full tables, method and caveats: <a href="appendix.html"><code>APPENDIX.md</code></a></p>
 <h2>The claim</h2>
-<p>The case for owning NEAR now rests on one business. NEAR Intents swaps tokens across blockchains, and part of what it earns is sent back as NEAR into three wallets. NEAR's market value is 213 times a year of Intents' revenue. A price like that says two things: the business will keep growing, and holders will share in it.</p>
-<p>I checked both against the chain. Four things came out.</p>
-<ul>
-<li><strong>The business held up under stress.</strong> Within a month Intents froze users' funds and was then exploited for $3.8M. Its main product is 1Click, the swap service that apps plug into. Counted swap by swap, 1Click volume in the four weeks that followed was -5% against August.</li>
-<li><strong>Holders' claim on it is small.</strong> The three wallets gain 13,571 NEAR a day. NEAR issues 86,966 a day. So 16% of the new supply comes back.</li>
-<li><strong>The claim is unsecured.</strong> None of that NEAR is paid to holders, staked or burned. It sits in wallets that a few signers can move, and no rule in code says what happens to it.</li>
-<li><strong>It is getting harder to check.</strong> Since 27 October most swaps settle off the public chain. In August 98% of the swaps I sampled left a public record. In November, 7%.</li>
-</ul>
-<p><strong>So the rating is Hold.</strong> Keep the NEAR you own, and keep it staked. Do not add yet. The rating turns to Buy when the wallets take in 21,700 NEAR a day, 25% of new supply, for three full months. The last three full months averaged 15,486. It turns to Avoid if the wallets shrink or the flow breaks. The rule is written down and timestamped in <a href="RATING.md"><code>RATING.md</code></a>, with five dated predictions that will show by 31 March 2027 whether I was right.</p>
+<p>The case for owning NEAR rests on one business. NEAR Intents swaps tokens across blockchains, and part of what it earns is sent back as NEAR. NEAR's market value is 213 times a year of that revenue. A price like that needs two things to be true: the business keeps going, and holders share in it.</p>
+<p>The first is true. The second, so far, is not. Here is the argument in four steps.</p>
+<ol>
+<li><strong>The business is resilient.</strong> Within a month Intents froze users' funds and was then hacked for $3.8M. Its volume barely moved: -5% against August.</li>
+<li><strong>One number looked like a loss. It was not.</strong> On NEAR's public chain, swaps fell by more than half. They had not left. On 27 October Intents began settling swaps off the public chain. The business was fine, but it became harder to check.</li>
+<li><strong>Holders get little of it.</strong> The wallets that receive Intents' revenue take in 16% of the NEAR that NEAR issues. To cover all of it, the inflow would have to grow about 6.4×.</li>
+<li><strong>And no rule protects even that.</strong> None of it is paid to holders, staked or burned. A few signers can move it.</li>
+</ol>
+<p><strong>So the rating is Hold.</strong> A resilient business is a reason not to sell. A small share that nobody guarantees is a reason not to buy more. Keep the NEAR you own, staked. The rating turns to Buy when the wallets take in 21,700 NEAR a day for three full months (the last three averaged 15,486), and to Avoid if the wallets shrink or the flow breaks. The rule is timestamped in <a href="RATING.md"><code>RATING.md</code></a>, with five dated predictions that resolve on 31 March 2027.</p>
 <h2>Evidence for the rating</h2>
-<p>Parts 1 and 2 are why this is not a Buy. Part 3 is why it is not an Avoid.</p>
-<h3>Part 1. Why not Buy: little reaches NEAR, and no rule protects it</h3>
-<p>Since February 2026, part of Intents' revenue has been swept, as NEAR, into three wallets: a buybacks wallet, a fund fed by 1Click fees and a fund fed by front-end fees. DefiLlama calls this a buyback and credits it to NEAR's holders. The wallets are public, so I read their balances for every day of the past year from NEAR's BigQuery dataset (<code>sql/revenue_wallets_daily.sql</code>).</p>
+<h3>Part 1. The business is resilient</h3>
+<p><strong>In one line: Intents took two hits to its users' trust in one month, and the money kept flowing.</strong></p>
+<p>The two hits:</p>
+<ul>
+<li><strong>2026-09-29: a freeze.</strong> Intents' compliance system blocked more than $50M of transfers linked to the Bitget hack and froze $503k in the middle of a swap. Three weeks earlier a Zcash user had reported $589k held for 50 days.</li>
+<li><strong>2026-10-01: a hack.</strong> $3.8M was taken, and the contract was paused on eleven networks. The funds were returned the next day.</li>
+</ul>
+<p>Critics had a simple prediction: a venue that can freeze your money is not trustless, so users will leave the first time it does. This was the test of that prediction.</p>
+<p>I counted every swap of $10,000 or more on 1Click, the swap service that apps plug into. These large swaps are about three-quarters of 1Click's dollars.</p>
 <table>
 <thead>
 <tr>
 <th></th>
-<th></th>
+<th>August</th>
+<th>4 weeks from the freeze</th>
+<th>After 27 Oct</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>NEAR held in the three wallets</td>
-<td>4,224,522 (0.32% of supply)</td>
+<td>Large-swap volume a day</td>
+<td>$28.9M</td>
+<td>$28.5M</td>
+<td>$27.6M</td>
 </tr>
 <tr>
-<td>Gained a day, last 28 days</td>
-<td>13,571 NEAR</td>
-</tr>
-<tr>
-<td>Issued by NEAR a day</td>
-<td>86,966 NEAR</td>
-</tr>
-<tr>
-<td>Share of new supply that comes back</td>
-<td><strong>16%</strong> (11% without the front-end fund)</td>
-</tr>
-<tr>
-<td>Paid to holders, staked or burned</td>
-<td><strong>None</strong></td>
+<td>Apps routing large swaps</td>
+<td>66</td>
+<td>81</td>
+<td>64</td>
 </tr>
 </tbody>
 </table>
-<p>My count comes to 100.4% of the revenue DefiLlama reports for the same days, so the two sources agree on the size.</p>
-<p><strong>It is not growing steadily.</strong> By month, the share of new supply that came back has run from 6% (Apr 2026) to 22% (Sep 2026), with no steady rise. Revenue in dollars grew 3.9× between Mar 2026 and Oct 2026, but NEAR's price rose 3.8×, so the extra dollars bought no extra NEAR. That is the catch in any buyback: when the token goes up, the buyback retires less of it.</p>
-<p><strong>A few signers decide what happens to it.</strong> I read the rules from the contracts themselves (<code>src/fetch_control.py</code>).</p>
+<ul>
+<li><strong>The volume stayed.</strong> In the four weeks from the freeze, large-swap volume was -1% against August, and all 1Click volume -5%.</li>
+<li><strong>The apps stayed.</strong> Most of this volume arrives through apps that build Intents into their own products. Of the 25 apps that routed $1M or more in August, 17 kept at least half their volume.</li>
+<li><strong>Revenue rose.</strong> Intents earned $23k a day in August and $72k a day in the four weeks after the freeze.</li>
+</ul>
+<p>Two cautions:</p>
+<ul>
+<li><strong>Individual users came back less.</strong> Of addresses that sent large swaps on five or more days before the freeze, 59% came back (94 addresses). In the one calm period I can compare with, 68% to 75% did.</li>
+<li><strong>One app carries a third of it.</strong> Since 27 October swapkit has routed 37% of large-swap dollars. A decision at one company could move more volume than the freeze did.</li>
+</ul>
+<p>The customer that decides is the app, not the end user. Most apps did not leave.</p>
+<h3>Part 2. The drop that was not a drop</h3>
+<p><strong>In one line: public swaps on the chain fell by more than half, but the swaps had moved out of view, not away.</strong></p>
+<p>If the business held, the public chain should show it. It showed the opposite.</p>
 <table>
 <thead>
 <tr>
-<th>Wallet</th>
-<th>Who can move the NEAR</th>
+<th>On NEAR's public chain, a day</th>
+<th>August</th>
+<th>From late October</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Buybacks wallet</td>
-<td>2 of 4 keys</td>
+<td>Swaps recorded</td>
+<td>119,511</td>
+<td>24,689</td>
 </tr>
 <tr>
-<td>1Click fund</td>
-<td>2 of 4 members</td>
-</tr>
-<tr>
-<td>Front-end fund</td>
-<td>2 of 5 members. But its policy sets the threshold for changing the fund's own rules at 1 vote (read from the contract, not tested).</td>
+<td>Their dollar value (swaps with a stablecoin side)</td>
+<td>$40.5M</td>
+<td>$15.0M</td>
 </tr>
 </tbody>
 </table>
-<p>Nothing in code sends this NEAR to holders. Today it is a treasury that has so far been left alone: the balance fell on 2 of 367 days.</p>
-<p><strong>What the price already assumes.</strong> The table shows the change in NEAR's price by the end of 2029, given how fast Intents revenue grows and what multiple of revenue the market still pays. It is arithmetic, not a forecast. Supply keeps growing in every cell, which is why the price slips even where nothing else changes.</p>
-<table>
-<thead>
-<tr>
-<th>Intents revenue growth a year</th>
-<th>Multiple falls to a quarter (53×)</th>
-<th>Multiple halves (107×)</th>
-<th>Multiple holds (213×)</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>0%</td>
-<td>-76%</td>
-<td>-52%</td>
-<td>-5%</td>
-</tr>
-<tr>
-<td>50%</td>
-<td>-15%</td>
-<td>+70%</td>
-<td>+241%</td>
-</tr>
-<tr>
-<td>100%</td>
-<td>+110%</td>
-<td>+321%</td>
-<td>+742%</td>
-</tr>
-</tbody>
-</table>
-<p>A holder loses wherever growth stops. A holder gains only if revenue compounds and the market keeps paying a high multiple for it. That is why this is not a Buy.</p>
-<p><strong>Why "staked".</strong> New NEAR goes to stakers. By the end of 2029, a holder who does not stake owns 7.4% less of the supply at today's issuance. A holder who stakes owns 7.3% more, before the validator's fee.</p>
-<h3>Part 2. Why not Buy: it is getting harder to check</h3>
-<p>Until this autumn, anyone could count Intents' swaps on NEAR's public chain. On 27 October 2026 NEAR Intents' changelog said: "From October 27, 2026, 1Click swaps settle confidentially." The swap now happens on what the changelog calls "a permissioned instance of the NEAR protocol operated by a small validator set with no public networking". The public chain shows only money going into a Treasury account and coming out again.</p>
+<p>On its face that is users leaving after the freeze, exactly as the critics predicted.</p>
+<p>It is not. On 27 October 2026 NEAR Intents' changelog said: "From October 27, 2026, 1Click swaps settle confidentially." The swap now happens on what the changelog calls "a permissioned instance of the NEAR protocol operated by a small validator set with no public networking". The public chain shows only money going into a Treasury account and coming out again.</p>
 <p>I tested this directly. I drew 300 successful swaps at random on each of five days and followed each one onto the chain (<code>src/fetch_explorer.py</code>, <code>sql/intents_swap_trace.sql</code>).</p>
 <table>
 <thead>
@@ -152,63 +128,107 @@
 </tr>
 </tbody>
 </table>
-<p>The swaps did not stop. What disappeared is the public record of them.</p>
-<p>This matters because of where the headline number comes from. The Intents volume that DefiLlama shows is read from a dataset NEAR itself publishes. The table above counts swaps. Counted in dollars against DefiLlama's total, public swaps were 43% of that figure in the summer and 13% from late October. Adding the 1Click swaps that now settle privately, I can account for about 33% of it.</p>
-<p>I have no evidence that the reported number is wrong. The point is narrower: a holder can no longer check most of it without relying on the operator. The part I can still count swap by swap, 1Click, is only part of Intents' volume, so it cannot confirm the total either way. The sampled swaps came from ordinary deposits, so this was a change in how 1Click settles, not users choosing privacy. Why NEAR Intents made the change, I cannot say.</p>
-<h3>Part 3. Why not Avoid: the business held up through a freeze and a hack</h3>
-<p>A small claim is only worth holding if the business behind it lasts. This autumn it was tested twice.</p>
-<ul>
-<li><strong>2026-09-29: a freeze.</strong> Intents' compliance system blocked more than $50M of transfers linked to the Bitget hack and froze $503k in the middle of a swap. Three weeks earlier a Zcash user had reported $589k held for 50 days.</li>
-<li><strong>2026-10-01: an exploit.</strong> $3.8M was taken, and the contract was paused on eleven networks. The funds were returned the next day.</li>
-</ul>
-<p>The bear case was simple: a venue that can freeze your money is not trustless, so users will leave the first time it does. Here is what happened to swaps of $10,000 or more, which are about three-quarters of 1Click's dollars.</p>
+<p>The swaps did not stop. Counted through Intents' own records, 1Click volume was $38.7M a day in August and $36.9M a day after the switch. What disappeared is the public record of them. The sampled swaps came from ordinary deposits, so this was a change in how 1Click settles, not users choosing privacy. Why NEAR Intents made the change, I cannot say.</p>
+<p><strong>What it costs a holder.</strong> The business did not shrink, but it became harder to check. The Intents volume that DefiLlama shows is read from a dataset NEAR itself publishes. Counted in dollars, public swaps were 43% of that figure in the summer and 13% from late October. I have no evidence that the reported number is wrong. But a holder can no longer verify most of it without relying on the operator.</p>
+<h3>Part 3. But little of it reaches NEAR holders</h3>
+<p><strong>In one line: 16% of new NEAR supply comes back from Intents, none of it goes to holders, and a few signers control it.</strong></p>
+<p>A resilient business only helps a token holder if the holder gets a share. Here is the share.</p>
+<p>Since February 2026, part of Intents' revenue has been swept, as NEAR, into three wallets: a buybacks wallet, a fund fed by 1Click fees and a fund fed by front-end fees. DefiLlama calls this a buyback and credits it to NEAR's holders. The wallets are public, so I read their balances for every day of the past year from NEAR's BigQuery dataset (<code>sql/revenue_wallets_daily.sql</code>).</p>
 <table>
 <thead>
 <tr>
 <th></th>
-<th>August</th>
-<th>4 weeks from the freeze</th>
-<th>After 27 Oct</th>
+<th></th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Large-swap volume a day</td>
-<td>$28.9M</td>
-<td>$28.5M</td>
-<td>$27.6M</td>
+<td>NEAR the wallets gain a day (last 28 days)</td>
+<td>13,571</td>
 </tr>
 <tr>
-<td>Apps routing large swaps</td>
-<td>66</td>
-<td>81</td>
-<td>64</td>
+<td>NEAR issued a day</td>
+<td>86,966</td>
 </tr>
 <tr>
-<td>Largest app's share of the dollars</td>
-<td>35%</td>
-<td>40%</td>
-<td>37%</td>
+<td>Share of new supply that comes back</td>
+<td><strong>16%</strong></td>
+</tr>
+<tr>
+<td>Growth needed to cover all of it</td>
+<td><strong>about 6.4×</strong></td>
+</tr>
+<tr>
+<td>Paid to holders, staked or burned</td>
+<td><strong>None</strong></td>
 </tr>
 </tbody>
 </table>
-<ul>
-<li><strong>The flow stayed.</strong> In the four weeks from the freeze, large-swap volume was -1% against August, and all 1Click volume -5%.</li>
-<li><strong>The apps stayed.</strong> Most of this volume arrives through apps that plug Intents into their own products. Of the 25 apps that routed $1M or more in August, 17 kept at least half their volume.</li>
-<li><strong>Revenue rose in dollars.</strong> $23k a day in August, $59k in the four weeks before the freeze, $72k in the four weeks after. In NEAR the wallets' gain was +11% against August, though below September's record.</li>
-</ul>
-<p>Two cautions belong here.</p>
-<ul>
-<li><strong>Individual users came back less.</strong> Of addresses that sent large swaps on five or more days before the freeze, 59% came back (94 addresses). In the one calm period I can compare with, 68% to 75% did.</li>
-<li><strong>One app carries a third of it.</strong> Since 27 October swapkit has routed 37% of large-swap dollars. A routing decision at one company could move more volume than the freeze did.</li>
-</ul>
-<p>So the customer that decides is the app, not the end user. Most apps did not leave.</p>
+<p>My count comes to 100.4% of the revenue DefiLlama reports for the same days, so the two sources agree on the size.</p>
+<p><strong>It is not growing steadily.</strong> By month, the share of new supply that came back has run from 6% (Apr 2026) to 22% (Sep 2026), with no steady rise. Revenue in dollars grew 3.9× between Mar 2026 and Oct 2026, but NEAR's price rose 3.8×, so the extra dollars bought no extra NEAR. That is the catch in any buyback: when the token goes up, the buyback retires less of it.</p>
+<p><strong>No rule protects it.</strong> Nothing in code sends this NEAR to holders. It sits in the three wallets, and I read from the contracts who can move it (<code>src/fetch_control.py</code>).</p>
+<table>
+<thead>
+<tr>
+<th>Wallet</th>
+<th>Who can move the NEAR</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Buybacks wallet</td>
+<td>2 of 4 keys</td>
+</tr>
+<tr>
+<td>1Click fund</td>
+<td>2 of 4 members</td>
+</tr>
+<tr>
+<td>Front-end fund</td>
+<td>2 of 5 members. But its policy sets the threshold for changing the fund's own rules at 1 vote (read from the contract, not tested).</td>
+</tr>
+</tbody>
+</table>
+<p>So far the signers have left it alone: the balance fell on 2 of 367 days.</p>
+<p><strong>What the price already assumes.</strong> The table shows the change in NEAR's price by the end of 2029, given how fast Intents revenue grows and what multiple of revenue the market still pays. It is arithmetic, not a forecast. Supply keeps growing in every cell, which is why the price slips even where nothing else changes.</p>
+<table>
+<thead>
+<tr>
+<th>Intents revenue growth a year</th>
+<th>Multiple falls to a quarter (53×)</th>
+<th>Multiple halves (107×)</th>
+<th>Multiple holds (213×)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0%</td>
+<td>-76%</td>
+<td>-52%</td>
+<td>-5%</td>
+</tr>
+<tr>
+<td>50%</td>
+<td>-15%</td>
+<td>+70%</td>
+<td>+241%</td>
+</tr>
+<tr>
+<td>100%</td>
+<td>+110%</td>
+<td>+321%</td>
+<td>+742%</td>
+</tr>
+</tbody>
+</table>
+<p>A holder loses wherever growth stops, and gains only if revenue compounds and the market keeps paying a high multiple for it. That is why a resilient business is not enough for a Buy.</p>
+<p><strong>Why "staked".</strong> New NEAR goes to stakers. By the end of 2029, a holder who does not stake owns 7.4% less of the supply at today's issuance. A holder who stakes owns 7.3% more, before the validator's fee.</p>
 <h2>Evidence against</h2>
 <ul>
 <li><strong>I changed the rating a day before submitting.</strong> I timestamped Long, which is this rule's Buy, on 10 November. On 11 November I measured the wallets and moved to Hold. I set the Buy level after seeing the data, so the fact that it fits the past proves nothing. Only the five dated predictions below test it.</li>
 <li><strong>Hold is close to Avoid.</strong> The rule watches three warning measures, called tripwires and listed below. One is already broken: Zcash held on Intents fell past its limit. Another, order flow against rival venues over the latest 28 days, holds by about a point (-34.5% against a limit of -35.7%).</li>
-<li><strong>The test I planned in advance was inconclusive.</strong> It compares Intents' reported volume, over the 28 days from the freeze, with a model built from rival venues. It could only detect a loss larger than 35.7%. It found -24.3% or +1.0%, depending on which rival venues I compare with, and neither can be told from noise. Part 3 rests on the direct counts, not on this test.</li>
-<li><strong>Part of the good news comes from the operator's own data.</strong> The swap-by-swap counts in Part 3 come from NEAR Intents' Explorer API. It is a second source, but not an independent one.</li>
+<li><strong>The test I planned in advance was inconclusive.</strong> It compares Intents' reported volume, over the 28 days from the freeze, with a model built from rival venues. It could only detect a loss larger than 35.7%. It found -24.3% or +1.0%, depending on which rival venues I compare with, and neither can be told from noise. Part 1 rests on the direct counts, not on this test.</li>
+<li><strong>Part of the good news comes from the operator's own data.</strong> The swap counts in Parts 1 and 2 come from NEAR Intents' Explorer API. It is a second source, but not an independent one.</li>
 <li><strong>The bull has a real point that my rule ignores.</strong> NEAR's governance has passed a cut in maximum issuance from 2.5% to 1.6% over 24 months (HSP-029). At that rate the same inflow would cover 24% of new supply instead of 16%. The Buy level is fixed in NEAR a day so that this cannot trigger a Buy by itself: it says nothing about whether Intents sends more to NEAR.</li>
 <li><strong>It is four weeks, and one business.</strong> Four weeks after a shock is not the long term. And if value reaches NEAR holders some other way than Intents, this thesis does not see it.</li>
 </ul>
@@ -280,7 +300,7 @@
 </table>
 <p>Three things are outside the rule, and I would review the rating if any happened:</p>
 <ul>
-<li><strong>The signers commit the NEAR by a rule in code</strong>: burned, staked, or paid to holders. That would turn an unsecured claim into a secured one, and it is the one change that needs no growth at all.</li>
+<li><strong>The signers commit the NEAR by a rule in code</strong>: burned, staked, or paid to holders. That would give holders a share that is guaranteed, and it is the one change that needs no growth at all.</li>
 <li><strong>swapkit's share falls by half</strong> with no other app replacing it.</li>
 <li><strong>NEAR Intents stops publishing 1Click swaps</strong> through its Explorer. Reported volume would then be uncheckable.</li>
 </ul>

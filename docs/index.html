@@ -16,10 +16,10 @@
   <p class="kicker"><b>NEAR Protocol (NEAR)</b> · Cross-chain infrastructure · Data to <span id="lastday"></span></p>
   <h1 id="h1"></h1>
   <div class="story">
-    <div><b>Small</b>The three wallets that receive Intents' revenue take in <span id="stCov"></span> of the NEAR that NEAR issues. To cover it all, the inflow would have to grow about <span id="stNeed"></span>.</div>
-    <div><b>Unsecured</b>None of it is paid to holders, staked or burned. A few signers can move it, and no rule in code says what happens to it.</div>
-    <div><b>Harder to check</b>From 27 Oct 1Click swaps settle confidentially. Sampled swaps that left a public record: <span id="stPubA"></span> in August, <span id="stPubB"></span> in November.</div>
-    <div><b>But the business held</b>After a freeze and a $3.8M exploit, 1Click volume counted swap by swap was <span id="stOne"></span> against August, and most large integrators kept routing.</div>
+    <div><b>1 · Resilient</b>After a freeze and a $3.8M hack, 1Click volume counted swap by swap was <span id="stOne"></span> against August, and most large integrators kept routing.</div>
+    <div><b>2 · Not a real drop</b>Public swaps on the chain fell by more than half. They had moved out of view, not away: sampled swaps leaving a public record went from <span id="stPubA"></span> to <span id="stPubB"></span>.</div>
+    <div><b>3 · Little for holders</b>The wallets that receive Intents' revenue take in <span id="stCov"></span> of the NEAR that NEAR issues. To cover it all, the inflow would have to grow about <span id="stNeed"></span>.</div>
+    <div><b>4 · No rule protects it</b>None of it is paid to holders, staked or burned. A few signers can move it.</div>
     <div><b>The rating</b><span id="stRating"></span>. Keep NEAR you own, staked; do not add yet. Buy when the wallets take in <span id="stBuy"></span> NEAR a day for three months.</div>
   </div>
   <div class="byline"><span><b>Method</b> Public wallets and swaps counted onchain; a pre-registered event study in the appendix</span><span><b>Sources</b> DefiLlama, CoinGecko, NEAR BigQuery, NEAR Intents Explorer API</span><span><a href="thesis.html">Read the full thesis →</a></span><span><a href="predictions.html">Predictions and rating rule →</a></span></div>
@@ -42,15 +42,25 @@
   </div>
 
   <section class="exhibit">
-    <div class="hd"><span class="no">Exhibit 1</span><h3 id="buyTitle"></h3></div>
-    <p class="sub">NEAR held by the three wallets that receive Intents' captured revenue (front-end fund, 1Click fund, buybacks wallet), daily, from NEAR's BigQuery dataset. DefiLlama defines Intents revenue as the NEAR swept into these wallets.</p>
-    <div class="chart" id="cBuy"></div>
-    <p class="note" id="buyNote"></p>
-    <p class="src">Source: NEAR public BigQuery dataset, DefiLlama adapter source, author's calculations · Query: <code>sql/revenue_wallets_daily.sql</code> · Added after the pre-registration</p>
+    <div class="hd"><span class="no">Exhibit 1</span><h3>Swap by swap, 1Click volume did not leave</h3></div>
+    <p class="sub">7-day average of daily volume. 1Click: every successful 1Click swap of $100 or more (about 99% of 1Click dollars), from NEAR Intents' Explorer API, which still sees swaps that settle confidentially. Public swaps: what NEAR's chain shows (BigQuery). DefiLlama: total Intents volume, of which 1Click is a part.</p>
+    <div class="legend"><span><i class="key" style="color:var(--s1)"></i>1Click (Explorer API)</span><span><i class="key" style="color:var(--s3)"></i>Public swaps (BigQuery)</span><span><i class="key dash" style="color:var(--s2)"></i>DefiLlama total</span></div>
+    <div class="chart" id="cOne"></div>
+    <p class="note" id="oneNote"></p>
+    <p class="src">Source: NEAR Intents Explorer API, NEAR public BigQuery dataset, DefiLlama · Code: <code>src/fetch_explorer.py</code> · Queries: <code>sql/intents_swap_trace.sql</code>, <code>sql/intents_stable_volume_daily.sql</code> · Added after the pre-registration</p>
   </section>
 
   <section class="exhibit">
-    <div class="hd"><span class="no">Exhibit 2</span><h3>The public record shrank when 1Click swaps moved to Confidential Intents</h3></div>
+    <div class="hd"><span class="no">Exhibit 2</span><h3>Who routes the flow: a handful of integrators, and large-swap volume held</h3></div>
+    <p class="sub" id="lgSub"></p>
+    <div class="legend"><span><i class="key" style="color:var(--s1)"></i><span id="lgTop"></span></span><span><i class="key" style="color:var(--s3)"></i>Next four integrators</span><span><i class="key dash" style="color:var(--s2)"></i>Everyone else</span></div>
+    <div class="chart" id="cLg"></div>
+    <p class="note" id="lgNote"></p>
+    <p class="src">Source: NEAR Intents Explorer API, author's calculations · Code: <code>src/fetch_explorer.py</code>, <code>src/build.py</code> · Added after the pre-registration</p>
+  </section>
+
+  <section class="exhibit">
+    <div class="hd"><span class="no">Exhibit 3</span><h3>The public record shrank when 1Click swaps moved to Confidential Intents</h3></div>
     <p class="sub">Left: share of Intents volume visible as public onchain swaps (7-day): the stablecoin side of every <code>token_diff</code> swap, counted once, logged by <code>intents.near</code> (NEAR BigQuery) over DefiLlama's total. Right, with no DefiLlama at all: receipts a day on <code>intents.near</code> that log a public swap, against those that move funds to or from the Treasury account behind Confidential Intents. NEAR Intents' changelog: "From October 27, 2026, 1Click swaps settle confidentially."</p>
     <div class="legend"><span><i class="key" style="color:var(--s3)"></i>Share visible as public swaps</span></div>
     <div class="two" style="gap:40px">
@@ -62,21 +72,11 @@
   </section>
 
   <section class="exhibit">
-    <div class="hd"><span class="no">Exhibit 3</span><h3>Swap by swap, 1Click volume did not leave</h3></div>
-    <p class="sub">7-day average of daily volume. 1Click: every successful 1Click swap of $100 or more (about 99% of 1Click dollars), from NEAR Intents' Explorer API, which still sees swaps that settle confidentially. Public swaps: what NEAR's chain shows (BigQuery). DefiLlama: total Intents volume, of which 1Click is a part.</p>
-    <div class="legend"><span><i class="key" style="color:var(--s1)"></i>1Click (Explorer API)</span><span><i class="key" style="color:var(--s3)"></i>Public swaps (BigQuery)</span><span><i class="key dash" style="color:var(--s2)"></i>DefiLlama total</span></div>
-    <div class="chart" id="cOne"></div>
-    <p class="note" id="oneNote"></p>
-    <p class="src">Source: NEAR Intents Explorer API, NEAR public BigQuery dataset, DefiLlama · Code: <code>src/fetch_explorer.py</code> · Queries: <code>sql/intents_swap_trace.sql</code>, <code>sql/intents_stable_volume_daily.sql</code> · Added after the pre-registration</p>
-  </section>
-
-  <section class="exhibit">
-    <div class="hd"><span class="no">Exhibit 4</span><h3>Who routes the flow: a handful of integrators, and large-swap volume held</h3></div>
-    <p class="sub" id="lgSub"></p>
-    <div class="legend"><span><i class="key" style="color:var(--s1)"></i><span id="lgTop"></span></span><span><i class="key" style="color:var(--s3)"></i>Next four integrators</span><span><i class="key dash" style="color:var(--s2)"></i>Everyone else</span></div>
-    <div class="chart" id="cLg"></div>
-    <p class="note" id="lgNote"></p>
-    <p class="src">Source: NEAR Intents Explorer API, author's calculations · Code: <code>src/fetch_explorer.py</code>, <code>src/build.py</code> · Added after the pre-registration</p>
+    <div class="hd"><span class="no">Exhibit 4</span><h3 id="buyTitle"></h3></div>
+    <p class="sub">NEAR held by the three wallets that receive Intents' captured revenue (front-end fund, 1Click fund, buybacks wallet), daily, from NEAR's BigQuery dataset. DefiLlama defines Intents revenue as the NEAR swept into these wallets.</p>
+    <div class="chart" id="cBuy"></div>
+    <p class="note" id="buyNote"></p>
+    <p class="src">Source: NEAR public BigQuery dataset, DefiLlama adapter source, author's calculations · Query: <code>sql/revenue_wallets_daily.sql</code> · Added after the pre-registration</p>
   </section>
 
   <section class="exhibit">
@@ -91,7 +91,7 @@
     <h2>What the freeze bears got right and wrong</h2>
     <div class="bgrid">
       <div><b class="n">Not shown</b><strong>The flow leaves.</strong><span id="bWrong"></span></div>
-      <div><b class="n">Missed</b><strong>The public record leaves.</strong>The share of volume visible as public swaps fell from <span id="bShareA"></span> to <span id="bShareB"></span>; from late October public swaps fell while executed intents doubled (Exhibit 2).</div>
+      <div><b class="n">Missed</b><strong>The public record leaves.</strong>The share of volume visible as public swaps fell from <span id="bShareA"></span> to <span id="bShareB"></span>; from late October public swaps fell while executed intents doubled (Exhibit 3).</div>
       <div><b class="r">Partly right</b><strong>Public activity weakens.</strong><span id="bRight"></span></div>
       <div><b class="n">Shown</b><strong>Why the record left.</strong><span id="bWhy"></span></div>
     </div>
@@ -207,8 +207,8 @@ text("lastday", fmtDate(R.last_day) + " " + R.last_day.slice(0, 4));
 text("hero", `${(100 * R.buyback.coverage_28d).toFixed(0)}%`);
 text("heroMeta", `Measured onchain over the last 28 days. Nothing is paid out, staked or burned. Meanwhile the share of Intents volume visible as public swaps went from ${(100 * R.privacy.windows.after_ga).toFixed(0)}% to ${(100 * R.privacy.windows.after).toFixed(0)}%, and 1Click volume counted swap by swap was ${pct(R.confidential.oneclick_event_vs_august, 0)} against August after the freeze.`);
 const CF = R.confidential, TA = CF.trace["2026-08-12"], TB = CF.trace["2026-11-05"], sh = v => (100 * v).toFixed(0) + "%";
-text("stOne", pct(CF.oneclick_after_vs_august, 0)); text("stPubA", sh(TA.public)); text("stPubB", sh(TB.public));
-text("bWhy", `From 27 Oct 1Click swaps settle confidentially (NEAR Intents changelog). Of ${TA.n} 1Click swaps sampled on each day, ${sh(TA.public)} logged a public swap on 12 Aug, ${sh(CF.trace["2026-10-26"].public)} on 26 Oct and ${sh(TB.public)} on 5 Nov, when ${sh(TB.treasury)} passed through the Treasury account behind Confidential Intents (Exhibit 2).`);
+text("stOne", pct(CF.oneclick_event_vs_august, 0)); text("stPubA", sh(TA.public)); text("stPubB", sh(TB.public));
+text("bWhy", `From 27 Oct 1Click swaps settle confidentially (NEAR Intents changelog). Of ${TA.n} 1Click swaps sampled on each day, ${sh(TA.public)} logged a public swap on 12 Aug, ${sh(CF.trace["2026-10-26"].public)} on 26 Oct and ${sh(TB.public)} on 5 Nov, when ${sh(TB.treasury)} passed through the Treasury account behind Confidential Intents (Exhibit 3).`);
 text("oneNote", `1Click volume averaged ${usd(CF.windows.august.oneclick_usd)} a day in August, ${usd(CF.windows.before.oneclick_usd)} from the forum post to the switch and ${usd(CF.windows.after.oneclick_usd)} after it, while public swap volume went from ${usd(CF.windows.august.public_usd)} to ${usd(CF.windows.after.public_usd)}. Every sampled swap is still executed on intents.near; what left the public chain is the swap event.`);
 text("posLabel", R.position.label);
 text("stRating", R.position.label);
@@ -238,13 +238,13 @@ text("lgTop", LG.top1);
 text("lgSub", `7-day average of daily volume in 1Click swaps of $10,000 or more (${(100 * LW.event.share_of_oneclick).toFixed(0)}% of 1Click dollars), by the integrating app named in each swap. Next four: ${LG.next4.join(", ")}. Everyone else includes swaps that name no integrator.`);
 text("lgNote", `Large swaps ran ${m1(LW.august.usd_per_day)} a day in August, ${m1(LW.event.usd_per_day)} in the 28 days from the freeze and ${m1(LW.after.usd_per_day)} after the switch. Of ${LG.august_big} integrators that routed $1M or more in August, ${LW.event.august_big_kept_half} kept at least half that volume after the freeze (${LW.event.august_big_still_routing} routed some); together they routed ${(100 * LW.event.august_big_usd_ratio).toFixed(0)}% of it. ${LG.top1} alone is ${(100 * LW.after.top1_share).toFixed(0)}% of the dollars. The next four fell from August, mostly one label (new.intents-referral.near) that had already dropped before the freeze. Individual senders came back less: ${(100 * LG.senders["1"].rate).toFixed(1)}% of addresses with a large swap in the 28 days before the freeze sent another after, against ${(100 * LG.senders["1"].calm_min).toFixed(1)}% to ${(100 * LG.senders["1"].calm_max).toFixed(1)}% in the one calm window the data allows.`);
 const takeaways = [
-  ["What reaches NEAR is small, and holders' claim on it is unsecured.", `The revenue wallets hold ${(BB.held / 1e6).toFixed(1)}M NEAR and gain ${(100 * BB.coverage_28d).toFixed(0)}% of what NEAR issues (${(LT.supply_growth_yr / 1e6).toFixed(1)}M a year), measured onchain. Covering all of it takes about ${BB.growth_needed.toFixed(1)}× more. None of it is paid out, staked or burned. ${R.control.multisig.needed} of ${R.control.multisig.keys}, ${R.control.oneclick.needed} of ${R.control.oneclick.members} and ${R.control.front_end.needed} of ${R.control.front_end.members} signers can move it; in the front-end fund ${R.control.front_end.policy_needed} vote can change the fund's own rules.`],
-  ["The swaps moved to Confidential Intents.", `The share of volume visible as public swaps went from ${(100 * R.privacy.windows.after_ga).toFixed(0)}% in the summer to ${(100 * R.privacy.windows.after).toFixed(0)}% by November. From 27 Oct 1Click swaps settle confidentially: sampled swaps logging a public swap went from ${sh(TA.public)} to ${sh(TB.public)}, while 1Click volume counted through the Explorer was ${pct(CF.oneclick_after_vs_august, 0)} vs August.`],
+  ["The business is resilient: most integrators kept routing.", `${LW.event.august_big_kept_half} of the ${LG.august_big} integrators routing $1M or more of large 1Click swaps in August kept at least half that volume after the freeze; ${LG.top1} alone is ${(100 * LW.after.top1_share).toFixed(0)}% of the dollars. Onchain, ${(100 * R.H5.cohorts.returning.rate).toFixed(0)}% of self-custody accounts seen before September came back, against ${(100 * R.H5.cohorts.returning.placebo_p50).toFixed(0)}% in calm periods.`],
+  ["The drop on the public chain was not a loss: the swaps moved to Confidential Intents.", `The share of volume visible as public swaps went from ${(100 * R.privacy.windows.after_ga).toFixed(0)}% in the summer to ${(100 * R.privacy.windows.after).toFixed(0)}% by November. From 27 Oct 1Click swaps settle confidentially: sampled swaps logging a public swap went from ${sh(TA.public)} to ${sh(TB.public)}, while 1Click volume counted through the Explorer was ${pct(CF.oneclick_after_vs_august, 0)} vs August.`],
+  ["But holders get little of it, and no rule protects even that.", `The revenue wallets hold ${(BB.held / 1e6).toFixed(1)}M NEAR and gain ${(100 * BB.coverage_28d).toFixed(0)}% of what NEAR issues (${(LT.supply_growth_yr / 1e6).toFixed(1)}M a year), measured onchain. Covering all of it takes about ${BB.growth_needed.toFixed(1)}× more. None of it is paid out, staked or burned. ${R.control.multisig.needed} of ${R.control.multisig.keys}, ${R.control.oneclick.needed} of ${R.control.oneclick.members} and ${R.control.front_end.needed} of ${R.control.front_end.members} signers can move it; in the front-end fund ${R.control.front_end.policy_needed} vote can change the fund's own rules.`],
   ["The engine is uneven.", `${mon(LT.last_month)} volume was ${usd(LT.last_month_volume)}: ${LT.volume_yoy.toFixed(1)}× a year earlier, when Intents was still ramping, but only ${LT.last_vs_first_peak.toFixed(2)}× its ${mon(LT.first_peak_month)} peak.`],
   ["No detectable loss; the size is unknown.", `DefiLlama's total against its model: ${pct(H1.literal.stat_pct)} with the pre-registered comparison venues (p = ${H1.literal.p_placebo_time.toFixed(2)}), ${pct(H1.stat_pct)} with a narrower set (p = ${H1.p_placebo_time.toFixed(2)}). Pre-registered verdict under both: ${H1.prereg_outcome}. Public onchain volume: ${pct(R.privacy.h1_public_pct)} (p = ${R.privacy.h1_public_p.toFixed(2)}, not significant).`],
   ["But the momentum stopped.", `All summer Intents beat its model by ${pct(R.onchain_check.volume.placebo_min_pct, 0)} to ${pct(R.onchain_check.volume.placebo_max_pct, 0)}; in the event window it only matched it. Onchain relayed transactions show the same.`],
   ["No price cuts.", `Take rate ${W0.between.take_rate_bps.toFixed(1)} bps in the three weeks before the shocks, ${W0.event.take_rate_bps.toFixed(1)} bps during them.`],
-  ["Most integrators kept routing; individuals came back less.", `${LW.event.august_big_kept_half} of the ${LG.august_big} integrators routing $1M or more of large 1Click swaps in August kept at least half that volume after the freeze; ${LG.top1} alone is ${(100 * LW.after.top1_share).toFixed(0)}% of the dollars. Onchain, ${(100 * R.H5.cohorts.returning.rate).toFixed(0)}% of self-custody accounts seen before September came back, against ${(100 * R.H5.cohorts.returning.placebo_p50).toFixed(0)}% in calm periods.`],
   [broken.length ? "Tripwire broken." : "All tripwires holding.", broken.length ? `${broken.join(", ")}: ${pct(R.tripwires.find(t => t.status !== "holding").value)} over 28 days, past its ${pct(R.tripwires.find(t => t.status !== "holding").limit)} limit.` : "Order flow, take rate and Zcash balances are all inside their calm-period limits."],
 ];
 for (const [b, p] of takeaways) { const li = h("li"); li.append(h("b", null, b), h("p", null, p)); $("takeaways").appendChild(li); }

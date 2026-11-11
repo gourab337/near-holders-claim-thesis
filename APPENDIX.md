@@ -5,7 +5,7 @@ NEAR HACKATHON 2026 · Investment Thesis track · data snapshot to 2026-11-09 ·
 The thesis is written to be read in a few minutes. Everything it leaves out is here.
 
 - **Part B, the detail behind the thesis.** B1 the rating in full; B2 what is at stake and the tripwires; B3 to B5 the full tables and caveats for Parts 1 to 3; B6 the evidence against, in full; B7 every deviation from the pre-registration.
-- **Part A, the pre-registered event study.** The study this repository began as: five hypotheses about the freeze and the exploit, with rules written before the daily series were downloaded. Its primary result is an underpowered null, so it supports Part 3 rather than leading it. Sections A1 to A5 were planned; A6 and A7 are exploratory.
+- **Part A, the pre-registered event study.** The study this repository began as: five hypotheses about the freeze and the exploit, with rules written before the daily series were downloaded. Its primary result is an underpowered null, so it supports Part 1 rather than leading it. Sections A1 to A5 were planned; A6 and A7 are exploratory.
 
 ## Part B. The detail behind the thesis
 
@@ -82,58 +82,9 @@ Each is recomputed on every build, over the latest 28 days, with limits fixed by
 - If the **take rate** breaks, Intents is buying volume with price, and revenue per dollar of flow falls.
 - If **Zcash** stays broken, the privacy segment is leaving. It was 18.3% of balances on 2026-09-28, so watch whether the drain spreads to other assets.
 
-### B3. Detail for Part 1: what reaches NEAR, and who controls it
+### B3. Detail for Part 1: the flow after a freeze and a hack
 
-This thesis judges NEAR by what NEAR Intents sends back to it: cross-chain swap revenue that arrives as NEAR in three wallets, labelled a buyback since 23 February 2026. DefiLlama credits it to NEAR's holders, and it can be measured onchain. I do not test whether NEAR's price follows it; the claim is narrower, that a holder's case for years rests on that revenue lasting and growing.
-
-- **Growth so far.** Volume first peaked at $3.66B in Nov 2025. It then sat between $1.90B and $2.78B a month for nine months, before a $4.80B record in Sep 2026. Oct 2026 was $3.99B: 2.3× the same month a year earlier, when Intents was still ramping up, but only 1.1× the first peak (Exhibit 6 on the dashboard).
-- **What reaches NEAR, measured.** DefiLlama defines Intents revenue as NEAR swept into three wallets and labels it a buyback that is not burned (its adapter credits NEAR's own Dune query). Their balances on NEAR's BigQuery dataset (`sql/revenue_wallets_daily.sql`), on 2026-11-09: 2,229,710 NEAR in the buybacks wallet and the 1Click fund, and 1,994,812 in the front-end fund; 4,224,522 together, 0.32% of supply. Nothing is paid to holders, nothing is staked and nothing is burned: the NEAR sits in wallets whose signers can move it. The total fell on 2 of 367 days, by 49,577 NEAR in all.
-- **Against issuance.** NEAR's total supply grew by 31.7M NEAR in the year to 2026-11-09 (2.5%), from NEAR's own supply table on BigQuery (issuance net of burns; circulating supply grew 36.5M including unlocks): 86,966 NEAR a day. In the 28 days to 2026-11-09 the three wallets gained 13,571 NEAR a day, 15.6% of that. 29% of the gain went to the front-end fund; the buybacks wallet and the 1Click fund alone gained 9,612 a day, 11.1%. The three-wallet gain matches DefiLlama's revenue for the same days, converted at each day's price, to 100.4%. To offset issuance the inflow has to grow about 6.4×.
-- **It is uneven, and price works against it.** NEAR a day into the three wallets, by month (share of issuance in brackets): Mar 14,544 (17%), Apr 4,947 (6%), May 10,446 (12%), Jun 9,756 (11%), Jul 8,010 (9%), Aug 13,077 (15%), Sep 18,814 (22%), Oct 14,567 (17%). The last three months averaged 1.6× the first three; Oct 2026 was 2.9× the low of Apr 2026, 1.00× Mar 2026 and 0.77× the best month, Sep 2026. Which of those a reader calls the trend depends on the base month; what does not depend on it is that no month has passed 22%. Between Mar 2026 and Oct 2026, DefiLlama's revenue in dollars grew 3.9× and NEAR's price 3.8×, so the same NEAR arrived. That is the catch in a buyback: when the token rises, the same revenue offsets less issuance. Covering issuance by the end of 2029 needs the NEAR inflow to grow 81% a year; arithmetic, not a forecast: at +50% a year it takes 4.6 years, at +100% 2.7, at +200% 1.7.
-- **Who controls it.** Read from the contracts (`src/fetch_control.py`): the buybacks wallet is a multisig that needs 2 of 4 keys; the 1Click fund is a DAO where 2 of 4 members approve a transfer; the front-end fund is a DAO where 2 of 5 do (auroracfo.near, aurorafinance1.near, aurorafinance2.near, aurorafinance3.near, paperclip-maximizer.near). Nothing in code commits the NEAR to holders. The front-end fund has a second, lower bar: a proposal to change its own policy (who the members are and how many must approve) passes with 1 vote from its 5 Admin members, who are the same accounts; in the 1Click fund that takes 2 of 4. So in the front-end fund the 2-vote rule on transfers holds only as long as no single member rewrites it. I read the thresholds from the contract; I did not test a policy change.
-- **How firm the target is.** It moves with two things. NEAR keeps more of each swap now (4.9 bps of volume) than in the calm period (2.6 bps); at the calm share the target is 12.0×. A cheaper NEAR buys more tokens per dollar; at the calm-period price the target is 3.4×. Not established: which fees fund the wallets swap by swap, and what the signers will do with the NEAR.
-- **Why durability is the next question.** A small inflow is only worth holding for if the revenue behind it does not disappear the first time trust is tested. Part 3 looks at exactly that.
-
-Part 1 uses the same snapshot as the rest but was added after the pre-registration (deviation 5).
-
-### B4. Detail for Part 2: the swaps left public view
-
-On NEAR's chain the share of Intents volume visible as public swaps was 43% in the summer, 29% in the four weeks after the freeze and 13% from 2026-10-27 (appendix A7). The second step has a documented cause, traced below swap by swap. This part was added after seeing results; the switch date comes from NEAR Intents' changelog, not from this data.
-
-NEAR Intents' changelog, 27 October 2026: "From October 27, 2026, 1Click swaps settle confidentially. The API is unchanged." The swap settles on FAR (the NEAR Private Shard), "a permissioned instance of the NEAR protocol operated by a small validator set with no public networking". Shielding moves tokens to the Treasury account `51e8f94d…7cbe` on `intents.near`; unshielding releases them. The 1Click swap's `nearTxHashes` then hold "the hashes for the shield and the unshield instead" of the swap. The switch date used below comes from the changelog, not from this data.
-
-**Swap by swap.** 300 successful 1Click swaps were drawn at random on each of five days from the NEAR Intents Explorer API (`src/fetch_explorer.py`) and followed through their NEAR transactions to what `intents.near` logged (`sql/intents_swap_trace.sql`, NEAR BigQuery). The days: one in August, one after the forum post, the days either side of 27 October, and one a week later.
-
-| | 12 Aug | 15 Sep | 26 Oct | 28 Oct | 5 Nov |
-|---|---|---|---|---|---|
-| Successful 1Click swaps that day | 24,346 | 15,972 | 17,372 | 15,518 | 21,017 |
-| Sampled swaps found on NEAR's chain | 100% | 100% | 100% | 100% | 100% |
-| Logged a public swap (`token_diff`) | **98%** | **97%** | **89%** | **83%** | **7%** |
-| the same, by dollars | 100% | 97% | 98% | 91% | 15% |
-| Moved funds through the Treasury | **0%** | **0%** | **0%** | **6%** | **87%** |
-| the same, by dollars | 0% | 0% | 0% | 9% | 76% |
-| NEAR transactions per swap (median) | 2 | 2 | 2 | 2 | 4 |
-| Deposited from a user's confidential balance | 0% | 0% | 0% | 0% | 0% |
-
-**Day by day** (`sql/intents_confidential_daily.sql`): receipts executed by `intents.near`, and daily volume, averaged by period.
-
-| Period | Receipts logging a public swap | Receipts moving funds through the Treasury | 1Click volume (Explorer) | Public swap volume (BigQuery) | DefiLlama volume |
-|---|---|---|---|---|---|
-| 2026-08-01 to 2026-08-31 | 33,121 | 6,002 | $38.7M | $40.5M | $89.6M |
-| 2026-09-08 to 2026-10-26 | 23,532 | 15,214 | $43.0M | $47.8M | $145.4M |
-| 2026-10-28 to 2026-11-09 | **8,881** | **61,051** | **$36.9M** | **$15.0M** | $129.2M |
-
-- The swaps did not disappear: every sampled swap is still executed by `intents.near`. What left the public chain is the swap itself, and with it the `token_diff` event that public dashboards count.
-- The switch was rolled out, not flipped. No sampled 1Click swap touched the Treasury on 26 October; 6% did on 28 October and 87% by 5 November.
-- Treasury flows began before the switch, but not from 1Click: apps could request confidential swaps from 1 July (the `confidentiality` quote field), and that use grew through September while no sampled 1Click swap used it. Neither upgrade (2026-10-02, 2026-10-07) moved the daily series.
-- The sampled swaps were deposited from other chains or ordinary Intents balances, not from users' confidential balances: the change was in how 1Click settles, not users choosing privacy.
-- 1Click volume in the 28 days after the freeze was -5% against August, and -5% after the switch: a second count of the flow, swap by swap. It is a different source from DefiLlama's, but the same operator's: the Explorer is NEAR Intents' own, and needs a partner token.
-- Coverage: the Explorer series counts successful 1Click swaps of $100 or more, 98.8–99.5% of 1Click dollars on four days pulled in full. 1Click is part of Intents' volume, not all of it.
-- **What this cannot show.** Why NEAR Intents switched, and whether it will publish the confidential volume elsewhere.
-
-### B5. Detail for Part 3: the flow after a freeze and an exploit
-
-A small claim on revenue is only worth holding for if the revenue does not disappear the first time trust is tested. Two tests arrived within three days of each other.
+Two tests of users' trust arrived within three days of each other.
 
 - **Operator discretion** (2026-09-29): SHIELD blocked more than $50M of transfers linked to the Bitget hack and froze $503k mid-swap, weeks after a Zcash user reported $589k held for 50 days.
 - **Security failure** (2026-10-01): a $3.8M exploit paused the contract and halted deposits and withdrawals on eleven networks. The funds were returned on 2026-10-02, per the 16 October postmortem.
@@ -176,15 +127,63 @@ The flow held and the apps that route it kept routing it, while fewer of the ind
 
 #### What the pre-registered model adds
 
-**In one line: an underpowered null, and the estimate depends on the comparison venues.** With the venues as pre-registered, reported volume was -24.3% against its model (p = 0.34; detection threshold -35.7%). With the narrower set I chose after seeing which venues had zero-volume days, it was +1.0% (p = 0.50; threshold -29.5%). Almost all of the difference is one venue, the 0x aggregator: without it the pre-registered set gives -8.2%. The pre-registered verdict is the same under both: no collapse, but too imprecise to clear the 25% bar. So the model cannot say whether Intents lost a quarter of its flow or none. The direct counts can say more: 1Click volume counted swap by swap (Part 2) and swaps of $10,000 or more (Part 3) were within a few percent of August.
+**In one line: an underpowered null, and the estimate depends on the comparison venues.** With the venues as pre-registered, reported volume was -24.3% against its model (p = 0.34; detection threshold -35.7%). With the narrower set I chose after seeing which venues had zero-volume days, it was +1.0% (p = 0.50; threshold -29.5%). Almost all of the difference is one venue, the 0x aggregator: without it the pre-registered set gives -8.2%. The pre-registered verdict is the same under both: no collapse, but too imprecise to clear the 25% bar. So the model cannot say whether Intents lost a quarter of its flow or none. The direct counts can say more: 1Click volume counted swap by swap (Part 2) and swaps of $10,000 or more (Part 1) were within a few percent of August.
 
 #### What the freeze bears got right and wrong
 
-- **Not shown: the flow leaves.** Counted directly, 1Click volume and large swaps were within a few percent of August (Parts 2 and 3). Against its model, DefiLlama's total gives -24.3% or +1.0% depending on the comparison venues, neither distinguishable from noise, and deposits were 12.2% lower from 27 October than in August. The pre-registered freeze-channel test (H4) found no Zcash flight in the month after the freeze.
+- **Not shown: the flow leaves.** Counted directly, 1Click volume and large swaps were within a few percent of August (Parts 1 and 2). Against its model, DefiLlama's total gives -24.3% or +1.0% depending on the comparison venues, neither distinguishable from noise, and deposits were 12.2% lower from 27 October than in August. The pre-registered freeze-channel test (H4) found no Zcash flight in the month after the freeze.
 - **Missed: the public record leaves.** The share of volume visible as public swaps fell from 43% to 13%, and from late October public swaps fell while executed intents doubled (appendix A7). Less of the flow can be seen.
 - **Partly right: public activity weakens.** On public onchain volume the model gives -29.6%, weaker though not significant (p = 0.18). Accounts that had used Intents publicly before September came back less than in any calm period (appendix A6); they may have left or moved to a less visible route. Intents' summer momentum stopped (appendix A1). Zcash balances fell past their calm-period limit a month later.
 - **Shown: where the swaps went.** From 27 October 1Click swaps settle confidentially (Part 2). Not shown: why NEAR Intents switched.
-- **Shown: who decides.** 1Click's dollars come through a few integrating apps. 17 of the 25 integrators that routed $1M or more in August kept at least half that volume after the freeze, and together the 25 routed 83% of their August volume, while fewer individual large senders came back (Part 3). The bear case was about users; the routing decision sits with integrators.
+- **Shown: who decides.** 1Click's dollars come through a few integrating apps. 17 of the 25 integrators that routed $1M or more in August kept at least half that volume after the freeze, and together the 25 routed 83% of their August volume, while fewer individual large senders came back (Part 1). The bear case was about users; the routing decision sits with integrators.
+
+### B4. Detail for Part 2: the swaps left public view
+
+On NEAR's chain the share of Intents volume visible as public swaps was 43% in the summer, 29% in the four weeks after the freeze and 13% from 2026-10-27 (appendix A7). The second step has a documented cause, traced below swap by swap. This part was added after seeing results; the switch date comes from NEAR Intents' changelog, not from this data.
+
+NEAR Intents' changelog, 27 October 2026: "From October 27, 2026, 1Click swaps settle confidentially. The API is unchanged." The swap settles on FAR (the NEAR Private Shard), "a permissioned instance of the NEAR protocol operated by a small validator set with no public networking". Shielding moves tokens to the Treasury account `51e8f94d…7cbe` on `intents.near`; unshielding releases them. The 1Click swap's `nearTxHashes` then hold "the hashes for the shield and the unshield instead" of the swap. The switch date used below comes from the changelog, not from this data.
+
+**Swap by swap.** 300 successful 1Click swaps were drawn at random on each of five days from the NEAR Intents Explorer API (`src/fetch_explorer.py`) and followed through their NEAR transactions to what `intents.near` logged (`sql/intents_swap_trace.sql`, NEAR BigQuery). The days: one in August, one after the forum post, the days either side of 27 October, and one a week later.
+
+| | 12 Aug | 15 Sep | 26 Oct | 28 Oct | 5 Nov |
+|---|---|---|---|---|---|
+| Successful 1Click swaps that day | 24,346 | 15,972 | 17,372 | 15,518 | 21,017 |
+| Sampled swaps found on NEAR's chain | 100% | 100% | 100% | 100% | 100% |
+| Logged a public swap (`token_diff`) | **98%** | **97%** | **89%** | **83%** | **7%** |
+| the same, by dollars | 100% | 97% | 98% | 91% | 15% |
+| Moved funds through the Treasury | **0%** | **0%** | **0%** | **6%** | **87%** |
+| the same, by dollars | 0% | 0% | 0% | 9% | 76% |
+| NEAR transactions per swap (median) | 2 | 2 | 2 | 2 | 4 |
+| Deposited from a user's confidential balance | 0% | 0% | 0% | 0% | 0% |
+
+**Day by day** (`sql/intents_confidential_daily.sql`): receipts executed by `intents.near`, and daily volume, averaged by period.
+
+| Period | Receipts logging a public swap | Receipts moving funds through the Treasury | 1Click volume (Explorer) | Public swap volume (BigQuery) | DefiLlama volume |
+|---|---|---|---|---|---|
+| 2026-08-01 to 2026-08-31 | 33,121 | 6,002 | $38.7M | $40.5M | $89.6M |
+| 2026-09-08 to 2026-10-26 | 23,532 | 15,214 | $43.0M | $47.8M | $145.4M |
+| 2026-10-28 to 2026-11-09 | **8,881** | **61,051** | **$36.9M** | **$15.0M** | $129.2M |
+
+- The swaps did not disappear: every sampled swap is still executed by `intents.near`. What left the public chain is the swap itself, and with it the `token_diff` event that public dashboards count.
+- The switch was rolled out, not flipped. No sampled 1Click swap touched the Treasury on 26 October; 6% did on 28 October and 87% by 5 November.
+- Treasury flows began before the switch, but not from 1Click: apps could request confidential swaps from 1 July (the `confidentiality` quote field), and that use grew through September while no sampled 1Click swap used it. Neither upgrade (2026-10-02, 2026-10-07) moved the daily series.
+- The sampled swaps were deposited from other chains or ordinary Intents balances, not from users' confidential balances: the change was in how 1Click settles, not users choosing privacy.
+- 1Click volume in the 28 days after the freeze was -5% against August, and -5% after the switch: a second count of the flow, swap by swap. It is a different source from DefiLlama's, but the same operator's: the Explorer is NEAR Intents' own, and needs a partner token.
+- Coverage: the Explorer series counts successful 1Click swaps of $100 or more, 98.8–99.5% of 1Click dollars on four days pulled in full. 1Click is part of Intents' volume, not all of it.
+- **What this cannot show.** Why NEAR Intents switched, and whether it will publish the confidential volume elsewhere.
+
+### B5. Detail for Part 3: what reaches NEAR, and who controls it
+
+This thesis judges NEAR by what NEAR Intents sends back to it: cross-chain swap revenue that arrives as NEAR in three wallets, labelled a buyback since 23 February 2026. DefiLlama credits it to NEAR's holders, and it can be measured onchain. I do not test whether NEAR's price follows it; the claim is narrower, that a holder's case for years rests on that revenue lasting and growing.
+
+- **Growth so far.** Volume first peaked at $3.66B in Nov 2025. It then sat between $1.90B and $2.78B a month for nine months, before a $4.80B record in Sep 2026. Oct 2026 was $3.99B: 2.3× the same month a year earlier, when Intents was still ramping up, but only 1.1× the first peak (Exhibit 6 on the dashboard).
+- **What reaches NEAR, measured.** DefiLlama defines Intents revenue as NEAR swept into three wallets and labels it a buyback that is not burned (its adapter credits NEAR's own Dune query). Their balances on NEAR's BigQuery dataset (`sql/revenue_wallets_daily.sql`), on 2026-11-09: 2,229,710 NEAR in the buybacks wallet and the 1Click fund, and 1,994,812 in the front-end fund; 4,224,522 together, 0.32% of supply. Nothing is paid to holders, nothing is staked and nothing is burned: the NEAR sits in wallets whose signers can move it. The total fell on 2 of 367 days, by 49,577 NEAR in all.
+- **Against issuance.** NEAR's total supply grew by 31.7M NEAR in the year to 2026-11-09 (2.5%), from NEAR's own supply table on BigQuery (issuance net of burns; circulating supply grew 36.5M including unlocks): 86,966 NEAR a day. In the 28 days to 2026-11-09 the three wallets gained 13,571 NEAR a day, 15.6% of that. 29% of the gain went to the front-end fund; the buybacks wallet and the 1Click fund alone gained 9,612 a day, 11.1%. The three-wallet gain matches DefiLlama's revenue for the same days, converted at each day's price, to 100.4%. To offset issuance the inflow has to grow about 6.4×.
+- **It is uneven, and price works against it.** NEAR a day into the three wallets, by month (share of issuance in brackets): Mar 14,544 (17%), Apr 4,947 (6%), May 10,446 (12%), Jun 9,756 (11%), Jul 8,010 (9%), Aug 13,077 (15%), Sep 18,814 (22%), Oct 14,567 (17%). The last three months averaged 1.6× the first three; Oct 2026 was 2.9× the low of Apr 2026, 1.00× Mar 2026 and 0.77× the best month, Sep 2026. Which of those a reader calls the trend depends on the base month; what does not depend on it is that no month has passed 22%. Between Mar 2026 and Oct 2026, DefiLlama's revenue in dollars grew 3.9× and NEAR's price 3.8×, so the same NEAR arrived. That is the catch in a buyback: when the token rises, the same revenue offsets less issuance. Covering issuance by the end of 2029 needs the NEAR inflow to grow 81% a year; arithmetic, not a forecast: at +50% a year it takes 4.6 years, at +100% 2.7, at +200% 1.7.
+- **Who controls it.** Read from the contracts (`src/fetch_control.py`): the buybacks wallet is a multisig that needs 2 of 4 keys; the 1Click fund is a DAO where 2 of 4 members approve a transfer; the front-end fund is a DAO where 2 of 5 do (auroracfo.near, aurorafinance1.near, aurorafinance2.near, aurorafinance3.near, paperclip-maximizer.near). Nothing in code commits the NEAR to holders. The front-end fund has a second, lower bar: a proposal to change its own policy (who the members are and how many must approve) passes with 1 vote from its 5 Admin members, who are the same accounts; in the 1Click fund that takes 2 of 4. So in the front-end fund the 2-vote rule on transfers holds only as long as no single member rewrites it. I read the thresholds from the contract; I did not test a policy change.
+- **How firm the target is.** It moves with two things. NEAR keeps more of each swap now (4.9 bps of volume) than in the calm period (2.6 bps); at the calm share the target is 12.0×. A cheaper NEAR buys more tokens per dollar; at the calm-period price the target is 3.4×. Not established: which fees fund the wallets swap by swap, and what the signers will do with the NEAR.
+
+Part 3 uses the same snapshot as the rest but was added after the pre-registration (deviation 5).
 
 ### B6. Evidence against, in full
 
@@ -195,7 +194,7 @@ The flow held and the apps that route it kept routing it, while fewer of the ind
 - **The estimate depends on the comparison venues.** With the donors as pre-registered it is -24.3%; with my narrower set, +1.0%; synthetic control on the narrower set, +39.5%. The verdict is the same; the size is not known.
 - **The wider grid says the same.** Across 60 alternative specifications (donor sets, controls, event date, horizon; not pre-registered) the estimate runs from -33% to +35%, median -4.1%, and 56.7% are negative. Every specification below −15% includes the 0x aggregator. 0x's mean daily volume in the event window was 8.4× its estimation-window mean, a launch curve rather than a market-wide factor, which is why I think it is a poor comparator. That argument is mine, made after seeing the results, so weigh it accordingly.
 - **September was a rally.** NEAR averaged $3.53 in the three weeks before the shocks against $1.93 in the calm period. The spot-volume controls are meant to absorb this, and may not fully.
-- **Established accounts pulled back.** Accounts that had used Intents before September came back less than in any calm period after the shocks (appendix A6). Large senders in the relayed 1Click flow show the same direction (Part 3), on one calm comparison.
+- **Established accounts pulled back.** Accounts that had used Intents before September came back less than in any calm period after the shocks (appendix A6). Large senders in the relayed 1Click flow show the same direction (Part 1), on one calm comparison.
 - **1Click volume can no longer be checked on the public chain.** Since 27 October the chain shows the shield and unshield of each 1Click swap, not the swap; the swap is visible only through NEAR Intents' own Explorer API, which needs a partner token. The verifiability that once set Intents apart now depends on its operator.
 - **The primary outcome is operator-reported.** DefiLlama's Intents volume is read from a dataset NEAR publishes on Dune (`dune.near.dataset_near_intents_metrics` in DefiLlama's adapter), not from the chain. Counted from outside, public swaps with a stablecoin side were 45% of it in August and 33% from the forum post to the switch (the same measure as the visible share in Part 2, over different windows). After the switch (2026-10-28 on; appendix A7's 13% starts a day earlier) they are 12%, or about 33% with the 1Click swaps that now settle confidentially (Part 2). The rest I cannot count: swaps with no stablecoin side, and confidential flow outside 1Click. DefiLlama's figure is +44% on August while 1Click is -5%; I cannot say what the difference is made of. One reading fits the levels: before the switch DefiLlama's figure is 1.17× to 1.36× twice my one-sided count of public swaps, which is what a figure that counts both sides of each swap would look like. I cannot confirm that from the dataset's definition. If it is right, the public share before the switch was about twice what this document reports, and the fall is the same in proportion. The same pattern shows another way: in August, when nearly every 1Click swap was public, the public swaps I count ($40.5M a day) and the Explorer's 1Click volume ($38.7M) are close to each other and both under half of DefiLlama's $89.6M.
 - **28 days is not the long term.** It is what the calendar allows.
@@ -206,7 +205,7 @@ The flow held and the apps that route it kept routing it, while fewer of the ind
 2. **Placebo dates** start 2026-03-10, not 2026-01-01, because CoinGecko's free daily history covers only the last 365 days.
 3. **On-chain sample (H5) replaced.** The keyless block archive was too slow for the planned random block sample. H5 instead uses every transaction to `intents.near` from NEAR's public BigQuery dataset, which is a census rather than a sample. The 2-day and 5-day user tiers are post hoc. The withdrawal-to-deposit ratio was not computed.
 4. **Scroll and Plasma** are not reported by DefiLlama, so H3 uses nine of the eleven paused networks.
-5. **Added after seeing results:** the robustness grid, the NEAR/ZEC/other balance decomposition, the long-term section, the Confidential Intents trace and the Explorer API data (Part 2), the integrators and large swaps (Part 3), the measured buyback wallets and the pace test, the public-visibility analysis (appendix A7), the rival comparison, the hack-date sensitivity, the new/returning account split, the valuation multiple, the fee-timing check in H2 and the tripwires. None of these change a pre-registered verdict.
+5. **Added after seeing results:** the robustness grid, the NEAR/ZEC/other balance decomposition, the long-term section, the Confidential Intents trace and the Explorer API data (Part 2), the integrators and large swaps (Part 1), the measured buyback wallets and the pace test, the public-visibility analysis (appendix A7), the rival comparison, the hack-date sensitivity, the new/returning account split, the valuation multiple, the fee-timing check in H2 and the tripwires. None of these change a pre-registered verdict.
 6. **Position.** `archive/PREDICTIONS-2026-11-10.md` names `make fetch && make fetch-bq && make` as its scorer; scoring later also needs the end date set: `make fetch && END_DATE=2027-03-31 make fetch-bq && LAST_DAY=2027-03-31 make` (only `make fetch` is strictly required, since P1 to P3 use DefiLlama). It also contains one error that cannot be edited without breaking its timestamp: P2's failure note says growth would have "stalled for 18 months"; if P2 fails in March 2027, the last record will be six months old and the first peak sixteen. Its first line also says "Written 2026-11-11", but its timestamp is 14:41 UTC on 2026-11-10: the date is wrong, and the timestamp is the date that counts. The pre-registration maps outcomes to a position only when the detection threshold is under 25%. It was not, so the position, its tripwire rule and the predictions in `archive/PREDICTIONS-2026-11-10.md` are my judgment, set after seeing the results.
 
 7. **Rating changed from Long to Hold.** `archive/PREDICTIONS-2026-11-10.md` (timestamped 2026-11-10) says "Long NEAR". On 2026-11-11 I measured the three revenue wallets and found the NEAR reaching them is 16% of issuance, uneven by month, and paid to no one. I changed the rating to Hold and wrote one current file, `RATING.md`, with the rule, the three earlier predictions carried over and two further calls, timestamped with OpenTimestamps (`RATING.md.ots`). The first version is kept unchanged in `archive/` so its proof still verifies; its exit to neutral is the rule's Avoid. The rule was written after seeing the wallet data, so its fit to the past months is not evidence; only its calls on later data are.
@@ -230,7 +229,7 @@ What is and is not pre-registered:
 | Three predictions to 2027-03-31 (first version, `archive/PREDICTIONS-2026-11-10.md`; carried into `RATING.md` as P1 to P3) | Yes: scored only on later data | Bitcoin block 975308, 2026-11-10 |
 | The rating rule and two more calls, C1 and C2 (`RATING.md`) | Calls yes; the rule was written after seeing the wallet data | OpenTimestamps, 2026-11-11 |
 | The rating itself | No. Long on 2026-11-10, Hold on 2026-11-11 after the wallets were measured (deviation 7) | |
-| Parts 2 and 3 and appendix A6 and A7, the wallets, the long-term case | No. Added after seeing results (deviation 5) | |
+| Parts 1 to 3 and appendix A6 and A7, the wallets, the long-term case | No. Added after seeing results (deviation 5) | |
 
 I wrote the tests and decision rules in `PREREGISTRATION.md` before downloading any daily series. That ordering is my statement. What can be checked is the OpenTimestamps proof (`PREREGISTRATION.md.ots`): it anchors the file in Bitcoin block 975284, mined at 10:15 UTC on 2026-11-10. The download began 29 minutes earlier (09:46 UTC, `data/raw/MANIFEST.json`). So the plan was frozen within half an hour of the download: any revision after seeing the data had at most that long. The proof alone does not show the plan came first.
 
