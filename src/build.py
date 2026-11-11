@@ -6,7 +6,7 @@ Follows PREREGISTRATION.md. Outputs:
   THESIS.md                     rendered from THESIS.template.md
   README.md                     rendered from README.template.md
   docs/thesis.html              the same thesis as a web page
-  docs/predictions.html         archive/PREDICTIONS-2026-11-10.md as a web page
+  docs/predictions.html         the rating and its calls, with RATING.md as timestamped
 """
 import json, os, re, sys
 import markdown
@@ -890,12 +890,44 @@ def render(R):
     write(os.path.join(ROOT, "docs", "appendix.html"), THESIS_PAGE.replace("{{body}}", markdown.markdown(appendix, extensions=["tables", "fenced_code"]).replace('href="THESIS.md"', 'href="thesis.html"')).replace("<title>NEAR Intents Thesis</title>", "<title>NEAR Intents Thesis: Appendix</title>"))
     body = markdown.markdown(text, extensions=["tables", "fenced_code"])
     write(os.path.join(ROOT, "docs", "thesis.html"), THESIS_PAGE.replace("{{body}}", body.replace('href="APPENDIX.md"', 'href="appendix.html"')))
-    preds = ""
-    for name in ("RATING.md", "archive/PREDICTIONS-2026-11-10.md"):  # timestamped, so rendered as they are; the first is current
-        with open(os.path.join(ROOT, name)) as f:
-            preds += markdown.markdown(f.read(), extensions=["tables"])
-        preds += "<hr><p><em>Below: the first version, superseded by the file above and kept unchanged so its timestamp proof still verifies.</em></p>" if name == "RATING.md" else ""
-    write(os.path.join(ROOT, "docs", "predictions.html"), THESIS_PAGE.replace("{{body}}", preds).replace("<title>NEAR Intents Thesis</title>", "<title>NEAR Intents Predictions</title>"))
+    # The rating page: a plain summary generated from results.json, then RATING.md as timestamped, word for word, folded
+    # away. The first version (archive/PREDICTIONS-2026-11-10.md, which said Long) is named and linked, not reprinted:
+    # it is superseded, and reprinting it in full read as if it were still the call.
+    st = lambda v: v.capitalize()
+    summary = re.sub(r"\{\{([^}]+)\}\}", sub, f"""# The rating and five dated calls
+
+**Rating: {{{{position.label}}}}**, to the end of 2029. Keep the NEAR you own, staked; do not add yet. First review: 31 March 2027.
+
+The rating follows a written rule, computed on every build (`src/build.py`).
+
+| Rating | When | Now |
+|---|---|---|
+| **Buy** | The wallets that receive Intents' revenue gain {{{{rating.need_per_day|n}}}} NEAR a day or more ({{{{rating.buy_level|share0}}}} of new supply), averaged over three full months | {{{{buyback.last3_per_day|n}}}} a day ({{{{rating.last_avg3|share0}}}}) |
+| **Hold** | Otherwise | **{{{{position.label}}}}** |
+| **Avoid** | The three wallets hold less NEAR than 28 days earlier, or two of the three warning measures break (Intents' volume against rival venues, the fee it earns per dollar, Zcash held on Intents) | Wallets growing; {{{{position.n_broken}}}} of {{{{position.n}}}} broken |
+
+Five calls, scored only on data after 11 November 2026 and resolved on 31 March 2027. Three are about the business, two about the wallets.
+
+| | The call | If it fails | Status |
+|---|---|---|---|
+| P1 | Intents' volume stays above its limit against rival venues in every 28-day window | Trust shocks or rivals are taking share | {st(R["predictions"]["P1"])} |
+| P2 | Intents sets a new monthly volume record, above {{{{long_term.record_month|month}}}}'s {{{{long_term.record_volume|usd_b}}}}, between December and March | Growth has stalled | {st(R["predictions"]["P2"])} |
+| P3 | The fee Intents earns per dollar stays above {{{{windows.estimation.take_rate_bps|bps}}}} bps in every 28-day window | It is buying volume with price | {st(R["predictions"]["P3"])} |
+| C1 | The three wallets keep their NEAR in every 28-day window | It is a treasury being spent, not a buyback | {st(R["rating"]["calls"]["C1"])} |
+| C2 | The wallets reach {{{{rating.need_per_day|n}}}} NEAR a day over three months. A test, not a forecast: if it is met, the rule says Buy | What reaches NEAR is not growing fast enough, and Hold stands | {st(R["rating"]["calls"]["C2"])} |
+
+Scoring after 31 March 2027: `make fetch && END_DATE=2027-03-31 make fetch-bq && LAST_DAY=2027-03-31 make`.
+""")
+    with open(os.path.join(ROOT, "RATING.md")) as f:
+        rating_md = f.read()
+    preds = (markdown.markdown(summary, extensions=["tables"])
+             + "<h2>The rule as timestamped</h2><p><code>RATING.md</code> is timestamped with OpenTimestamps, so it is shown word for word: "
+               "editing it would break its proof. It holds the exact thresholds and the reasoning behind the Buy level.</p>"
+             + "<details><summary>Show RATING.md</summary>" + markdown.markdown(rating_md, extensions=["tables"]) + "</details>"
+             + "<p><em>An earlier version of the calls, timestamped on 10 November 2026 (Bitcoin block 975308), rated NEAR Long before the "
+               "revenue wallets were measured. It is superseded by the rule above and kept unchanged in "
+               "<code>archive/PREDICTIONS-2026-11-10.md</code> so its proof still verifies; the change is explained in the thesis.</em></p>")
+    write(os.path.join(ROOT, "docs", "predictions.html"), THESIS_PAGE.replace("{{body}}", preds).replace("<title>NEAR Intents Thesis</title>", "<title>NEAR Intents: Rating and Calls</title>"))
 
 
 THESIS_PAGE = """<!doctype html>

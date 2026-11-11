@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>NEAR Intents Predictions</title>
+<title>NEAR Intents: Rating and Calls</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Mona+Sans:wght@400..800&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -13,7 +13,79 @@
 <div class="band"><div class="in"><span>Digital Assets Research · Investment Thesis</span><span>NEAR Hackathon 2026 · Investment Thesis Track</span></div></div>
 <main class="prose">
 <p class="back"><a href="index.html">← Dashboard</a></p>
-<h1>Rating, rule and predictions</h1>
+<h1>The rating and five dated calls</h1>
+<p><strong>Rating: Hold</strong>, to the end of 2029. Keep the NEAR you own, staked; do not add yet. First review: 31 March 2027.</p>
+<p>The rating follows a written rule, computed on every build (<code>src/build.py</code>).</p>
+<table>
+<thead>
+<tr>
+<th>Rating</th>
+<th>When</th>
+<th>Now</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Buy</strong></td>
+<td>The wallets that receive Intents' revenue gain 21,700 NEAR a day or more (25% of new supply), averaged over three full months</td>
+<td>15,486 a day (18%)</td>
+</tr>
+<tr>
+<td><strong>Hold</strong></td>
+<td>Otherwise</td>
+<td><strong>Hold</strong></td>
+</tr>
+<tr>
+<td><strong>Avoid</strong></td>
+<td>The three wallets hold less NEAR than 28 days earlier, or two of the three warning measures break (Intents' volume against rival venues, the fee it earns per dollar, Zcash held on Intents)</td>
+<td>Wallets growing; 1 of 3 broken</td>
+</tr>
+</tbody>
+</table>
+<p>Five calls, scored only on data after 11 November 2026 and resolved on 31 March 2027. Three are about the business, two about the wallets.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>The call</th>
+<th>If it fails</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>P1</td>
+<td>Intents' volume stays above its limit against rival venues in every 28-day window</td>
+<td>Trust shocks or rivals are taking share</td>
+<td>Pending</td>
+</tr>
+<tr>
+<td>P2</td>
+<td>Intents sets a new monthly volume record, above Sep 2026's $4.80B, between December and March</td>
+<td>Growth has stalled</td>
+<td>Pending</td>
+</tr>
+<tr>
+<td>P3</td>
+<td>The fee Intents earns per dollar stays above 13.6 bps in every 28-day window</td>
+<td>It is buying volume with price</td>
+<td>Pending</td>
+</tr>
+<tr>
+<td>C1</td>
+<td>The three wallets keep their NEAR in every 28-day window</td>
+<td>It is a treasury being spent, not a buyback</td>
+<td>Pending</td>
+</tr>
+<tr>
+<td>C2</td>
+<td>The wallets reach 21,700 NEAR a day over three months. A test, not a forecast: if it is met, the rule says Buy</td>
+<td>What reaches NEAR is not growing fast enough, and Hold stands</td>
+<td>Pending</td>
+</tr>
+</tbody>
+</table>
+<p>Scoring after 31 March 2027: <code>make fetch &amp;&amp; END_DATE=2027-03-31 make fetch-bq &amp;&amp; LAST_DAY=2027-03-31 make</code>.</p><h2>The rule as timestamped</h2><p><code>RATING.md</code> is timestamped with OpenTimestamps, so it is shown word for word: editing it would break its proof. It holds the exact thresholds and the reasoning behind the Buy level.</p><details><summary>Show RATING.md</summary><h1>Rating, rule and predictions</h1>
 <p>Written on 2026-11-11. The SHA-256 of this file is timestamped with OpenTimestamps (<code>RATING.md.ots</code>). This is the current statement of the rating and of every dated call the thesis makes. It supersedes <code>archive/PREDICTIONS-2026-11-10.md</code>, the first version, which was timestamped in Bitcoin block 975308 on 2026-11-10 and is kept unchanged so its proof still verifies.</p>
 <p><strong>Rating: Hold</strong>, to the end of 2029, first review 2027-03-31.</p>
 <h2>What changed from the first version, and why</h2>
@@ -97,45 +169,7 @@
 </tbody>
 </table>
 <p>I rate Hold while making C2 as a call because a call is what would prove the rating wrong: if C2 is met the rule says Buy, and if it fails the rating stands. I do not put a probability on it.</p>
-<p>P1 and P2 are scored on DefiLlama's volume, which is NEAR's own dataset; C1 and C2 are scored on public wallets. Scoring: <code>make fetch &amp;&amp; END_DATE=2027-03-31 make fetch-bq &amp;&amp; LAST_DAY=2027-03-31 make</code>; results in <code>data/processed/results.json</code> under <code>predictions</code> and <code>rating.calls</code>.</p><hr><p><em>Below: the first version, superseded by the file above and kept unchanged so its timestamp proof still verifies.</em></p><h1>Predictions: what this thesis says will happen next</h1>
-<p>Written 2026-11-11, after the analysis and before any of the data that will score them exists. The SHA-256 of this file is timestamped with OpenTimestamps (<code>PREDICTIONS.md.ots</code>). Each prediction is scored from the same pipeline: <code>make fetch &amp;&amp; make fetch-bq &amp;&amp; make</code>.</p>
-<p>The thesis is: NEAR Intents' order flow survives trust shocks, so the long-term case for NEAR rests on Intents growing again. These three predictions are what that thesis commits to. If any one fails, the thesis is wrong in the way the prediction names.</p>
-<table>
-<thead>
-<tr>
-<th></th>
-<th>Prediction</th>
-<th>Resolves</th>
-<th>Scored from</th>
-<th>If it fails</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>P1</td>
-<td><strong>Flow stays durable.</strong> In every 28-day window ending from 2026-12-08 to 2027-03-31 (so every day scored is after 2026-11-10), Intents volume stays above the calm-period limit against the pre-registered model (abnormal volume above −29.5%).</td>
-<td>2027-03-31</td>
-<td>the order-flow tripwire in <code>src/build.py</code></td>
-<td>Trust shocks or rivals are taking share: the durability half of the thesis fails.</td>
-</tr>
-<tr>
-<td>P2</td>
-<td><strong>Growth comes back.</strong> Intents sets a new monthly volume record, above September 2026's $4.80B, in at least one calendar month from December 2026 to March 2027 (November is excluded because its first days are already observed).</td>
-<td>2027-03-31</td>
-<td>DefiLlama monthly volume, as in Exhibit 2</td>
-<td>Growth has stalled for 18 months: the growth half of the thesis fails.</td>
-</tr>
-<tr>
-<td>P3</td>
-<td><strong>Price holds.</strong> In every 28-day window ending from 2026-12-08 to 2027-03-31 (so every day scored is after 2026-11-10), the take rate stays above the calm-period average of 13.6 bps.</td>
-<td>2027-03-31</td>
-<td>the take-rate tripwire in <code>src/build.py</code></td>
-<td>Intents is buying volume with price, and revenue per dollar falls.</td>
-</tr>
-</tbody>
-</table>
-<h2>Position</h2>
-<p><strong>Long NEAR.</strong> One of the three tripwires (Zcash balances) is broken now. The position moves to neutral if a second tripwire breaks, or if P2 fails on 2027-03-31.</p>
+<p>P1 and P2 are scored on DefiLlama's volume, which is NEAR's own dataset; C1 and C2 are scored on public wallets. Scoring: <code>make fetch &amp;&amp; END_DATE=2027-03-31 make fetch-bq &amp;&amp; LAST_DAY=2027-03-31 make</code>; results in <code>data/processed/results.json</code> under <code>predictions</code> and <code>rating.calls</code>.</p></details><p><em>An earlier version of the calls, timestamped on 10 November 2026 (Bitcoin block 975308), rated NEAR Long before the revenue wallets were measured. It is superseded by the rule above and kept unchanged in <code>archive/PREDICTIONS-2026-11-10.md</code> so its proof still verifies; the change is explained in the thesis.</em></p>
 </main>
 </body>
 </html>
