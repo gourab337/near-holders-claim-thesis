@@ -2,7 +2,7 @@
 
 [![check](https://github.com/gourab337/near-holders-claim-thesis/actions/workflows/check.yml/badge.svg)](https://github.com/gourab337/near-holders-claim-thesis/actions/workflows/check.yml) (on every push GitHub rebuilds every number from the committed data on Linux, checks it reproduces the committed thesis, and runs the tests)
 
-NEAR HACKATHON 2026 · **Investment Thesis track** · **Live dashboard:** https://gourab337.github.io/near-holders-claim-thesis/ · **Thesis (about ten minutes):** [`THESIS.md`](THESIS.md)
+NEAR HACKATHON 2026 · **Investment Thesis track** · **Live dashboard:** https://gourab337.github.io/near-holders-claim-thesis/ · **Thesis (about ten minutes):** [`THESIS.md`](THESIS.md) · **Demo video (99 s, narrated):** [`docs/demo.mp4`](docs/demo.mp4)
 
 ## In 30 seconds
 
