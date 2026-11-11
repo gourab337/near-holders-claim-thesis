@@ -652,6 +652,18 @@ def main():
         "years_to_cover": {str(g): float(np.log(issued_day / in28) / np.log(1 + g / 100)) for g in (50, 100, 200)},
         "daily": [{"d": str(d.date()), "held": float(v)} for d, v in held[held > 0][:w1].items()],
     }
+    # Buy pressure, over the same 28 days: the buyback in dollars against NEAR's daily trading volume (CoinGecko) and
+    # against new supply in dollars. And NEAR's gas burn: DefiLlama's revenue for the NEAR chain is the 70% of every
+    # gas fee that is burned, so it bounds what Intents' own transactions burn. The supply table above is already net
+    # of burns, so the burn is inside issued_day, not in addition to it.
+    win = slice(w0 + day, w1)
+    px28 = float(near.price[win].mean())
+    burn_near = float((llama_series("near_chain_revenue") / near.price)[win].mean())
+    R["pressure"] = {"price": px28, "buyback_usd_per_day": in28 * px28, "issued_usd_per_day": issued_day * px28,
+                     "spot_volume_usd_per_day": float(near.volume[win].mean()),
+                     "buyback_vs_volume": in28 * px28 / float(near.volume[win].mean()),
+                     "issued_vs_buyback": issued_day / in28,
+                     "chain_burn_near_per_day": burn_near, "chain_burn_share_of_issuance": burn_near / issued_day}
     # The front-end fund is DefiLlama's "Front-end Affiliate Revenue" wallet; the other two are the 1Click fund and the
     # buybacks wallet, which pass NEAR between themselves, so they are counted together.
     FRONT = "fefundsadmin.sputnik-dao.near"
@@ -857,7 +869,7 @@ def render(R):
     fmts = {"pct": lambda v: f"{100 * v:+.1f}%", "pct0": lambda v: f"{100 * v:+.0f}%", "upct": lambda v: f"{100 * abs(v):.1f}%",
             "share": lambda v: f"{100 * v:.1f}%", "spct0": lambda v: f"{100 * v:+,.0f}%", "pp": lambda v: f"{100 * v:.1f} points", "p": lambda v: "< 0.01" if v == 0 else "> 0.99" if v == 1 else f"{v:.2f}", "peq": lambda v: "p < 0.01" if v == 0 else "p > 0.99" if v == 1 else f"p = {v:.2f}", "usd_m": lambda v: f"${v / 1e6:,.1f}M",
             "usd_b": lambda v: f"${v / 1e9:,.2f}B", "usd_k": lambda v: f"${v / 1e3:,.0f}k", "bps": lambda v: f"{v:.1f}",
-            "n": lambda v: f"{v:,.0f}", "f2": lambda v: f"{v:.2f}", "x": lambda v: f"{v:.1f}×", "f1": lambda v: f"{v:.1f}", "f0x": lambda v: f"{v:.0f} times", "f2pct": lambda v: f"{100 * v:.2f}%", "upct0": lambda v: f"{100 * v:,.0f}%", "months": lambda v: ", ".join(pd.Timestamp(x + "-01").strftime("%b %Y") for x in v), "share0": lambda v: f"{100 * v:.0f}%", "share_inv": lambda v: f"{100 * (1 - v):.0f}%", "month": lambda v: pd.Timestamp(v + "-01").strftime("%b %Y"), "m_near": lambda v: f"{v / 1e6:,.1f}M", "list": lambda v: ", ".join(v), "s": str}
+            "n": lambda v: f"{v:,.0f}", "f2": lambda v: f"{v:.2f}", "x": lambda v: f"{v:.1f}×", "f1": lambda v: f"{v:.1f}", "f0x": lambda v: f"{v:.0f} times", "pct2": lambda v: f"{100 * v:.2f}%", "usd_k1": lambda v: f"${v / 1e3:,.0f}k", "f2pct": lambda v: f"{100 * v:.2f}%", "upct0": lambda v: f"{100 * v:,.0f}%", "months": lambda v: ", ".join(pd.Timestamp(x + "-01").strftime("%b %Y") for x in v), "share0": lambda v: f"{100 * v:.0f}%", "share_inv": lambda v: f"{100 * (1 - v):.0f}%", "month": lambda v: pd.Timestamp(v + "-01").strftime("%b %Y"), "m_near": lambda v: f"{v / 1e6:,.1f}M", "list": lambda v: ", ".join(v), "s": str}
 
     def sub(m):
         path, _, fmt = m.group(1).partition("|")

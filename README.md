@@ -4,7 +4,7 @@
 
 [![check](https://github.com/gourab337/near-holders-claim-thesis/actions/workflows/check.yml/badge.svg)](https://github.com/gourab337/near-holders-claim-thesis/actions/workflows/check.yml) (on every push GitHub rebuilds every number from the committed data on Linux, checks it reproduces the committed thesis, and runs the tests)
 
-NEAR HACKATHON 2026 · **Investment Thesis track** · **Live dashboard:** https://gourab337.github.io/near-holders-claim-thesis/ · **Thesis (about ten minutes):** [`THESIS.md`](THESIS.md) · **Demo video (126 s, narrated):** [`docs/demo.mp4`](docs/demo.mp4)
+NEAR HACKATHON 2026 · **Investment Thesis track** · **Live dashboard:** https://gourab337.github.io/near-holders-claim-thesis/ · **Thesis (about ten minutes):** [`THESIS.md`](THESIS.md) · **Demo video (136 s, narrated):** [`docs/demo.mp4`](docs/demo.mp4)
 
 ## In 30 seconds
 
@@ -18,7 +18,7 @@ Most of the revenue that can be measured on NEAR comes from one business: NEAR I
 
 1. **The business is resilient.** Within a month Intents froze users' funds and was hacked for $3.8M. Counted swap by swap, volume on 1Click (the swap service apps plug into) in the four weeks after was -5% against August, and 17 of 25 large integrating apps kept at least half their volume.
 2. **One number looked like a loss. It was not.** From late October, swap volume visible on NEAR's public chain fell from $40.5M a day to $15.0M, while 1Click volume held at $36.9M. Usage had not dropped: since 27 October 1Click settles on a permissioned instance of NEAR with no public networking, and the big apps kept routing through it. Because the switch came four weeks after the freeze, the chain alone makes it look as if users left. Of the swaps I sampled, 98% left a public record in August and 7% in November. The business was fine, but it became harder to check.
-3. **Holders get little of it.** NEAR creates 86,966 new tokens a day, which dilutes holders. The wallets that receive Intents' revenue take in 13,571 a day: 16% as much. To match all the new supply, the inflow would have to grow about 6.4×. By month it has run from 6% to 22% with no steady rise.
+3. **Holders get little of it.** Intents does buy back NEAR with its revenue. But NEAR creates 86,966 new tokens a day, which dilutes holders, and the buyback takes in 13,571: 16% as much. To match all the new supply, it would have to grow about 6.4×. At about $60k a day against $707.0M of NEAR traded, it is far too small to move the price on its own. Intents' transactions also burn a little NEAR in gas; the whole chain burns 0.8% of new supply, and the issuance figure is already net of it. By month it has run from 6% to 22% with no steady rise.
 4. **And no rule protects even that.** None of it is paid to holders, staked or burned. A few signers can move it (2 of 4, 2 of 4 and 2 of 5 across the three wallets), and the front-end fund's policy sets the threshold for changing its own rules at 1 vote (read from the contract, not tested).
 
 So: a resilient business is a reason not to sell, and a small share that nobody guarantees is a reason not to buy more. Hold.

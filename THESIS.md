@@ -14,7 +14,7 @@ The first is true. The second, so far, is not. Here is the argument in four step
 
 1. **The business is resilient.** Within a month Intents froze users' funds and was then hacked for $3.8M. Its volume barely moved: -5% against August.
 2. **One number looked like a loss. It was not.** From late October, swap volume visible on NEAR's public chain fell from $40.5M a day to $15.0M. Usage did not fall: on 27 October Intents began settling swaps off the public chain, and the big apps kept routing through it. The business was fine, but it became harder to check.
-3. **Holders get little of it.** NEAR creates 86,966 new tokens a day, which dilutes holders. The wallets that receive Intents' revenue take in 13,571 a day: 16% as much. To match all the new supply, the inflow would have to grow about 6.4×.
+3. **Holders get little of it.** Intents does buy back NEAR with its revenue. But NEAR creates 86,966 new tokens a day, which dilutes holders, and the buyback takes in 13,571: 16% as much. To match all the new supply, it would have to grow about 6.4×. At about $60k a day against $707.0M of NEAR traded, it is also far too small to move the price on its own.
 4. **And no rule protects even that.** None of it is paid to holders, staked or burned. A few signers can move it.
 
 **So the rating is Hold.** A resilient business is a reason not to sell. A small share that nobody guarantees is a reason not to buy more. Keep the NEAR you own, staked, and do not add; the horizon is the end of 2029. The rating turns to Buy when the wallets take in 21,700 NEAR a day (25% of new supply) for three full months. The last three full months averaged 15,486 (18%). It turns to Avoid if the wallets shrink or two of its three warning measures break. The rule is timestamped in [`RATING.md`](RATING.md), with five dated predictions that resolve on 31 March 2027.
@@ -100,6 +100,20 @@ Since February 2026, part of Intents' revenue has been swept, as NEAR, into thre
 | Growth needed to match all of it | **about 6.4×** |
 
 My count comes to 100.4% of the revenue DefiLlama reports for the same days, so the two sources agree on the size.
+
+**Doesn't a buyback push the price up?** In direction, yes: buying NEAR adds demand, and holding it takes NEAR out of circulation. That is exactly what the 16% measures. The question is size. A day, over the same 28 days, at their average NEAR price of $4.46:
+
+| A day | NEAR | Dollars |
+|---|---|---|
+| Bought back with Intents' revenue | 13,571 | $60k |
+| Newly issued | 86,966 | $388k |
+| Traded on markets | | $707.0M |
+
+- **Against trading, it is a rounding error.** The buyback is about 0.01% of what trades each day. It cannot move the price much by itself.
+- **Against new supply, it is outweighed.** NEAR issues 6.4 times more than the buyback absorbs. Not every new token is sold, but the part that is can outweigh the buying.
+- **Where a buyback can move the price is expectations.** If traders expect it to grow, they price that in early. That only lasts while it does grow, which is what the Buy level below tests.
+
+**Does Intents burn any NEAR?** A little, the way every NEAR transaction does: 70% of each gas fee is burned. The whole chain burns about 692 NEAR a day (0.8% of new supply), and Intents' transactions are only part of that. The new-supply figure above is already net of burns, so this does not change the 16%.
 
 **It is not growing steadily.** By month, the share of new supply that came back has run from 6% (Apr 2026) to 22% (Sep 2026), with no steady rise. Revenue in dollars grew 3.9× between Mar 2026 and Oct 2026, but NEAR's price rose 3.8×, so the extra dollars bought no extra NEAR. That is the catch in any buyback: when the token goes up, the same dollars buy less of it.
 

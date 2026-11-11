@@ -14,7 +14,7 @@ The first is true. The second, so far, is not. Here is the argument in four step
 
 1. **The business is resilient.** Within a month Intents froze users' funds and was then hacked for $3.8M. Its volume barely moved: {{confidential.oneclick_event_vs_august|pct0}} against August.
 2. **One number looked like a loss. It was not.** From late October, swap volume visible on NEAR's public chain fell from {{confidential.windows.august.public_usd|usd_m}} a day to {{confidential.windows.after.public_usd|usd_m}}. Usage did not fall: on 27 October Intents began settling swaps off the public chain, and the big apps kept routing through it. The business was fine, but it became harder to check.
-3. **Holders get little of it.** NEAR creates {{buyback.issued_per_day|n}} new tokens a day, which dilutes holders. The wallets that receive Intents' revenue take in {{buyback.in_28d_per_day|n}} a day: {{buyback.coverage_28d|share0}} as much. To match all the new supply, the inflow would have to grow about {{buyback.growth_needed|x}}.
+3. **Holders get little of it.** Intents does buy back NEAR with its revenue. But NEAR creates {{buyback.issued_per_day|n}} new tokens a day, which dilutes holders, and the buyback takes in {{buyback.in_28d_per_day|n}}: {{buyback.coverage_28d|share0}} as much. To match all the new supply, it would have to grow about {{buyback.growth_needed|x}}. At about {{pressure.buyback_usd_per_day|usd_k1}} a day against {{pressure.spot_volume_usd_per_day|usd_m}} of NEAR traded, it is also far too small to move the price on its own.
 4. **And no rule protects even that.** None of it is paid to holders, staked or burned. A few signers can move it.
 
 **So the rating is {{position.label}}.** A resilient business is a reason not to sell. A small share that nobody guarantees is a reason not to buy more. Keep the NEAR you own, staked, and do not add; the horizon is the end of 2029. The rating turns to Buy when the wallets take in {{rating.need_per_day|n}} NEAR a day ({{rating.buy_level|share0}} of new supply) for three full months. The last three full months averaged {{buyback.last3_per_day|n}} ({{rating.last_avg3|share0}}). It turns to Avoid if the wallets shrink or two of its three warning measures break. The rule is timestamped in [`RATING.md`](RATING.md), with five dated predictions that resolve on 31 March 2027.
@@ -100,6 +100,20 @@ Since February 2026, part of Intents' revenue has been swept, as NEAR, into thre
 | Growth needed to match all of it | **about {{buyback.growth_needed|x}}** |
 
 My count comes to {{buyback.wallets_vs_defillama|share}} of the revenue DefiLlama reports for the same days, so the two sources agree on the size.
+
+**Doesn't a buyback push the price up?** In direction, yes: buying NEAR adds demand, and holding it takes NEAR out of circulation. That is exactly what the {{buyback.coverage_28d|share0}} measures. The question is size. A day, over the same 28 days, at their average NEAR price of ${{pressure.price|f2}}:
+
+| A day | NEAR | Dollars |
+|---|---|---|
+| Bought back with Intents' revenue | {{buyback.in_28d_per_day|n}} | {{pressure.buyback_usd_per_day|usd_k1}} |
+| Newly issued | {{buyback.issued_per_day|n}} | {{pressure.issued_usd_per_day|usd_k1}} |
+| Traded on markets | | {{pressure.spot_volume_usd_per_day|usd_m}} |
+
+- **Against trading, it is a rounding error.** The buyback is about {{pressure.buyback_vs_volume|pct2}} of what trades each day. It cannot move the price much by itself.
+- **Against new supply, it is outweighed.** NEAR issues {{pressure.issued_vs_buyback|f1}} times more than the buyback absorbs. Not every new token is sold, but the part that is can outweigh the buying.
+- **Where a buyback can move the price is expectations.** If traders expect it to grow, they price that in early. That only lasts while it does grow, which is what the Buy level below tests.
+
+**Does Intents burn any NEAR?** A little, the way every NEAR transaction does: 70% of each gas fee is burned. The whole chain burns about {{pressure.chain_burn_near_per_day|n}} NEAR a day ({{pressure.chain_burn_share_of_issuance|share}} of new supply), and Intents' transactions are only part of that. The new-supply figure above is already net of burns, so this does not change the {{buyback.coverage_28d|share0}}.
 
 **It is not growing steadily.** By month, the share of new supply that came back has run from {{rating.month_min|share0}} ({{buyback.low_month|month}}) to {{rating.month_max|share0}} ({{buyback.best_month|month}}), with no steady rise. Revenue in dollars grew {{buyback.usd_last_vs_first_month|x}} between {{buyback.first_month|month}} and {{buyback.last_month|month}}, but NEAR's price rose {{buyback.price_last_vs_first_month|x}}, so the extra dollars bought no extra NEAR. That is the catch in any buyback: when the token goes up, the same dollars buy less of it.
 

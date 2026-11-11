@@ -13099,6 +13099,16 @@
   "event_vs_august_usd": 2.0863584506227144,
   "event_vs_before_near": -0.23405010583805652
  },
+ "pressure": {
+  "price": 4.457145591047815,
+  "buyback_usd_per_day": 60488.16130482367,
+  "issued_usd_per_day": 387620.34501605865,
+  "spot_volume_usd_per_day": 707037071.5346166,
+  "buyback_vs_volume": 8.555161212909918e-05,
+  "issued_vs_buyback": 6.408201814280435,
+  "chain_burn_near_per_day": 692.0749862564738,
+  "chain_burn_share_of_issuance": 0.007957990372099082
+ },
  "tripwires": [
   {
    "name": "Order flow against the model",
