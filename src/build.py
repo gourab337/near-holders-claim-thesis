@@ -6,7 +6,7 @@ Follows PREREGISTRATION.md. Outputs:
   THESIS.md                     rendered from THESIS.template.md
   README.md                     rendered from README.template.md
   docs/thesis.html              the same thesis as a web page
-  docs/predictions.html         PREDICTIONS.md as a web page
+  docs/predictions.html         archive/PREDICTIONS-2026-11-10.md as a web page
 """
 import json, os, re, sys
 import markdown
@@ -155,7 +155,7 @@ def main():
     for d in DONORS_PREREG:
         s = panel[d]
         if s[est].isna().any() or (s[est] <= 0).any():
-            dropped[d] = "missing or zero days in the estimation window (pre-registered rule)"
+            dropped[d] = "missing days in the estimation window (pre-registered rule)" if s[est].isna().any() else "zero-volume days in the estimation window (deviation 1)"
         elif s[first_needed:EST_END].isna().any():
             dropped[d] = "does not cover the placebo windows (deviation 1)"
     donors = [d for d in DONORS_PREREG if d not in dropped]
@@ -191,6 +191,19 @@ def main():
     R["H1"]["from_hack_date_pct"] = pct(event_stat(panel, "volume", donors, HACK)[0])  # sensitivity, not pre-registered
     R["H1"]["n_independent"] = (R["H1"]["n_placebo"] + HORIZON - 1) // HORIZON  # non-overlapping 28-day windows in the placebo span
     R["H1"]["mde_pct"] = R["H1"]["placebo_p10_pct"]  # detection threshold: a loss this size reaches p = 0.10 only about half the time
+    # The donor rule exactly as written in PREREGISTRATION.md: a donor is dropped only for missing days in the estimation
+    # window. The index averages donors before taking logs, so a zero-volume day does not break it. Deviation 1 dropped more.
+    literal = [d for d in DONORS_PREREG if not panel[d][est].isna().any()]
+    lit_stat, lit_ab = event_stat(panel, "volume", literal, T)
+    lit_plc = np.array([event_stat(panel, "volume", literal, x)[0] for x in placebo_dates])
+    lit_plc = lit_plc[np.isfinite(lit_plc)]
+    R["H1"]["literal"] = {"donors": literal, "dropped": [d for d in DONORS_PREREG if d not in literal], "stat_pct": pct(lit_stat),
+                          "p_placebo_time": float((lit_plc <= lit_stat).mean()), "n_placebo": int(len(lit_plc)),
+                          "mde_pct": pct(np.quantile(lit_plc, 0.10)),
+                          "verdict": "flow was lost" if (lit_stat < 0 and float((lit_plc <= lit_stat).mean()) < 0.10) else "no detectable loss",
+                          "without_0x_pct": pct(event_stat(panel, "volume", [x for x in literal if x != "0x-bridge-aggregator"], T)[0]),
+                          "without": {d: pct(event_stat(panel, "volume", [x for x in literal if x != d], T)[0]) for d in literal}}
+    assert R["H1"]["literal"]["verdict"] == R["H1"]["verdict"], "the two donor rules give different pre-registered verdicts: say so in the thesis"
     # The decision rule in PREREGISTRATION.md, applied mechanically.
     if R["H1"]["verdict"] == "flow was lost":
         R["H1"]["prereg_outcome"] = "flow was lost"
@@ -227,7 +240,8 @@ def main():
     zx = wide["0x-bridge-aggregator"]
     zero_x_growth = float(zx[evt].mean() / zx[est].mean())  # event-window vs estimation-window mean daily volume
     R["grid"] = {"zero_x_growth": zero_x_growth, "specs": grid, "n": len(grid), "min_pct": float(g.min()), "median_pct": float(np.median(g)), "max_pct": float(g.max()),
-                 "share_negative": float((g < 0).mean()), "share_below_mde": float((g < R["H1"]["mde_pct"]).mean())}
+                 "share_negative": float((g < 0).mean()), "share_below_mde": float((g < R["H1"]["mde_pct"]).mean()),
+                 "with_0x_pct": next(x["pct"] for x in grid if x["donors"] == "+ 0x" and x["controls"] == "donors + spot volume" and x["event"] == "freeze" and x["days"] == HORIZON)}
 
     # synthetic control + placebo in space
     ratio, w, synth, scaled = synthetic(panel, "volume", donors, est, evt)
@@ -391,7 +405,7 @@ def main():
     ac, ac_plc = active_change(T), np.array([active_change(t) for t in h5_placebo])
     evt_tx = sg[(sg.block_date >= T) & (sg.block_date < T + pd.Timedelta(days=HORIZON))].groupby("signer_account_id").n.sum()
     R["H5"] = {"from": str(days.min().date()), "relayed_share": relayed_share, "n_accounts": int(sg.signer_account_id.nunique()),
-               "active_per_day_median": float(active.median()), "n_placebo": int(len(h5_placebo)),
+               "active_per_day_median": float(active.median()), "n_placebo": int(len(h5_placebo)), "n_independent": (len(h5_placebo) + HORIZON - 1) // HORIZON,
                "resight": tiers, "cohorts": cohorts,
                "active_change_pct": pct(ac), "active_change_p": float((ac_plc <= ac).mean()),
                "active_change_placebo_p10_pct": pct(np.quantile(ac_plc, 0.10)),
@@ -420,7 +434,11 @@ def main():
     # DefiLlama's total Intents volume falls when flow moves to execution that is not logged as public swaps
     # (Confidential Intents, generally available to every app from 2026-07-08).
     sv = pd.read_csv(os.path.join(RAW, "bq_intents_stable_volume_daily.csv"), parse_dates=["block_date"])
-    public = sv.groupby("block_date").usd.sum()
+    # One-sided: a stablecoin-to-stablecoin swap shows a positive stablecoin amount in both parties' diffs, so half of
+    # that part is removed. The gross figure (both legs) is kept for comparison.
+    sv_day = sv.groupby("block_date")[["usd", "usd_stable_to_stable"]].sum()
+    public_gross = sv_day.usd
+    public = sv_day.usd - sv_day.usd_stable_to_stable / 2
     GA = pd.Timestamp("2026-07-08")
 
     def share(a, b):
@@ -432,6 +450,8 @@ def main():
     priv_plc = pd.date_range(public.index.min() + pd.Timedelta(days=HORIZON), E0 - pd.Timedelta(days=HORIZON))
     plc = np.array([share_chg(t) for t in priv_plc])
     day = pd.Timedelta(days=1)
+    R["privacy_gross"] = {"after_ga": float(public_gross[GA:EST_END].sum() / panel["volume"][GA:EST_END].sum()),
+                          "stable_to_stable_share": float(sv_day.usd_stable_to_stable[GA:LAST_DAY].sum() / sv_day.usd[GA:LAST_DAY].sum())}
     R["privacy"] = {
         "ga_date": str(GA.date()), "n_placebo": int(len(plc)), "placebo_from": str(priv_plc[0].date()),
         "placebo_p50_pct": pct(np.median(plc)), "placebo_min_pct": pct(plc.min()),
@@ -471,6 +491,97 @@ def main():
     R["privacy"]["h1_public_pct"] = pct(st)
     R["privacy"]["h1_public_p"] = float((on_plc <= st).mean())
 
+    # ---- Where the public swaps went: Confidential Intents (added after seeing results) ------------
+    # NEAR Intents' changelog, 2026-10-27: "From October 27, 2026, 1Click swaps settle confidentially": the swap
+    # settles on the NEAR Private Shard (FAR), and only the shield and unshield are on the public chain, as transfers
+    # to and from the Treasury account. The switch date comes from the changelog, not from this data.
+    SWITCH, TREASURY = pd.Timestamp("2026-10-27"), "51e8f94d77b5e90dc9852ca6113771e11e8382ce69473a75e313e41665de7cbe"
+    cd = pd.read_csv(os.path.join(RAW, "bq_intents_confidential_daily.csv"), parse_dates=["block_date"]).set_index("block_date")
+    c_win = {"august": (pd.Timestamp("2026-08-01"), pd.Timestamp("2026-08-31")), "before": (E0, SWITCH - day),
+             "after": (SWITCH + day, LAST_DAY)}
+    # Swap-level trace: a seeded random sample of 300 successful 1Click swaps on each sampled day (Explorer API),
+    # each followed through its NEAR transactions (BigQuery) to what intents.near logged.
+    with open(os.path.join(RAW, "explorer_trace_sample.json")) as f:
+        sample = json.load(f)
+    tr = pd.read_csv(os.path.join(RAW, "bq_intents_swap_trace.csv")).set_index("tx_hash")
+    trace = {}
+    for d, s in sample.items():
+        sw = pd.DataFrame([{"public": any(tr.token_diff.get(h, 0) > 0 for h in hashes),
+                            "treasury": any(tr.treasury.get(h, 0) > 0 for h in hashes),
+                            "found": any(h in tr.index for h in hashes),
+                            "n_hashes": len(hashes)} for hashes in s["near_tx_hashes"]])
+        # The dollar-weighted shares and the deposit type are computed when the sample is pulled (src/fetch_explorer.py):
+        # the swaps' amounts are not stored.
+        trace[d] = {"n": len(sw), "swaps_that_day": s["swaps_that_day"], "found": float(sw.found.mean()),
+                    "public": float(sw.public.mean()), "public_usd": s["public_usd"],
+                    "treasury": float(sw.treasury.mean()), "treasury_usd": s["treasury_usd"],
+                    "hashes_median": float(sw.n_hashes.median()), "deposit_confidential": s["deposit_confidential"]}
+    # 1Click volume from the Explorer API: successful swaps of $100 or more (about 99% of 1Click dollars), by day.
+    ex = pd.read_csv(os.path.join(RAW, "explorer_1click_daily.csv"), parse_dates=["day"]).groupby("day")[["swaps", "usd_in"]].sum()
+    ex_win = {k: float(ex.usd_in[a:b].mean()) for k, (a, b) in {**c_win, "event": (T, T + pd.Timedelta(days=HORIZON - 1))}.items()}
+    roll = lambda s: s.rolling(7).mean().dropna()
+    R["confidential"] = {
+        "switch_date": str(SWITCH.date()), "treasury": TREASURY, "trace": trace,
+        "windows": {k: {"from": str(a.date()), "to": str(b.date()),
+                        "public_swaps": float(cd.with_token_diff[a:b].mean()), "treasury": float(cd.with_treasury[a:b].mean()),
+                        "oneclick_usd": ex_win[k], "public_usd": float(public[a:b].mean()), "defillama_usd": float(panel["volume"][a:b].mean())}
+                    for k, (a, b) in c_win.items()},
+        "oneclick_event_vs_august": ex_win["event"] / ex_win["august"] - 1,
+        "oneclick_after_vs_august": ex_win["after"] / ex_win["august"] - 1,
+        "daily": [{"d": str(d.date()), "public": float(r.with_token_diff), "treasury": float(r.with_treasury)}
+                  for d, r in roll(cd[["with_token_diff", "with_treasury"]]).iterrows()],
+        "volume_daily": [{"d": str(d.date()), "oneclick": float(v), "public": float(public.rolling(7).mean().get(d, np.nan)),
+                          "defillama": float(panel["volume"].rolling(7).mean().get(d, np.nan))} for d, v in roll(ex.usd_in).items()],
+    }
+
+    # ---- who routes the flow (added after the pre-registration) ---------------------------
+    # Successful 1Click swaps of $10,000 or more (Explorer API), summed by day and integrating app (referral). Swaps with
+    # no referral are kept as their own group, not as an integrator. The counts of sender addresses that came back are
+    # computed when the data is pulled (src/fetch_explorer.py): no per-swap record or address is stored.
+    lg = pd.read_csv(os.path.join(RAW, "explorer_large_daily.csv"), parse_dates=["day"], keep_default_na=False)
+    with open(os.path.join(RAW, "explorer_large_senders.json")) as f:
+        snd = json.load(f)
+    assert (snd["freeze"], snd["horizon"]) == (str(T.date()), HORIZON), "explorer_large_senders.json was computed for another event window"
+    l_win = {"august": c_win["august"], "before": (E0, T - day), "event": (T, T + pd.Timedelta(days=HORIZON - 1)), "after": c_win["after"]}
+    named = lg[lg.referral != ""]
+    rank = named.groupby("referral").usd_in.sum().sort_values(ascending=False)
+    top1, next4 = rank.index[0], list(rank.index[1:5])
+    aug_big = named[named.day <= l_win["august"][1]].groupby("referral").usd_in.sum()
+    aug_big_usd = aug_big[aug_big >= 1e6] / 31  # dollars a day in August, for the integrators that routed $1M or more
+    aug_big = set(aug_big_usd.index)
+
+    FALLER = "new.intents-referral.near"  # the one label behind most of the fall; its volume dropped before the freeze
+
+    def l_stats(a, b):
+        w, n = lg[(lg.day >= a) & (lg.day <= b)], (b - a).days + 1
+        by = w[w.referral != ""].groupby("referral").usd_in.sum().sort_values(ascending=False)
+        return {"from": str(a.date()), "to": str(b.date()), "swaps_per_day": float(w.swaps.sum() / n), "usd_per_day": float(w.usd_in.sum() / n),
+                "share_of_oneclick": float(w.usd_in.sum() / ex.usd_in[a:b].sum()), "integrators": int(by.size),
+                "top1_share": float(by.get(top1, 0) / w.usd_in.sum()), "top5_share": float(by.iloc[:5].sum() / w.usd_in.sum()),
+                "no_referral_share": float(w.usd_in[w.referral == ""].sum() / w.usd_in.sum()),
+                "august_big_still_routing": int(len(aug_big & set(by.index))),
+                "august_big_kept_half": int((by.reindex(aug_big_usd.index).fillna(0) / n >= 0.5 * aug_big_usd).sum()),
+                "august_big_at_or_above": int((by.reindex(aug_big_usd.index).fillna(0) / n >= aug_big_usd).sum()),
+                "august_big_usd_ratio": float(by.reindex(aug_big_usd.index).fillna(0).sum() / n / aug_big_usd.sum()),
+                "august_big_usd_ratio_ex_faller": float(by.reindex(aug_big_usd.index.drop(FALLER)).fillna(0).sum() / n / aug_big_usd.drop(FALLER).sum()),
+                "by_integrator": {r: float(by.get(r, 0) / n) for r in [top1] + next4}}
+
+    grp = lambda r: "top1" if r == top1 else "next4" if r in next4 else "rest"
+    lg_daily = lg.assign(g=lg.referral.map(grp)).pivot_table(index="day", columns="g", values="usd_in", aggfunc="sum").fillna(0)
+    R["large"] = {
+        "min_usd": 10000, "n": int(lg.swaps.sum()), "from": str(lg.day.min().date()), "top1": top1, "next4": next4,
+        "august_big": len(aug_big), "sender_known": snd["sender_known"],
+        "windows": {k: l_stats(a, b) for k, (a, b) in l_win.items()},
+        "usd_event_vs_august": None, "usd_after_vs_august": None,
+        "senders": snd["senders"], "calm_dates": snd["calm_dates"], "calm_from": snd["calm_from"], "calm_to": snd["calm_to"],
+        "daily": [{"d": str(d.date()), "top1": float(r.top1), "next4": float(r.next4), "rest": float(r.rest)} for d, r in roll(lg_daily).iterrows()],
+    }
+    lw = R["large"]["windows"]
+    R["large"]["by"] = [{k: lw[k]["by_integrator"][r] for k in l_win} for r in [top1] + next4] + \
+                       [{k: lw[k]["no_referral_share"] * lw[k]["usd_per_day"] for k in l_win}]
+    R["large"]["usd_event_vs_august"] = lw["event"]["usd_per_day"] / lw["august"]["usd_per_day"] - 1
+    R["large"]["usd_after_vs_august"] = lw["after"]["usd_per_day"] / lw["august"]["usd_per_day"] - 1
+
     # ---- long-term view (added after the pre-registration) ------------------------------
     vol_all, rev_all = llama_series("intents_volume"), llama_series("intents_revenue")
     month_end = LAST_DAY.to_period("M").start_time  # first day of the current, incomplete month
@@ -481,7 +592,6 @@ def main():
     s1 = min(LAST_DAY, supply.index.max())  # supply needs BigQuery; scoring predictions later does not
     s0 = s1 - pd.Timedelta(days=365)
     supply_growth_yr = float(supply[s1] - supply[s0])
-    buyback_yr = R["stake"]["revenue_annualised"] / float(near.price[LAST_DAY])  # upper bound: all revenue buys NEAR
     last_m = monthly.index.max()
     R["long_term"] = {
         "monthly": [{"m": str(i.date())[:7], "volume": float(r.volume), "revenue": None if pd.isna(r.revenue) else float(r.revenue)}
@@ -495,8 +605,6 @@ def main():
         "supply_from": str(s0.date()), "supply_to": str(s1.date()), "supply_now": float(supply[s1]),
         "supply_growth_yr": supply_growth_yr, "supply_growth_pct_yr": supply_growth_yr / float(supply[s0]),
         "circulating_growth_yr": float(chain_supply.circulating_tokens_supply[s1] - chain_supply.circulating_tokens_supply[s0]),
-        "buyback_near_yr": buyback_yr, "buyback_coverage": buyback_yr / supply_growth_yr,
-        "growth_needed": supply_growth_yr / buyback_yr,
     }
     first_peak = monthly.volume[:monthly.volume.idxmax() - pd.DateOffset(months=9)].idxmax()  # the first surge's peak
     capture_now = R["stake"]["revenue_30d"] / R["stake"]["volume_30d"] * 1e4
@@ -504,9 +612,86 @@ def main():
         "first_peak_month": str(first_peak.date())[:7], "first_peak_volume": float(monthly.volume[first_peak]),
         "last_vs_first_peak": float(monthly.volume[last_m] / monthly.volume[first_peak]),
         "capture_now_bps": capture_now,
-        "growth_needed_calm_capture": R["long_term"]["growth_needed"] * capture_now / R["windows"]["estimation"]["capture_bps"],
-        "growth_needed_calm_price": R["long_term"]["growth_needed"] * R["windows"]["estimation"]["near_price"] / float(near.price[LAST_DAY]),
     })
+
+    # ---- measured buybacks (added after the pre-registration) -----------------------------
+    # DefiLlama's revenue is NEAR swept into three wallets (its adapter credits NEAR's Dune query 6740088) and is
+    # labelled a buyback that is not burned. So the holder-side number can be read from the wallets' balances.
+    wl = pd.read_csv(os.path.join(RAW, "bq_revenue_wallets_daily.csv"), parse_dates=["epoch_date"])
+    wl["near"] = wl[["liquid", "unstaked_not_liquid", "staked", "reward"]].sum(axis=1)
+    wallets = wl.pivot(index="epoch_date", columns="account_id", values="near")
+    wallets = wallets.reindex(pd.date_range(wallets.index.min(), wallets.index.max())).ffill().fillna(0)
+    held = wallets.sum(axis=1)
+    w1 = min(LAST_DAY, held.index.max())
+    w0, w90 = w1 - pd.Timedelta(days=HORIZON), w1 - pd.Timedelta(days=90)
+    flow = held.diff().dropna()
+    issued_day = supply_growth_yr / 365
+    in28, in90, in_prev90 = float(held[w1] - held[w0]) / HORIZON, float(held[w1] - held[w90]) / 90, float(held[w90] - held[w90 - pd.Timedelta(days=90)]) / 90
+    rev_near28 = float((rev_all / near.price)[w0 + day:w1].sum()) / HORIZON  # DefiLlama revenue, in NEAR at each day's price
+    R["buyback"] = {
+        "wallets": {a: float(wallets[a][w1]) for a in wallets.columns}, "as_of": str(w1.date()), "from": str(w0.date()),
+        "held": float(held[w1]), "held_share_of_supply": float(held[w1] / supply[s1]),
+        "staked": float(wl[["unstaked_not_liquid", "staked", "reward"]].sum().sum()),
+        "outflow_days": int((flow < -1).sum()), "outflow_near": float(-flow[flow < -1].sum()), "days": int(len(flow)),
+        "in_28d_per_day": in28, "issued_per_day": issued_day, "coverage_28d": in28 / issued_day, "coverage_90d": in90 / issued_day,
+        "growth_needed": issued_day / in28, "in_90d_vs_prior_90d": in90 / in_prev90,
+        "defillama_revenue_near_28d_per_day": rev_near28, "wallets_vs_defillama": in28 / rev_near28,
+        "years_to_cover": {str(g): float(np.log(issued_day / in28) / np.log(1 + g / 100)) for g in (50, 100, 200)},
+        "daily": [{"d": str(d.date()), "held": float(v)} for d, v in held[held > 0][:w1].items()],
+    }
+    # The front-end fund is DefiLlama's "Front-end Affiliate Revenue" wallet; the other two are the 1Click fund and the
+    # buybacks wallet, which pass NEAR between themselves, so they are counted together.
+    FRONT = "fefundsadmin.sputnik-dao.near"
+    core = wallets.drop(columns=FRONT).sum(axis=1)
+    # Monthly inflow, full calendar months from the first one after the buyback began (2026-02-23).
+    m_end = held.resample("ME").last()
+    m_in = pd.DataFrame({"all": m_end.diff(), "core": core.resample("ME").last().diff()})
+    m_in = m_in[(m_in.index >= "2026-03-01") & (m_in.index <= w1)].div(m_in.index.days_in_month[(m_in.index >= "2026-03-01") & (m_in.index <= w1)], axis=0)
+    m_first, m_last = m_in.index[0], m_in.index[-1]
+    rev_m = rev_all.resample("ME").sum()
+    R["buyback"].update({
+        "front_end_wallet": FRONT, "held_core": float(core[w1]), "held_front_end": float(wallets[FRONT][w1]),
+        "in_28d_per_day_core": float(core[w1] - core[w0]) / HORIZON,
+        "coverage_28d_core": float(core[w1] - core[w0]) / HORIZON / issued_day,
+        "front_end_share_28d": 1 - float(core[w1] - core[w0]) / float(held[w1] - held[w0]),
+        "monthly": [{"m": str(i.date())[:7], "per_day": float(r["all"]), "per_day_core": float(r["core"]), "coverage": float(r["all"] / issued_day)}
+                    for i, r in m_in.iterrows()],
+        "first_month": str(m_first.date())[:7], "last_month": str(m_last.date())[:7],
+        "monthly_text": ", ".join(f"{i.strftime('%b')} {r['all']:,.0f} ({100 * r['all'] / issued_day:.0f}%)" for i, r in m_in.iterrows()),
+        "last_vs_first_month": float(m_in["all"][m_last] / m_in["all"][m_first]),
+        "last_vs_best_month": float(m_in["all"][m_last] / m_in["all"].max()), "best_month": str(m_in["all"].idxmax().date())[:7],
+        "best_month_per_day": float(m_in["all"].max()),
+        "usd_last_vs_first_month": float(rev_m[m_last] / rev_m[m_first]),
+        "price_last_vs_first_month": float(near.price[m_last.replace(day=1):m_last].mean() / near.price[m_first.replace(day=1):m_first].mean()),
+    })
+    # Pace test (added 2026-11-11, not timestamped): the yearly growth in NEAR inflow that covers issuance by the end of 2029,
+    # against the growth from the first full month of buybacks to the last, annualised.
+    BY = pd.Timestamp("2029-12-31")
+    bb = R["buyback"]
+    bb.update({
+        "cover_by": str(BY.date()), "pace_needed_yr": float(bb["growth_needed"] ** (365 / (BY - w1).days) - 1),
+        "growth_needed_calm_capture": bb["growth_needed"] * capture_now / R["windows"]["estimation"]["capture_bps"],
+        "growth_needed_calm_price": bb["growth_needed"] * R["windows"]["estimation"]["near_price"] / float(near.price[LAST_DAY]),
+    })
+    bb.update({"last3_vs_first3": float(m_in["all"][-3:].mean() / m_in["all"][:3].mean()), "last3_per_day": float(m_in["all"][-3:].mean()),
+               "last_vs_low_month": float(m_in["all"][m_last] / m_in["all"].min()), "low_month": str(m_in["all"].idxmin().date())[:7],
+               "n_months": int(len(m_in))})
+    # ---- how much of the reported volume an outsider can count (added after the pre-registration) ----
+    # DefiLlama's Intents volume is NEAR's own dataset on Dune (dune.near.dataset_near_intents_metrics), not a chain read.
+    # Countable from outside: public swaps with a stablecoin side (BigQuery), plus, after the switch, the 1Click swaps
+    # that settle confidentially (Explorer volume times the share of sampled dollars routed through the Treasury).
+    cw, conf_usd_share = R["confidential"]["windows"], R["confidential"]["trace"]["2026-11-05"]["treasury_usd"]
+    # DefiLlama's figure against twice the one-sided public count: about 1 if the reported figure counts both sides of a swap.
+    two_sided = lambda a, b: float(panel["volume"][a:b].sum() / (2 * public[a:b].sum()))
+    R["confidential"]["reported_vs_two_sided"] = {"summer": two_sided(GA, EST_END), "august": two_sided(*c_win["august"]),
+                                                   "before": two_sided(E0, T - day)}
+    R["confidential"]["countable"] = {
+        "before": cw["before"]["public_usd"] / cw["before"]["defillama_usd"],
+        "after_public": cw["after"]["public_usd"] / cw["after"]["defillama_usd"],
+        "after": (cw["after"]["public_usd"] + conf_usd_share * cw["after"]["oneclick_usd"]) / cw["after"]["defillama_usd"],
+        "august": cw["august"]["public_usd"] / cw["august"]["defillama_usd"],
+        "defillama_after_vs_august": cw["after"]["defillama_usd"] / cw["august"]["defillama_usd"] - 1,
+    }
 
     # ---- tripwires: the same measures on the latest 28 days, with the limits fixed by the calm period ----
     ab = pd.Series({pd.Timestamp(x["d"]): x["abnormal_log"] for x in R["H1"]["series"]})
@@ -524,7 +709,22 @@ def main():
     ]
     for t in R["tripwires"]:
         t["status"] = "holding" if t["value"] >= t["limit"] else "broken"
-    # ---- PREDICTIONS.md, scored with the literal thresholds written there (frozen, not recomputed) ----
+    # How often would two of the three have been broken at once in the calm period? Same limits, each 28-day window
+    # that starts in the estimation window (the windows overlap, so this is a rate over about three independent windows).
+    def n_broken_at(d):
+        w = slice(d, d + pd.Timedelta(days=HORIZON - 1))
+        take = 1e4 * panel.loc[w, "fees"].sum() / panel.loc[w, "volume"].sum()
+        return int(pct(ab[w].mean()) < R["H1"]["mde_pct"]) + int(take < R["windows"]["estimation"]["take_rate_bps"]) + \
+            int(pct(logchg(zec_units, d, d + pd.Timedelta(days=HORIZON))) < pct(zec_limit))
+    calm_n = np.array([n_broken_at(d) for d in starts])
+    R["tripwire_calm"] = {"windows": int(len(calm_n)), "one_or_more": float((calm_n >= 1).mean()), "two_or_more": float((calm_n >= 2).mean()),
+                          "independent": int(len(calm_n) + HORIZON - 1) // HORIZON}
+    # The same order-flow tripwire with the donors as pre-registered (reported beside the frozen one, which archive/PREDICTIONS-2026-11-10.md fixes).
+    R["tripwires"][0]["value_literal"] = pct(lit_ab[recent:].mean())
+    R["tripwires"][0]["limit_literal"] = R["H1"]["literal"]["mde_pct"]
+    R["tripwires"][0]["margin_literal"] = R["tripwires"][0]["value_literal"] - R["tripwires"][0]["limit_literal"]
+    R["tripwires"][0]["status_literal"] = "holding" if R["tripwires"][0]["value_literal"] >= R["tripwires"][0]["limit_literal"] else "broken"
+    # ---- archive/PREDICTIONS-2026-11-10.md, scored with the literal thresholds written there (frozen, not recomputed) ----
     P_FROM, P_TO = pd.Timestamp("2026-12-08"), pd.Timestamp("2027-03-31")
     ends = pd.date_range(P_FROM, min(P_TO, LAST_DAY))
 
@@ -532,7 +732,7 @@ def main():
         return slice(e - pd.Timedelta(days=HORIZON - 1), e)
 
     assert all(ab[window(e)].notna().sum() == HORIZON for e in ends), "a prediction window has missing days"
-    p1 = [pct(ab[window(e)].mean()) > -0.295 for e in ends]
+    p1 = [pct(ab[window(e)].mean()) > -0.295 and pct(lit_ab[window(e)].mean()) > -0.357 for e in ends]  # both donor sets (RATING.md)
     p3 = [1e4 * panel.loc[window(e), "fees"].sum() / panel.loc[window(e), "volume"].sum() > 13.6 for e in ends]
     months = panel["volume"].resample("MS").sum()
     done = [m for m in months.index if pd.Timestamp("2026-12-01") <= m <= pd.Timestamp("2027-03-01") and m + pd.offsets.MonthEnd(0) <= LAST_DAY]
@@ -545,9 +745,90 @@ def main():
     R["predictions"] = {"windows_checked": len(ends), "months_checked": len(done),
                         "P1": every(p1), "P3": every(p3), "P2": "met" if record else ("failed" if over else "pending")}
     n_broken = sum(t["status"] == "broken" for t in R["tripwires"])
-    # Position rule, set after seeing results (deviation 6): long while all hold, under review at one break, neutral at two.
-    R["position"] = {"n_broken": n_broken, "n": len(R["tripwires"]),
-                     "label": "Long" if n_broken == 0 else "Long, one tripwire broken" if n_broken == 1 else "Neutral"}
+    # ---- who can move the wallets (read from the contracts; src/fetch_control.py) ----
+    with open(os.path.join(RAW, "rpc_wallet_control.json")) as f:
+        ctl = json.load(f)
+
+    def approvers(policy):
+        role = next(r for r in policy["roles"] if "transfer:VoteApprove" in r["permissions"])
+        admin = next(r for r in policy["roles"] if "policy:*" in r["permissions"])  # may change the DAO's own policy: roles, members, thresholds
+        return {"members": len(role["kind"]["Group"]), "needed": int(role["vote_policy"]["transfer"]["threshold"]), "names": sorted(role["kind"]["Group"]),
+                "policy_needed": int(admin["vote_policy"]["policy"]["threshold"]), "policy_members": len(admin["kind"]["Group"])}
+
+    R["control"] = {"multisig": {"needed": int(ctl["multisig"]["num_confirmations"]), "keys": len(ctl["multisig"]["access_keys"])},
+                    "front_end": approvers(ctl["daos"][FRONT]), "oneclick": approvers(ctl["daos"]["1csfundsadmin.sputnik-dao.near"])}
+    # ---- HSP-029: the proposal's own text gives the issuance change; the wallet inflow is then set against the target rate ----
+    with open(os.path.join(RAW, "gov_hsp029.json")) as f:
+        hsp = json.load(f)
+    m_rate = re.search(r"maximum annual issuance from ([\d.]+)% to ([\d.]+)% on a smooth (\d+)-month", hsp["text"])
+    m_yield = re.search(r"gross staking yield declines from ([\d.]+)% to ([\d.]+)% and ([\d.]+)%", hsp["text"])
+    m_status = re.search(r"Status: (\w+)", hsp["text"])
+    rate_from, rate_to = float(m_rate.group(1)) / 100, float(m_rate.group(2)) / 100
+    issued_day_target = float(supply[s1]) * rate_to / 365
+    R["hsp029"] = {"title": hsp["title"], "status": m_status.group(1), "rate_from": rate_from, "rate_to": rate_to, "months": int(m_rate.group(3)),
+                   "yield_now": float(m_yield.group(1)) / 100, "yield_year1": float(m_yield.group(2)) / 100, "yield_year2": float(m_yield.group(3)) / 100,
+                   "issued_per_day_target": issued_day_target, "coverage_28d_at_target": R["buyback"]["in_28d_per_day"] / issued_day_target,
+                   "growth_needed_at_target": issued_day_target / R["buyback"]["in_28d_per_day"],
+                   "last_avg3_at_target": None}
+    m_unstaked = re.search(r"does not stake, which is currently ([\d.]+)% of supply", hsp["text"])
+    R["hsp029"]["unstaked_share"] = float(m_unstaked.group(1)) / 100
+    # ---- durability on the investable variable: did the shocks dent what reaches the wallets? ----
+    flow_win = {"august": c_win["august"], "before": (T - pd.Timedelta(days=HORIZON), T - day), "event": (T, T + pd.Timedelta(days=HORIZON - 1)),
+                "after": c_win["after"]}
+    R["buyback"]["around_shocks"] = {k: {"from": str(a.date()), "to": str(b.date()),
+                                         "near_per_day": float(held[b] - held[a - day]) / ((b - a).days + 1),
+                                         "usd_per_day": float(rev_all[a:b].mean())} for k, (a, b) in flow_win.items()}
+    aw = R["buyback"]["around_shocks"]
+    R["buyback"]["event_vs_august_near"] = aw["event"]["near_per_day"] / aw["august"]["near_per_day"] - 1
+    R["buyback"]["event_vs_august_usd"] = aw["event"]["usd_per_day"] / aw["august"]["usd_per_day"] - 1
+    R["buyback"]["event_vs_before_near"] = aw["event"]["near_per_day"] / aw["before"]["near_per_day"] - 1
+    # ---- what a holder's outcome depends on, to the end of 2029 (arithmetic on stated assumptions, not a forecast) ----
+    yrs = (pd.Timestamp("2029-12-31") - w1).days / 365
+    g_now, g_tgt = R["long_term"]["supply_growth_pct_yr"], rate_to
+    y_now, y_tgt = R["hsp029"]["yield_now"], R["hsp029"]["yield_year2"]
+    R["holder"] = {
+        "years": yrs,
+        "unstaked_share_change_now": float((1 / (1 + g_now)) ** yrs - 1), "unstaked_share_change_target": float((1 / (1 + g_tgt)) ** yrs - 1),
+        "staked_share_change_now": float(((1 + y_now) / (1 + g_now)) ** yrs - 1), "staked_share_change_target": float(((1 + y_tgt) / (1 + g_tgt)) ** yrs - 1),
+        # price in 2029 relative to today = revenue growth x change in the revenue multiple / supply growth
+        "multiple_now": R["stake"]["mcap_to_revenue"],
+        "returns": [{"growth": g, "multiple_share": m, "multiple": m * R["stake"]["mcap_to_revenue"],
+                     "price_change": float((1 + g / 100) ** yrs * m / (1 + g_tgt) ** yrs - 1)} for g in (0, 50, 100) for m in (0.25, 0.5, 1.0)],
+    }
+    # ---- rating rule (RATING.md, written 2026-11-11 after the wallet measurement; deviation 7) ----
+    # Buy needs the wallets' inflow to average BUY_NEAR a day over three full calendar months: a quarter of the issuance
+    # measured on 2026-11-09, fixed in NEAR in RATING.md so that a cut in issuance (HSP-029) cannot trigger it by itself.
+    BUY_NEAR = 21700
+    BUY_LEVEL = BUY_NEAR / issued_day
+    ml = R["buyback"]["monthly"]
+    months_r = [{"m": x["m"], "coverage": x["coverage"],
+                 "avg3": None if k < 2 else float(np.mean([y["coverage"] for y in ml[k - 2:k + 1]]))} for k, x in enumerate(ml)]
+    for x in months_r:
+        x["buy"] = x["avg3"] is not None and x["avg3"] * issued_day >= BUY_NEAR
+    # RATING.md counts the order-flow tripwire as broken if it breaks under either set of comparison venues.
+    n_broken_rule = n_broken + int(R["tripwires"][0]["status"] == "holding" and R["tripwires"][0]["status_literal"] == "broken")
+    flow_ok = n_broken_rule < 2
+    wallets_ok = bool(held[w1] >= held[w1 - pd.Timedelta(days=HORIZON)])
+    label = "Avoid" if not (flow_ok and wallets_ok) else "Buy" if months_r[-1]["buy"] else "Hold"
+    C_FROM, C_TO = pd.Timestamp("2026-12-08"), pd.Timestamp("2027-03-31")
+    c_ends = pd.date_range(C_FROM, min(C_TO, w1))
+    c1 = all(held[e] >= held[e - pd.Timedelta(days=HORIZON)] for e in c_ends)
+    c2 = any(x["buy"] for x in months_r if "2026-12" <= x["m"] <= "2027-03")
+    c_over = w1 >= C_TO
+    avg3 = [x["avg3"] for x in months_r if x["avg3"] is not None]
+    R["hsp029"]["last_avg3_at_target"] = avg3[-1] * issued_day / issued_day_target
+    R["rating"] = {"label": label, "flow_ok": flow_ok, "wallets_ok": wallets_ok, "months": months_r, "buy_level": BUY_LEVEL,
+                   "last_month": months_r[-1]["m"], "last_avg3": avg3[-1], "best_avg3": max(avg3), "first_avg3": avg3[0],
+                   "months_buy": [x["m"] for x in months_r if x["buy"]],
+                   "month_min": min(x["coverage"] for x in months_r), "month_max": max(x["coverage"] for x in months_r),
+                   "need_per_day": BUY_NEAR, "need_vs_last_avg3": BUY_LEVEL / avg3[-1],
+                   "dilution_to_2029": float(1 - 1 / (1 + R["long_term"]["supply_growth_pct_yr"]) ** ((pd.Timestamp("2029-12-31") - w1).days / 365)),
+                   "scenarios": {str(g): float(R["buyback"]["coverage_28d"] * (1 + g / 100) ** ((pd.Timestamp("2029-12-31") - w1).days / 365)) for g in (0, 25, 50, 100)},
+                   "calls": {"windows_checked": len(c_ends), "C1": "failed" if not c1 else ("met" if c_over else "pending"),
+                             "C2": "met" if c2 else ("failed" if c_over else "pending")}}
+    # The position shown is the rating. archive/PREDICTIONS-2026-11-10.md's timestamped position was Long; see deviation 7.
+    R["position"] = {"n_broken": n_broken_rule, "n": len(R["tripwires"]), "label": label,
+                     "timestamped": "Long" if n_broken == 0 else "Long, one tripwire broken" if n_broken == 1 else "Neutral"}
 
     os.makedirs(os.path.join(ROOT, "data", "processed"), exist_ok=True)
     with open(os.path.join(ROOT, "data", "processed", "results.json"), "w") as f:
@@ -561,9 +842,9 @@ def render(R):
     """Fill THESIS.template.md and README.template.md. {{a.b|fmt}} looks up R['a']['b']; a missing key is an error."""
     tpath = os.path.join(ROOT, "THESIS.template.md")
     fmts = {"pct": lambda v: f"{100 * v:+.1f}%", "pct0": lambda v: f"{100 * v:+.0f}%", "upct": lambda v: f"{100 * abs(v):.1f}%",
-            "share": lambda v: f"{100 * v:.1f}%", "p": lambda v: f"{v:.2f}", "usd_m": lambda v: f"${v / 1e6:,.1f}M",
+            "share": lambda v: f"{100 * v:.1f}%", "spct0": lambda v: f"{100 * v:+,.0f}%", "pp": lambda v: f"{100 * v:.1f} points", "p": lambda v: "< 0.01" if v == 0 else "> 0.99" if v == 1 else f"{v:.2f}", "peq": lambda v: "p < 0.01" if v == 0 else "p > 0.99" if v == 1 else f"p = {v:.2f}", "usd_m": lambda v: f"${v / 1e6:,.1f}M",
             "usd_b": lambda v: f"${v / 1e9:,.2f}B", "usd_k": lambda v: f"${v / 1e3:,.0f}k", "bps": lambda v: f"{v:.1f}",
-            "n": lambda v: f"{v:,.0f}", "f2": lambda v: f"{v:.2f}", "x": lambda v: f"{v:.1f}×", "share0": lambda v: f"{100 * v:.0f}%", "share_inv": lambda v: f"{100 * (1 - v):.0f}%", "month": lambda v: pd.Timestamp(v + "-01").strftime("%b %Y"), "m_near": lambda v: f"{v / 1e6:,.1f}M", "list": lambda v: ", ".join(v), "s": str}
+            "n": lambda v: f"{v:,.0f}", "f2": lambda v: f"{v:.2f}", "x": lambda v: f"{v:.1f}×", "f1": lambda v: f"{v:.1f}", "f2pct": lambda v: f"{100 * v:.2f}%", "upct0": lambda v: f"{100 * v:,.0f}%", "months": lambda v: ", ".join(pd.Timestamp(x + "-01").strftime("%b %Y") for x in v), "share0": lambda v: f"{100 * v:.0f}%", "share_inv": lambda v: f"{100 * (1 - v):.0f}%", "month": lambda v: pd.Timestamp(v + "-01").strftime("%b %Y"), "m_near": lambda v: f"{v / 1e6:,.1f}M", "list": lambda v: ", ".join(v), "s": str}
 
     def sub(m):
         path, _, fmt = m.group(1).partition("|")
@@ -579,10 +860,16 @@ def render(R):
     text = fill("THESIS")
     write(os.path.join(ROOT, "THESIS.md"), text)
     write(os.path.join(ROOT, "README.md"), fill("README"))
+    appendix = fill("APPENDIX")
+    write(os.path.join(ROOT, "APPENDIX.md"), appendix)
+    write(os.path.join(ROOT, "docs", "appendix.html"), THESIS_PAGE.replace("{{body}}", markdown.markdown(appendix, extensions=["tables", "fenced_code"]).replace('href="THESIS.md"', 'href="thesis.html"')).replace("<title>NEAR Intents Thesis</title>", "<title>NEAR Intents Thesis: Appendix</title>"))
     body = markdown.markdown(text, extensions=["tables", "fenced_code"])
-    write(os.path.join(ROOT, "docs", "thesis.html"), THESIS_PAGE.replace("{{body}}", body))
-    with open(os.path.join(ROOT, "PREDICTIONS.md")) as f:  # frozen and timestamped, so rendered as is
-        preds = markdown.markdown(f.read(), extensions=["tables"])
+    write(os.path.join(ROOT, "docs", "thesis.html"), THESIS_PAGE.replace("{{body}}", body.replace('href="APPENDIX.md"', 'href="appendix.html"')))
+    preds = ""
+    for name in ("RATING.md", "archive/PREDICTIONS-2026-11-10.md"):  # timestamped, so rendered as they are; the first is current
+        with open(os.path.join(ROOT, name)) as f:
+            preds += markdown.markdown(f.read(), extensions=["tables"])
+        preds += "<hr><p><em>Below: the first version, superseded by the file above and kept unchanged so its timestamp proof still verifies.</em></p>" if name == "RATING.md" else ""
     write(os.path.join(ROOT, "docs", "predictions.html"), THESIS_PAGE.replace("{{body}}", preds).replace("<title>NEAR Intents Thesis</title>", "<title>NEAR Intents Predictions</title>"))
 
 
@@ -594,7 +881,7 @@ THESIS_PAGE = """<!doctype html>
 <title>NEAR Intents Thesis</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Mona+Sans:wght@400..800&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -611,5 +898,6 @@ THESIS_PAGE = """<!doctype html>
 if __name__ == "__main__":
     R = main()
     h1 = R["H1"]
-    print(f"H1 abnormal volume, {HORIZON} days from {R['events']['T']}: {100 * h1['stat_pct']:+.1f}%  "
-          f"placebo-in-time p = {h1['p_placebo_time']:.2f}  ->  {h1['verdict']}")
+    lit = h1["literal"]
+    print(f"H1 abnormal volume, {HORIZON} days from {R['events']['T']}: {100 * lit['stat_pct']:+.1f}% (pre-registered donors, p = {lit['p_placebo_time']:.2f}), "
+          f"{100 * h1['stat_pct']:+.1f}% (narrower set, p = {h1['p_placebo_time']:.2f})  ->  {h1['verdict']}")

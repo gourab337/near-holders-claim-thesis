@@ -1,34 +1,43 @@
-# After NEAR Intents froze funds, its volume held. Its public record didn't.
+# Hold NEAR. Intents came through its worst month, but holders have a small, unsecured claim on what it earns.
 
-[![check](https://github.com/gourab337/near-intents-freeze-thesis/actions/workflows/check.yml/badge.svg)](https://github.com/gourab337/near-intents-freeze-thesis/actions/workflows/check.yml) (on every push GitHub rebuilds every number from the committed raw data on Linux, checks it reproduces the committed thesis, and runs the tests)
+[![check](https://github.com/gourab337/near-holders-claim-thesis/actions/workflows/check.yml/badge.svg)](https://github.com/gourab337/near-holders-claim-thesis/actions/workflows/check.yml) (on every push GitHub rebuilds every number from the committed data on Linux, checks it reproduces the committed thesis, and runs the tests)
 
-NEAR HACKATHON 2026 · **Investment Thesis track** · **Live dashboard:** https://gourab337.github.io/near-intents-freeze-thesis/ · **Demo video (96 s, narrated):** [`docs/demo.mp4`](docs/demo.mp4)
+NEAR HACKATHON 2026 · **Investment Thesis track** · **Live dashboard:** https://gourab337.github.io/near-holders-claim-thesis/ · **Thesis (about ten minutes):** [`THESIS.md`](THESIS.md)
 
-> **In 30 seconds.** In September NEAR Intents showed it can freeze users' funds. If users cared most about trustlessness, they should have left. They didn't: reported volume held (+1.0% against a model of rival venues). What changed is what anyone can check: the share of volume visible as public swaps on NEAR's chain fell from 59% in the summer to 19% by November, and on that public slice the same model reads -28.6% (not significant). **Position: Long, one tripwire broken.** That is my judgment, not a pre-registered output; its exit rules and three dated predictions are timestamped in Bitcoin (`PREDICTIONS.md`), and the predictions are scored only on data from after that timestamp.
+## In 30 seconds
 
-- **The bear case.** A cross-chain venue whose operator can freeze funds is not trustless, so users will leave the first time it uses that power.
-- **The test.** Two freeze stories reached the public three weeks apart: a Zcash user's $589k held for 50 days (2026-09-08), then SHIELD blocking more than $50M of transfers tied to the Bitget hackers and freezing $503k mid-swap (reported 2026-09-29). Then a $3.8M exploit paused the contract (2026-10-01; funds returned the next day).
-- **The result.** Total volume held: +1.0% against a model built from rival venues and the market, and deposits dipped 12.2%. Its public record did not. On NEAR's chain (BigQuery) the share of volume visible as public swaps went from 59% in the summer to 19% by November; from late October public swap events fell to a fifth of August's level while executed intents doubled.
-- **The catch.** Total volume is DefiLlama's figure, and most of it can no longer be checked onchain: run after the fact on public onchain volume, the same model gives -28.6% (p = 0.20, not significant). Why the swaps left public view is not identified: Confidential Intents, contract upgrades (2026-10-02, 2026-10-07) and solver settlement all fit. Intents' summer momentum stopped, and Zcash balances drained a month later.
-- **The bet.** The freeze bears were wrong about the reported flow; my reading is that being trusted, not trustless, is NEAR's edge. But most of Intents' volume can no longer be checked on the chain, and revenue must still grow about 5.2× for buybacks to offset new NEAR supply. **Position: Long, one tripwire broken; neutral if a second breaks, or if Intents sets no new monthly volume record from December 2026 to March 2027 (prediction P2).**
+| | |
+|---|---|
+| **Rating** | **Hold**, to the end of 2029. Keep NEAR you own, staked; do not add yet. |
+| **The number** | 16% of NEAR's new supply comes back from NEAR Intents into three wallets. None is paid to holders, staked or burned. |
+| **The trigger** | Buy when the wallets take in 21,700 NEAR a day for three months (now 15,486). Avoid if the wallets shrink or the flow breaks. |
 
-The tests and decision rules are in [`PREREGISTRATION.md`](PREREGISTRATION.md). Its OpenTimestamps proof anchors it in Bitcoin block 975284 (10:15 UTC, 2026-11-10), half an hour after the data download began. The thesis states exactly what that proves and what it does not.
+NEAR trades at 213 times the revenue of one business, NEAR Intents. I checked what a holder actually owns of it.
 
-- **Thesis:** [`THESIS.md`](THESIS.md) (also rendered as `docs/thesis.html`)
-- **Predictions:** [`PREDICTIONS.md`](PREDICTIONS.md), three dated calls to 2027-03-31, scored on future data only and timestamped in Bitcoin block 975308
-- **Live dashboard:** https://gourab337.github.io/near-intents-freeze-thesis/ (source: [`docs/index.html`](docs/index.html), a static page that reads `docs/data.js`)
+- **Small.** The wallets that receive Intents' revenue gain 13,571 NEAR a day; NEAR issues 86,966. By month the share has run from 6% to 22% with no steady rise.
+- **Unsecured.** None of it is paid to holders, staked or burned. 2 of 4, 2 of 4 and 2 of 5 signers can move it, and in the front-end fund 1 vote can change the fund's own rules. No rule in code says what happens to the NEAR.
+- **Harder to check.** Since 27 October 1Click swaps settle on a private network. Of the swaps I sampled, 98% left a public record in August and 7% in November. The volume DefiLlama reports comes from NEAR's own dataset.
+- **But the business held.** Within a month Intents froze users' funds and was exploited for $3.8M. Counted swap by swap, 1Click volume in the four weeks after was -5% against August, and 17 of 25 large integrating apps kept at least half their volume.
 
-## The evidence (data to 2026-11-09, the last full day)
+What cuts against it is in the thesis too: the statistical test I planned in advance was inconclusive (-24.3% or +1.0%, depending on the comparison venues), and I changed the rating from Long to Hold a day before submitting, after measuring the wallets.
 
-- **The public record shrank (onchain).** Public swap events: 119,511 a day in August, 78,240 after the first freeze story, 24,689 from late October. Executed intents: 46,107 to 89,934. Deposits: 29,216 to 25,665 (-12.2%). The clear split (swaps falling while executed intents double) starts in late October, with no contract deploy then; Confidential Intents had opened to every app in July.
-- **No collapse.** 28-day volume was +1.0% against the model (placebo p = 0.50). The pre-registered verdict is "no collapse, but too imprecise to clear the 25% bar": a loss of about 29.5% would be detected only about half the time. The position is my judgment beyond that, listed as a deviation.
-- **The momentum stopped.** BigQuery data covers 44 calm windows since 2026-03-01. In all of them Intents beat its model by +7% to +26%; the event window ranks below every one, for volume and for onchain relayed transactions.
-- **No outperformance.** Against the 28 days before the shocks, Intents changed -16% and the rival median -33%. Against August, before rivals' much bigger September rally, Intents changed +47% and the rival median +89%. The model, which controls for rivals, says Intents kept pace.
-- **Prices held.** The take rate was 16.4 bps in the three weeks before the shocks and 16.2 bps during them. The fee premium over the model predates the shocks.
-- **Onchain (NEAR BigQuery).** 83% of transactions to `intents.near` are relayed (signed by the contract itself). Of accounts that sign their own, those seen before September came back at 38% against 53% in calm periods (p = 0.00); new and heavy accounts came back as usual.
-- **The paused networks** dipped 22.1% for a day and were +27% against their pre-event level four weeks later.
-- **The engine.** Oct 2026 volume was $3.99B: 2.3× a year earlier, when Intents was still ramping, but 1.09× its Nov 2025 peak, after nine months between $1.90B and $2.78B and a $4.80B record in Sep 2026.
-- **Fragility.** The two pre-registered estimators agree on sign, not size (+1.0% and +39.5%). Across 60 alternative specifications the estimate runs from -33% to +35%; every large negative uses the 0x aggregator as a comparator.
+## Read
+
+- **[`THESIS.md`](THESIS.md)**: the claim, the evidence for, the evidence against, and what would change my mind. About ten minutes to read. Also at `docs/thesis.html`.
+- **[`RATING.md`](RATING.md)**: the Buy / Hold / Avoid rule and five dated predictions, scored on 31 March 2027. Timestamped with OpenTimestamps.
+- **[`APPENDIX.md`](APPENDIX.md)**: every table, caveat and deviation, and the pre-registered event study the project began as.
+- **Dashboard**: https://gourab337.github.io/near-holders-claim-thesis/ (source [`docs/index.html`](docs/index.html)): eleven exhibits, each with the query or function behind it.
+
+## Where each number comes from
+
+| Finding | Source | Code |
+|---|---|---|
+| Wallet balances, 4,224,522 NEAR; inflow against issuance | NEAR's public BigQuery dataset | `sql/revenue_wallets_daily.sql` |
+| Who can move the wallets | The contracts, over a public RPC endpoint | `src/fetch_control.py` |
+| 98% to 7% of sampled swaps leaving a public record | NEAR Intents Explorer API, then BigQuery | `src/fetch_explorer.py`, `sql/intents_swap_trace.sql` |
+| Share of reported volume visible as public swaps, 43% to 13% | BigQuery over DefiLlama | `sql/intents_stable_volume_daily.sql` |
+| Large swaps and integrating apps (64,591 swaps of $10,000 or more) | NEAR Intents Explorer API | `src/fetch_explorer.py` |
+| Reported volume against a model of rival venues | DefiLlama, CoinGecko | `src/build.py`, `event_stat()` |
 
 ## Check it in two minutes
 
@@ -36,30 +45,46 @@ Requires [uv](https://docs.astral.sh/uv/) (it installs Python 3.12 and the pinne
 
 | Do | See |
 |---|---|
-| `make` | It prints `H1 abnormal volume, 28 days from 2026-09-29: +1.0%  placebo-in-time p = 0.50  ->  no detectable loss`, and rewrites `data/processed/results.json`, `docs/data.js`, `THESIS.md`, `docs/thesis.html` and this `README.md` from `data/raw/`. On macOS `git status` then shows no change. On Linux `results.json` and `docs/data.js` can differ in the 12th significant digit, because numpy's linear algebra rounds differently there; the thesis and README text stay identical. |
+| `make` | It prints `H1 abnormal volume, 28 days from 2026-09-29: -24.3% (pre-registered donors, p = 0.34), +1.0% (narrower set, p = 0.50)  ->  no detectable loss`, and rewrites `data/processed/results.json`, `docs/data.js`, `THESIS.md`, `docs/thesis.html` and this `README.md` from `data/raw/`. On macOS `git status` then shows no change. On Linux `results.json` and `docs/data.js` can differ in the 12th significant digit, because numpy's linear algebra rounds differently there; the thesis and README text stay identical. |
 | `make check` | Rebuilds, then prints `Rebuild matches the commit: ...`: the README, thesis and thesis page are byte-identical to the committed ones, and `results.json` matches to 1e-9 relative. GitHub runs this and `make test` on every push (badge above). |
-| `make test` | 12 tests pass: raw files match the hashes in `data/raw/MANIFEST.json`; the timestamp proofs commit to `PREREGISTRATION.md` and `PREDICTIONS.md`, each with a Bitcoin attestation; the estimators recover known answers on synthetic data; verdicts and tripwires follow their written rules; the thesis and this README have no unfilled numbers; the dashboard data equals `results.json`. |
-| `python3 -m http.server -d docs 8000`, then open http://localhost:8000 | The dashboard: verdict, tripwires, predictions and eight exhibits, each with the function in `src/build.py` that produced it. |
+| `make test` | The tests pass: raw files match the hashes in `data/raw/MANIFEST.json`; the timestamp proofs commit to `PREREGISTRATION.md`, `archive/PREDICTIONS-2026-11-10.md` and `RATING.md`; the estimators recover known answers on synthetic data; verdicts and tripwires follow their written rules; the thesis and this README have no unfilled numbers; the dashboard data equals `results.json`. |
+| `python3 -m http.server -d docs 8000`, then open http://localhost:8000 | The dashboard: verdict, tripwires, predictions and eleven exhibits, each with the query or function that produced it. |
 | `make fetch` (optional, needs network) | Re-downloads every series into `data/raw/` and rewrites the manifest. The numbers will move, because the sources keep updating. |
+| `make fetch-explorer` (optional, needs a NEAR Intents partner token in `.env` and the `fetch-bq` setup) | Re-pulls 1Click swaps from the Explorer API (daily volume of swaps of $100 or more; every swap of $10,000 or more; a seeded sample of 300 swaps on each of five days), traces the sample onto the chain in BigQuery, and saves totals and counts only. About three hours, because the API allows one request every five seconds. |
 | `make fetch-bq` (optional, needs `gcloud` login and a billing project) | Re-runs `sql/` on NEAR's public BigQuery dataset (about 990 GB, roughly BigQuery's 1 TB monthly free tier) and rewrites those entries in the manifest. |
-| `LAST_DAY=2027-03-31 make` after `make fetch` and `END_DATE=2027-03-31 make fetch-bq` | Scores `PREDICTIONS.md` with the thresholds written there; results in `results.json` under `predictions`. |
+| `LAST_DAY=2027-03-31 make` after `make fetch` and `END_DATE=2027-03-31 make fetch-bq` | Scores the five calls in `RATING.md` with the thresholds written there; results in `results.json` under `predictions` and `rating.calls`. |
 
 ## How it is built
 
 | Path | What it is |
 |---|---|
 | `PREREGISTRATION.md` | The plan, with its OpenTimestamps proof (`.ots`, Bitcoin block 975284) |
-| `PREDICTIONS.md` | Three dated, falsifiable calls to 2027-03-31, with their OpenTimestamps proof (Bitcoin block 975308) |
+| `RATING.md` | The rating, its rule and five dated, falsifiable calls to 2027-03-31, with its OpenTimestamps proof |
+| `archive/PREDICTIONS-2026-11-10.md` | The first version (Long; three calls), unchanged, with its proof in Bitcoin block 975308 |
 | `src/fetch.py` | Downloads every series; records URL, time and SHA-256 in `data/raw/MANIFEST.json` |
+| `src/fetch_explorer.py` | The NEAR Intents Explorer API pulls (1Click swaps) and the swap-level trace; saves totals and counts, not swap records |
+| `src/fetch_control.py` | Reads who can move the three wallets from the contracts |
 | `src/fetch_bigquery.py`, `sql/` | The NEAR chain queries (BigQuery) and the script that runs them |
 | `src/build.py` | All analysis. Every number in the thesis and on the dashboard comes from here |
-| `THESIS.template.md`, `README.template.md` | The write-ups with placeholders; `build.py` fills every number from `results.json` |
-| `data/raw/` | Snapshot downloaded 2026-11-10, covering data to 2026-11-09 (DefiLlama, CoinGecko, NEAR BigQuery) |
+| `THESIS.template.md`, `APPENDIX.template.md`, `README.template.md` | The write-ups with placeholders; `build.py` fills every number from `results.json` |
+| `data/raw/` | Snapshot downloaded 2026-11-10 and 2026-11-11, covering data to 2026-11-09 (DefiLlama, CoinGecko, NEAR BigQuery, Explorer API totals, contract policies) |
 | `docs/` | Dashboard and thesis page |
 
-The thesis lists every deviation from the pre-registration, and separately everything added after seeing results.
+## What is and is not pre-registered
 
-**Onchain data:** NEAR's public BigQuery dataset gives every transaction to `intents.near` and NEAR's supply. Relayed 1Click swaps are signed by the contract itself, so user-level retention covers only self-custody accounts. The Intents Explorer API would cover the rest; it needs a partner token and is not used.
+| | Fixed before the result | Evidence of when |
+|---|---|---|
+| The five tests of the freeze and the exploit, and their decision rules (`PREREGISTRATION.md`) | Yes, by my statement | Bitcoin block 975284, mined 29 minutes after the data download began. It shows the plan was frozen early, not that it came first. |
+| Three predictions to 2027-03-31 (first version, `archive/PREDICTIONS-2026-11-10.md`; carried into `RATING.md` as P1 to P3) | Yes: scored only on later data | Bitcoin block 975308, 2026-11-10 |
+| The rating rule and two more calls, C1 and C2 (`RATING.md`) | Calls yes; the rule was written after seeing the wallet data | OpenTimestamps, 2026-11-11 |
+| The rating itself | No. Long on 2026-11-10, Hold on 2026-11-11 after the wallets were measured (appendix B7, deviation 7) | |
+| Parts 1 to 3 of the thesis (wallets, the confidential switch, integrators) and appendix A6 and A7 | No. Added after seeing results (appendix B7, deviation 5) | |
+
+## Data notes
+
+- **Onchain data.** NEAR's public BigQuery dataset gives every transaction to `intents.near` and NEAR's supply. Relayed 1Click swaps are signed by the contract itself, so user-level retention onchain covers only self-custody accounts. Since 27 October 1Click swaps settle confidentially, so the chain shows their shield and unshield, not the swap; the Explorer API supplies 1Click volume and the swap sample.
+- **Explorer API data and its terms.** The track's starter prompt asks for a pull from the NEAR Intents Explorer API. The 1Click API terms (section 4.1(e)) limit storing API data to 24 hours. So this repository holds no swap records, amounts or addresses from the API: `src/fetch_explorer.py` keeps them in memory and saves daily totals by integrating app, counts of sender addresses that came back, and, for the 1,500 sampled swaps, their public NEAR transaction hashes with dollar-weighted shares. Re-pulling needs a partner token.
+- **Reported volume.** DefiLlama's Intents volume is read from a dataset NEAR publishes on Dune. The thesis uses it and says where it cannot be checked from outside.
 
 ## License
 

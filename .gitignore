@@ -1,3 +1,7 @@
 __pycache__/
 .venv/
 .DS_Store
+.env
+# raw Explorer API records: never committed (1Click API terms, section 4.1(e))
+data/raw/explorer_1click_large.csv
+data/raw/explorer_swaps_sample.json

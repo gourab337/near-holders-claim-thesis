@@ -6,14 +6,98 @@
 <title>NEAR Intents Predictions</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Mona+Sans:wght@400..800&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <div class="band"><div class="in"><span>Digital Assets Research · Investment Thesis</span><span>NEAR Hackathon 2026 · Investment Thesis Track</span></div></div>
 <main class="prose">
 <p class="back"><a href="index.html">← Dashboard</a></p>
-<h1>Predictions: what this thesis says will happen next</h1>
+<h1>Rating, rule and predictions</h1>
+<p>Written on 2026-11-11. The SHA-256 of this file is timestamped with OpenTimestamps (<code>RATING.md.ots</code>). This is the current statement of the rating and of every dated call the thesis makes. It supersedes <code>archive/PREDICTIONS-2026-11-10.md</code>, the first version, which was timestamped in Bitcoin block 975308 on 2026-11-10 and is kept unchanged so its proof still verifies.</p>
+<p><strong>Rating: Hold</strong>, to the end of 2029, first review 2027-03-31.</p>
+<h2>What changed from the first version, and why</h2>
+<p>The first version set the position at Long, on the evidence that NEAR Intents' order flow survived a freeze and an exploit. The next day I measured the three wallets that receive Intents' captured revenue (<code>sql/revenue_wallets_daily.sql</code>). The NEAR reaching them is about a sixth of new NEAR supply (15.6% over the 28 days to 2026-11-09), by month it has run between 5.7% and 21.6% since March 2026 without a steady rise, and none of it is paid to holders, staked or burned. Flow that holds is necessary for a Long. It is not sufficient while what reaches NEAR is this small and holders receive none of it. So the rating is Hold, by the rule below.</p>
+<p>The three predictions of the first version are carried over as P1 to P3 with the same thresholds. Two errors in its text are corrected here: it said "Written 2026-11-11" although it was timestamped on 2026-11-10, and it said a failed P2 would mean growth had "stalled for 18 months" (six months from the last record). It also called P1's limit the limit of "the pre-registered model"; it is the limit of the narrower set of comparison venues the thesis used, and P1 now has to hold under both sets.</p>
+<h2>The rule</h2>
+<p>The rule is computed by <code>src/build.py</code> on every build.</p>
+<ul>
+<li><strong>Wallet inflow, in NEAR a day.</strong> For a calendar month: the NEAR gained by the three wallets (<code>fefundsadmin.sputnik-dao.near</code>, <code>1csfundsadmin.sputnik-dao.near</code>, <code>buybacks.multisignature.near</code>), divided by the days in the month. The rule uses the mean of the latest three full calendar months.</li>
+<li><strong>Three tripwires</strong>, each over the latest 28 days: order flow against its model, the take rate, and Zcash held on Intents. Order flow is computed twice, with the narrower set of comparison venues (limit -29.5%) and with the venues exactly as pre-registered (limit -35.7%), and counts as broken if it is broken under either.</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Rating</th>
+<th>When</th>
+<th>What a holder does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Avoid</strong></td>
+<td>Two or more tripwires are broken, or the three wallets together hold less NEAR than 28 days earlier.</td>
+<td>Does not hold NEAR on this thesis.</td>
+</tr>
+<tr>
+<td><strong>Buy</strong></td>
+<td>Not Avoid, and the three-month average wallet inflow is 21,700 NEAR a day or more.</td>
+<td>Adds.</td>
+</tr>
+<tr>
+<td><strong>Hold</strong></td>
+<td>Otherwise.</td>
+<td>Keeps NEAR already owned, staked; does not add.</td>
+</tr>
+</tbody>
+</table>
+<p>Why 21,700: it is a quarter of the 86,966 NEAR issued a day in the year to 2026-11-09, about 1.4 times the latest three-month average (15,486 a day, August to October 2026), and above every three-month average so far. It is also roughly where a constant-growth path from today's level to all of issuance at the end of 2029 stands in the spring of 2027. A single strong month does not reach it: September 2026 alone was 18,814. The level is fixed in NEAR, not as a share, because HSP-029 lowers NEAR's maximum issuance from 2.5% to 1.6% over 24 months: a share would rise with no change in what reaches NEAR. It is not a valuation. It is the smallest move that would show what the price already assumes, that what reaches NEAR can grow.</p>
+<p>On the data to 2026-11-09 the rule gives <strong>Hold</strong>. One tripwire is broken (Zcash). Order flow holds under both sets of venues, by 1.1 points under the pre-registered set, so the rating is close to Avoid, and a tripwire set at the worst tenth of calm periods breaks by chance about one window in ten. The wallets are growing, and the three-month average is 15,486 NEAR a day. The rule has given Hold for every three months so far. Its levels were chosen after seeing these months, so that history is a description, not a test. The calls below are the test.</p>
+<h2>Five calls, scored on data after 2026-11-11</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Call</th>
+<th>Resolves</th>
+<th>If it fails</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>P1</td>
+<td><strong>Flow stays durable.</strong> In every 28-day window ending from 2026-12-08 to 2027-03-31, Intents volume stays above the calm-period limit against its model: above -29.5% with the narrower set of comparison venues and above -35.7% with the venues as pre-registered.</td>
+<td>2027-03-31</td>
+<td>Trust shocks or rivals are taking share.</td>
+</tr>
+<tr>
+<td>P2</td>
+<td><strong>Growth comes back.</strong> Intents sets a new monthly volume record, above September 2026's $4.80B, in at least one calendar month from December 2026 to March 2027.</td>
+<td>2027-03-31</td>
+<td>Reported volume has gone six months without a record.</td>
+</tr>
+<tr>
+<td>P3</td>
+<td><strong>Price holds.</strong> In every 28-day window ending from 2026-12-08 to 2027-03-31, the take rate stays above the calm-period average of 13.6 bps.</td>
+<td>2027-03-31</td>
+<td>Intents is buying volume with price.</td>
+</tr>
+<tr>
+<td>C1</td>
+<td><strong>The wallets keep the NEAR.</strong> In every 28-day window ending from 2026-12-08 to 2027-03-31, the three wallets together hold at least as much NEAR at the end as at the start.</td>
+<td>2027-03-31</td>
+<td>The NEAR is being spent or moved: it is a treasury, not a buyback.</td>
+</tr>
+<tr>
+<td>C2</td>
+<td><strong>The inflow reaches a quarter of today's dilution.</strong> For at least one of the months December 2026 to March 2027, the three-month average wallet inflow ending in that month is 21,700 NEAR a day or more.</td>
+<td>2027-03-31</td>
+<td>What reaches NEAR is not growing fast enough to matter against issuance, and the rating stays Hold.</td>
+</tr>
+</tbody>
+</table>
+<p>I rate Hold while making C2 as a call because a call is what would prove the rating wrong: if C2 is met the rule says Buy, and if it fails the rating stands. I do not put a probability on it.</p>
+<p>P1 and P2 are scored on DefiLlama's volume, which is NEAR's own dataset; C1 and C2 are scored on public wallets. Scoring: <code>make fetch &amp;&amp; END_DATE=2027-03-31 make fetch-bq &amp;&amp; LAST_DAY=2027-03-31 make</code>; results in <code>data/processed/results.json</code> under <code>predictions</code> and <code>rating.calls</code>.</p><hr><p><em>Below: the first version, superseded by the file above and kept unchanged so its timestamp proof still verifies.</em></p><h1>Predictions: what this thesis says will happen next</h1>
 <p>Written 2026-11-11, after the analysis and before any of the data that will score them exists. The SHA-256 of this file is timestamped with OpenTimestamps (<code>PREDICTIONS.md.ots</code>). Each prediction is scored from the same pipeline: <code>make fetch &amp;&amp; make fetch-bq &amp;&amp; make</code>.</p>
 <p>The thesis is: NEAR Intents' order flow survives trust shocks, so the long-term case for NEAR rests on Intents growing again. These three predictions are what that thesis commits to. If any one fails, the thesis is wrong in the way the prediction names.</p>
 <table>

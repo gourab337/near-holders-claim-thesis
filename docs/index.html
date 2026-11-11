@@ -3,59 +3,85 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>NEAR Intents Trust Shocks</title>
-<meta name="description" content="Event study: did the September 2026 SHIELD freeze and the October exploit cost NEAR Intents its order flow?">
+<title>Hold NEAR: a small, unsecured claim on Intents</title>
+<meta name="description" content="Investment thesis on NEAR: Intents came through a freeze and an exploit, but holders have a small, unsecured claim on what it earns, and it is getting harder to check.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Mona+Sans:wght@400..800&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div class="band"><div class="in"><span>Digital Assets Research · Event Study</span><span>NEAR Hackathon 2026 · Investment Thesis Track</span></div></div>
+<div class="band"><div class="in"><span>Digital Assets Research · Investment Thesis</span><span>NEAR Hackathon 2026 · Investment Thesis Track</span></div></div>
 <main>
   <p class="kicker"><b>NEAR Protocol (NEAR)</b> · Cross-chain infrastructure · Data to <span id="lastday"></span></p>
-  <h1>After NEAR Intents froze funds, its volume held. Its public record didn't.</h1>
+  <h1 id="h1"></h1>
   <div class="story">
-    <div><b>The bear case</b>A venue that can freeze funds isn't trustless. Users leave the first time it does.</div>
-    <div><b>The test</b>Two freeze stories three weeks apart ($589k held; $50M blocked, $503k frozen), then a $3.8M exploit.</div>
-    <div><b>The result</b>Reported volume held. The share visible onchain fell from three-fifths to under a fifth.</div>
-    <div><b>The catch</b>Onchain, public volume came in <span id="stPub"></span> vs model (not significant). Why the record left is unknown.</div>
-    <div><b>The bet</b>My read: trusted beats trustless. But most flow can no longer be checked onchain. Revenue must grow about <span id="stNeed"></span>.</div>
+    <div><b>Small</b>The three wallets that receive Intents' revenue take in <span id="stCov"></span> of the NEAR that NEAR issues. To cover it all, the inflow would have to grow about <span id="stNeed"></span>.</div>
+    <div><b>Unsecured</b>None of it is paid to holders, staked or burned. A few signers can move it, and no rule in code says what happens to it.</div>
+    <div><b>Harder to check</b>From 27 Oct 1Click swaps settle confidentially. Sampled swaps that left a public record: <span id="stPubA"></span> in August, <span id="stPubB"></span> in November.</div>
+    <div><b>But the business held</b>After a freeze and a $3.8M exploit, 1Click volume counted swap by swap was <span id="stOne"></span> against August, and most large integrators kept routing.</div>
+    <div><b>The rating</b><span id="stRating"></span>. Keep NEAR you own, staked; do not add yet. Buy when the wallets take in <span id="stBuy"></span> NEAR a day for three months.</div>
   </div>
-  <div class="byline"><span><b>Method</b> Pre-registered event study, timestamped with OpenTimestamps</span><span><b>Sources</b> DefiLlama, CoinGecko, NEAR BigQuery</span><span><a href="thesis.html">Read the full thesis →</a></span><span><a href="predictions.html">Predictions to Mar 2027 →</a></span></div>
+  <div class="byline"><span><b>Method</b> Public wallets and swaps counted onchain; a pre-registered event study in the appendix</span><span><b>Sources</b> DefiLlama, CoinGecko, NEAR BigQuery, NEAR Intents Explorer API</span><span><a href="thesis.html">Read the full thesis →</a></span><span><a href="predictions.html">Predictions and rating rule →</a></span></div>
 
   <div class="front">
     <section>
       <div class="hero">
         <div class="big" id="hero"></div>
-        <div class="lab"><b>Share of Intents volume visible as public onchain swaps</b><span id="heroMeta"></span></div>
+        <div class="lab"><b>Share of new NEAR supply that reaches Intents' revenue wallets</b><span id="heroMeta"></span></div>
       </div>
       <h2>Key takeaways</h2>
       <ol class="takeaways" id="takeaways"></ol>
     </section>
     <aside>
       <div class="rating">
-        <div class="pos"><div><div class="k">Position</div><div class="v" id="posLabel"></div></div><div class="q">Exits: a second tripwire breaks, or no new monthly volume record by 31 Mar 2027</div></div>
+        <div class="pos"><div><div class="k">Position</div><div class="v" id="posLabel"></div></div><div class="q" id="posRule"></div></div>
         <table class="kv" id="kv"></table>
       </div>
     </aside>
   </div>
 
   <section class="exhibit">
-    <div class="hd"><span class="no">Exhibit 1</span><h3>Reported volume held; its public record didn't</h3></div>
-    <p class="sub">Share of Intents volume visible as public onchain swaps (7-day). Numerator: the stablecoin side of every <code>token_diff</code> swap logged by <code>intents.near</code> (NEAR BigQuery). Denominator: DefiLlama's total. Right: the same shift with no DefiLlama at all, from the events <code>intents.near</code> logs. Confidential Intents opened to every app on 8 Jul; the contract was upgraded on 2 and 7 Oct.</p>
-    <div class="legend"><span><i class="key" style="color:var(--s3)"></i>Share visible as public swaps</span></div>
-    <div class="two" style="gap:40px">
-      <div><div class="chart" id="cPriv"></div></div>
-      <div><div class="legend"><span><i class="key" style="color:var(--s1)"></i>Executed intents</span><span><i class="key" style="color:var(--s3)"></i>Transfers</span><span><i class="key dash" style="color:var(--s2)"></i>Public swaps</span></div><div class="chart" id="cPrivEv"></div></div>
-    </div>
-    <p class="note" id="privNote"></p>
-    <p class="src">Source: NEAR public BigQuery dataset, DefiLlama, author's calculations · Query: <code>sql/intents_stable_volume_daily.sql</code> · Code: <code>src/build.py</code>, privacy in <code>main()</code> · Added after the pre-registration</p>
+    <div class="hd"><span class="no">Exhibit 1</span><h3 id="buyTitle"></h3></div>
+    <p class="sub">NEAR held by the three wallets that receive Intents' captured revenue (front-end fund, 1Click fund, buybacks wallet), daily, from NEAR's BigQuery dataset. DefiLlama defines Intents revenue as the NEAR swept into these wallets.</p>
+    <div class="chart" id="cBuy"></div>
+    <p class="note" id="buyNote"></p>
+    <p class="src">Source: NEAR public BigQuery dataset, DefiLlama adapter source, author's calculations · Query: <code>sql/revenue_wallets_daily.sql</code> · Added after the pre-registration</p>
   </section>
 
   <section class="exhibit">
-    <div class="hd"><span class="no">Exhibit 2</span><h3>No collapse: volume kept pace with its model through both shocks</h3></div>
-    <p class="sub">7-day average of daily Intents volume, actual and predicted. The model is built from rival venues and NEAR and ZEC spot volume, fitted 1 Jun – 7 Sep, so it shows what the market alone would have produced. Shaded: the pre-registered 28-day window.</p>
+    <div class="hd"><span class="no">Exhibit 2</span><h3>The public record shrank when 1Click swaps moved to Confidential Intents</h3></div>
+    <p class="sub">Left: share of Intents volume visible as public onchain swaps (7-day): the stablecoin side of every <code>token_diff</code> swap, counted once, logged by <code>intents.near</code> (NEAR BigQuery) over DefiLlama's total. Right, with no DefiLlama at all: receipts a day on <code>intents.near</code> that log a public swap, against those that move funds to or from the Treasury account behind Confidential Intents. NEAR Intents' changelog: "From October 27, 2026, 1Click swaps settle confidentially."</p>
+    <div class="legend"><span><i class="key" style="color:var(--s3)"></i>Share visible as public swaps</span></div>
+    <div class="two" style="gap:40px">
+      <div><div class="chart" id="cPriv"></div></div>
+      <div><div class="legend"><span><i class="key" style="color:var(--s1)"></i>Receipts through the Treasury</span><span><i class="key" style="color:var(--s3)"></i>Public swaps</span></div><div class="chart" id="cConf"></div></div>
+    </div>
+    <p class="note" id="privNote"></p>
+    <p class="src">Source: NEAR public BigQuery dataset, DefiLlama, NEAR Intents changelog, author's calculations · Queries: <code>sql/intents_stable_volume_daily.sql</code>, <code>sql/intents_confidential_daily.sql</code> · Added after the pre-registration</p>
+  </section>
+
+  <section class="exhibit">
+    <div class="hd"><span class="no">Exhibit 3</span><h3>Swap by swap, 1Click volume did not leave</h3></div>
+    <p class="sub">7-day average of daily volume. 1Click: every successful 1Click swap of $100 or more (about 99% of 1Click dollars), from NEAR Intents' Explorer API, which still sees swaps that settle confidentially. Public swaps: what NEAR's chain shows (BigQuery). DefiLlama: total Intents volume, of which 1Click is a part.</p>
+    <div class="legend"><span><i class="key" style="color:var(--s1)"></i>1Click (Explorer API)</span><span><i class="key" style="color:var(--s3)"></i>Public swaps (BigQuery)</span><span><i class="key dash" style="color:var(--s2)"></i>DefiLlama total</span></div>
+    <div class="chart" id="cOne"></div>
+    <p class="note" id="oneNote"></p>
+    <p class="src">Source: NEAR Intents Explorer API, NEAR public BigQuery dataset, DefiLlama · Code: <code>src/fetch_explorer.py</code> · Queries: <code>sql/intents_swap_trace.sql</code>, <code>sql/intents_stable_volume_daily.sql</code> · Added after the pre-registration</p>
+  </section>
+
+  <section class="exhibit">
+    <div class="hd"><span class="no">Exhibit 4</span><h3>Who routes the flow: a handful of integrators, and large-swap volume held</h3></div>
+    <p class="sub" id="lgSub"></p>
+    <div class="legend"><span><i class="key" style="color:var(--s1)"></i><span id="lgTop"></span></span><span><i class="key" style="color:var(--s3)"></i>Next four integrators</span><span><i class="key dash" style="color:var(--s2)"></i>Everyone else</span></div>
+    <div class="chart" id="cLg"></div>
+    <p class="note" id="lgNote"></p>
+    <p class="src">Source: NEAR Intents Explorer API, author's calculations · Code: <code>src/fetch_explorer.py</code>, <code>src/build.py</code> · Added after the pre-registration</p>
+  </section>
+
+  <section class="exhibit">
+    <div class="hd"><span class="no">Exhibit 5</span><h3>Reported volume against its model: no detectable loss, but the size depends on the comparison venues</h3></div>
+    <p class="sub">7-day average of daily Intents volume, actual and predicted. The model is built from rival venues and NEAR and ZEC spot volume, fitted 1 Jun – 7 Sep, so it shows what the market alone would have produced. Shaded: the pre-registered 28-day window. The chart uses the narrower set of comparison venues; with the set as pre-registered the 28-day estimate is <span id="litStat"></span> (deviation 1).</p>
     <div class="legend"><span><i class="key" style="color:var(--s1)"></i>Actual</span><span><i class="key dash" style="color:var(--s2)"></i>Model</span></div>
     <div class="chart" id="cZoom"></div>
     <p class="src">Source: DefiLlama, CoinGecko, author's calculations · Code: <code>src/build.py</code>, <code>event_stat()</code></p>
@@ -64,15 +90,15 @@
   <section class="bears">
     <h2>What the freeze bears got right and wrong</h2>
     <div class="bgrid">
-      <div><b class="w">Wrong</b><strong>The reported flow leaves.</strong><span id="bWrong"></span></div>
-      <div><b class="n">Missed</b><strong>The public record leaves.</strong>The share of volume visible as public swaps fell from about three-fifths to under a fifth; from late October public swaps fell while executed intents doubled (Exhibit 1).</div>
+      <div><b class="n">Not shown</b><strong>The flow leaves.</strong><span id="bWrong"></span></div>
+      <div><b class="n">Missed</b><strong>The public record leaves.</strong>The share of volume visible as public swaps fell from <span id="bShareA"></span> to <span id="bShareB"></span>; from late October public swaps fell while executed intents doubled (Exhibit 2).</div>
       <div><b class="r">Partly right</b><strong>Public activity weakens.</strong><span id="bRight"></span></div>
-      <div><b class="n">Not shown</b><strong>Why the record left.</strong>Confidential Intents, the October upgrades and a change in how solvers settle all fit; the data does not separate them.</div>
+      <div><b class="n">Shown</b><strong>Why the record left.</strong><span id="bWhy"></span></div>
     </div>
   </section>
 
   <section class="exhibit">
-    <div class="hd"><span class="no">Exhibit 3</span><h3>The engine: Intents volume and revenue since launch</h3></div>
+    <div class="hd"><span class="no">Exhibit 6</span><h3>The engine: Intents volume and revenue since launch</h3></div>
     <p class="sub" id="ltSub"></p>
     <div class="two" style="gap:40px">
       <div><div class="legend"><span><i class="dotkey" style="background:var(--s1)"></i>Monthly volume</span></div><div class="chart" id="cLtVol"></div></div>
@@ -81,6 +107,7 @@
     <p class="src">Source: DefiLlama, author's calculations · Code: <code>src/build.py</code>, long-term view in <code>main()</code> · Added after the pre-registration</p>
     <details><summary>Show data</summary><div class="tbl" id="tLt"></div></details>
   </section>
+
 
   <section class="trip">
     <h2>Tripwires: when the thesis is wrong</h2>
@@ -101,11 +128,11 @@
         <tr><td><b>P3 · Price holds.</b><span class="rule">Every 28-day window ending 8 Dec 2026 – 31 Mar 2027 keeps the take rate above 13.6 bps.</span></td><td class="n">31 Mar 2027</td><td class="n">Revenue per dollar falls</td></tr>
       </tbody>
     </table>
-    <p style="font-size:12px;color:var(--muted);margin:8px 0 0">Scored only on data after 10 Nov 2026. <code>PREDICTIONS.md</code> is timestamped in Bitcoin block 975308; any edit breaks the proof, and <code>make test</code> checks it.</p>
+    <p style="font-size:12px;color:var(--muted);margin:8px 0 0">Scored only on data after 10 Nov 2026. The current file is <code>RATING.md</code> (rating, rule and five calls, timestamped 11 Nov 2026). The first version, timestamped in Bitcoin block 975308, is kept unchanged in <code>archive/</code>; <code>make test</code> checks both proofs.</p>
   </section>
 
   <section class="exhibit">
-    <div class="hd"><span class="no">Exhibit 4</span><h3>Onchain: established accounts pulled back; new and heavy users did not</h3></div>
+    <div class="hd"><span class="no">Exhibit 7</span><h3>Onchain: established accounts pulled back; new and heavy users did not</h3></div>
     <p class="sub" id="h5Sub"></p>
     <div class="two" style="gap:40px">
       <div><table class="kv" id="h5Tbl" style="margin-top:6px"></table><p class="note" id="h5Note"></p></div>
@@ -116,7 +143,7 @@
 
   <div class="two">
     <section class="exhibit">
-      <div class="hd"><span class="no">Exhibit 5</span><h3>Against the full calm period the result is ordinary; against the summer it is weak</h3></div>
+      <div class="hd"><span class="no">Exhibit 8</span><h3>Against the full calm period the result is ordinary; against the summer it is weak</h3></div>
       <p class="sub">The same test run at every calm-period date, <span id="plcFrom"></span> – <span id="plcTo"></span>.</p>
       <div class="chart" id="cPlc"></div>
       <p class="note" id="plcNote"></p>
@@ -124,7 +151,7 @@
       <details><summary>Show data</summary><div class="tbl" id="tPlc"></div></details>
     </section>
     <section class="exhibit">
-      <div class="hd"><span class="no">Exhibit 6</span><h3>Every large negative estimate uses 0x as a comparator</h3></div>
+      <div class="hd"><span class="no">Exhibit 9</span><h3>Every large negative estimate uses 0x as a comparator</h3></div>
       <p class="sub"><span id="gridN"></span> alternative specifications: donor sets, controls, event date and horizon. Not pre-registered.</p>
       <div class="legend"><span><i class="dotkey" style="background:var(--s3)"></i>Includes 0x</span><span><i class="dotkey" style="background:var(--s1)"></i>Excludes 0x</span></div>
       <div class="chart" id="cGrid"></div>
@@ -135,7 +162,7 @@
   </div>
 
   <section class="exhibit">
-    <div class="hd"><span class="no">Exhibit 7</span><h3>Since the events, NEAR and ZEC holdings fell while everything else held</h3></div>
+    <div class="hd"><span class="no">Exhibit 10</span><h3>Since the events, NEAR and ZEC holdings fell while everything else held</h3></div>
     <p class="sub">Indexed to 28 Sep = 1.0. Units rather than dollars, so price moves cannot pose as flows.</p>
     <div class="legend"><span><i class="key" style="color:var(--s1)"></i>NEAR</span><span><i class="key" style="color:var(--s3)"></i>ZEC</span><span><i class="key dash" style="color:var(--s2)"></i>All other</span></div>
     <div class="chart" id="cBal"></div>
@@ -144,7 +171,7 @@
   </section>
 
   <section class="exhibit">
-    <div class="hd"><span class="no">Exhibit 8</span><h3>Networks paused after the exploit dipped, then recovered</h3></div>
+    <div class="hd"><span class="no">Exhibit 11</span><h3>Networks paused after the exploit dipped, then recovered</h3></div>
     <p class="sub" id="pausedMeta"></p>
     <div class="legend"><span><i class="key" style="color:var(--s1)"></i>Paused networks</span><span><i class="key dash" style="color:var(--s2)"></i>Other networks</span></div>
     <div class="chart" id="cPaused"></div>
@@ -155,7 +182,7 @@
   <footer class="disc">
     <h2>Methodology and disclosures</h2>
     <p>Tests, windows and decision rules are in <code>PREREGISTRATION.md</code>, anchored by OpenTimestamps in Bitcoin block 975284 (10:15 UTC, 10 Nov 2026), 29 minutes after the data download began; the thesis explains what that does and does not prove. Deviations are listed in the full thesis. Every figure on this page is produced by <code>src/build.py</code> from the raw snapshot in <code>data/raw/</code>; file hashes are recorded in <code>data/raw/MANIFEST.json</code>.</p>
-    <p>Independent research prepared for the NEAR Hackathon 2026 Investment Thesis track. It is not investment advice, an offer, or a solicitation, and is not affiliated with any financial institution.</p>
+    <p>Independent research prepared for the NEAR Hackathon 2026 Investment Thesis track. It is not investment advice, an offer, or a solicitation, and is not affiliated with or endorsed by NEAR Foundation, NEAR Intents or any financial institution. The colours and typefaces follow NEAR's public website; no NEAR logo or trademark is used.</p>
   </footer>
 </main>
 <script src="data.js"></script>
@@ -177,10 +204,14 @@ const h = (tag, cls, s) => { const e = document.createElement(tag); if (cls) e.c
 const H1 = R.H1, S = R.stake, W0 = R.windows;
 const last = R.daily[R.daily.length - 1];
 text("lastday", fmtDate(R.last_day) + " " + R.last_day.slice(0, 4));
-text("hero", `${(100 * R.privacy.windows.after_ga).toFixed(0)}% → ${(100 * R.privacy.windows.after).toFixed(0)}%`);
-text("heroMeta", `Summer to November, from NEAR BigQuery. Meanwhile reported total volume came in ${pct(H1.stat_pct)} against its model (p = ${H1.p_placebo_time.toFixed(2)}; detection threshold ${pct(H1.mde_pct)}).`);
-text("stPub", pct(R.privacy.h1_public_pct));
+text("hero", `${(100 * R.buyback.coverage_28d).toFixed(0)}%`);
+text("heroMeta", `Measured onchain over the last 28 days. Nothing is paid out, staked or burned. Meanwhile the share of Intents volume visible as public swaps went from ${(100 * R.privacy.windows.after_ga).toFixed(0)}% to ${(100 * R.privacy.windows.after).toFixed(0)}%, and 1Click volume counted swap by swap was ${pct(R.confidential.oneclick_event_vs_august, 0)} against August after the freeze.`);
+const CF = R.confidential, TA = CF.trace["2026-08-12"], TB = CF.trace["2026-11-05"], sh = v => (100 * v).toFixed(0) + "%";
+text("stOne", pct(CF.oneclick_after_vs_august, 0)); text("stPubA", sh(TA.public)); text("stPubB", sh(TB.public));
+text("bWhy", `From 27 Oct 1Click swaps settle confidentially (NEAR Intents changelog). Of ${TA.n} 1Click swaps sampled on each day, ${sh(TA.public)} logged a public swap on 12 Aug, ${sh(CF.trace["2026-10-26"].public)} on 26 Oct and ${sh(TB.public)} on 5 Nov, when ${sh(TB.treasury)} passed through the Treasury account behind Confidential Intents (Exhibit 2).`);
+text("oneNote", `1Click volume averaged ${usd(CF.windows.august.oneclick_usd)} a day in August, ${usd(CF.windows.before.oneclick_usd)} from the forum post to the switch and ${usd(CF.windows.after.oneclick_usd)} after it, while public swap volume went from ${usd(CF.windows.august.public_usd)} to ${usd(CF.windows.after.public_usd)}. Every sampled swap is still executed on intents.near; what left the public chain is the swap event.`);
 text("posLabel", R.position.label);
+text("stRating", R.position.label);
 text("gridN", R.grid.n);
 text("gridNote", `Every estimate below −15% includes 0x, whose mean daily volume in the event window was ${R.grid.zero_x_growth.toFixed(1)}× its estimation-window mean. That reading was made after seeing the results.`);
 text("plcFrom", fmtDate(H1.placebo_from)); text("plcTo", fmtDate(H1.placebo_to));
@@ -188,18 +219,32 @@ text("plcFrom", fmtDate(H1.placebo_from)); text("plcTo", fmtDate(H1.placebo_to))
 const broken = R.tripwires.filter(t => t.status !== "holding").map(t => t.name);
 const LT = R.long_term;
 const mon = m => new Date(m + "-01T00:00:00Z").toLocaleDateString("en-GB", { month: "short", year: "numeric", timeZone: "UTC" });
-text("stNeed", LT.growth_needed.toFixed(1) + "×");
+text("posRule", `Rule on public wallets (RATING.md). Buy when the wallet inflow averages ${Math.round(R.rating.need_per_day).toLocaleString()} NEAR a day over three months, a quarter of today's issuance: now ${Math.round(R.buyback.last3_per_day).toLocaleString()}. Avoid if a second tripwire breaks or the wallets shrink.`);
+const BB = R.buyback;
+text("stNeed", BB.growth_needed.toFixed(1) + "×");
+text("litStat", pct(R.H1.literal.stat_pct));
+text("bShareA", (100 * R.privacy.windows.after_ga).toFixed(0) + "%");
+text("bShareB", (100 * R.privacy.windows.after).toFixed(0) + "%");
+text("stCov", (100 * BB.coverage_28d).toFixed(0) + "%");
+text("h1", "Hold NEAR. Intents came through its worst month, but holders have a small, unsecured claim on what it earns.");
+text("stBuy", Math.round(R.rating.need_per_day).toLocaleString());
+text("buyTitle", `What reaches NEAR: the revenue wallets gain ${(100 * BB.coverage_28d).toFixed(0)}% of issuance, and none of it is paid out`);
+text("buyNote", `The wallets held ${(BB.held / 1e6).toFixed(2)}M NEAR on ${BB.as_of}, none staked. Over the last 28 days they gained ${Math.round(BB.in_28d_per_day).toLocaleString()} NEAR a day against ${Math.round(BB.issued_per_day).toLocaleString()} issued: ${(100 * BB.coverage_28d).toFixed(0)}% (the gain matches DefiLlama's revenue to ${(100 * BB.wallets_vs_defillama).toFixed(0)}%). ${(100 * BB.front_end_share_28d).toFixed(0)}% of the gain went to the front-end fund; without it coverage is ${(100 * BB.coverage_28d_core).toFixed(0)}%. Nothing is paid out or burned. By month the inflow has run from ${(100 * R.rating.month_min).toFixed(0)}% to ${(100 * R.rating.month_max).toFixed(0)}% of issuance with no steady rise. The wallets are moved by ${R.control.multisig.needed} of ${R.control.multisig.keys} keys, ${R.control.oneclick.needed} of ${R.control.oneclick.members} and ${R.control.front_end.needed} of ${R.control.front_end.members} members. HSP-029 lowers maximum issuance from ${(100 * R.hsp029.rate_from).toFixed(1)}% to ${(100 * R.hsp029.rate_to).toFixed(1)}% over ${R.hsp029.months} months; at that target the same inflow is ${(100 * R.hsp029.coverage_28d_at_target).toFixed(0)}% of issuance. The balance fell on ${BB.outflow_days} of ${BB.days} days.`);
 text("ltSub", `Monthly totals, ${mon(LT.first_month)} to ${mon(LT.last_month)}; revenue from when DefiLlama began reporting it. Shaded: the months of the freeze and the exploit.`);
 const EW = R.privacy.events.windows;
-text("privNote", `Public swaps fell from ${Math.round(EW.before.token_diff / 1000)}k a day in August to ${Math.round(EW.between.token_diff / 1000)}k after the first freeze story and ${Math.round(EW.after.token_diff / 1000)}k from late October, while executed intents went from ${Math.round(EW.before.intents_executed / 1000)}k to ${Math.round(EW.after.intents_executed / 1000)}k and deposits dipped ${Math.abs(100 * R.privacy.events.deposit_change_pct).toFixed(0)}%. The July launch moved the visible share ${pct(R.privacy.chg.ga.pct)}, an ordinary change. Where the swaps went is not identified.`);
+text("privNote", `Public swaps fell from ${Math.round(EW.before.token_diff / 1000)}k a day in August to ${Math.round(EW.between.token_diff / 1000)}k after the first freeze story and ${Math.round(EW.after.token_diff / 1000)}k from late October, while executed intents went from ${Math.round(EW.before.intents_executed / 1000)}k to ${Math.round(EW.after.intents_executed / 1000)}k and deposits were ${Math.abs(100 * R.privacy.events.deposit_change_pct).toFixed(0)}% lower. Public swap receipts went from ${Math.round(CF.windows.before.public_swaps / 1000)}k a day before 27 Oct to ${Math.round(CF.windows.after.public_swaps / 1000)}k after it, while Treasury flows went from ${Math.round(CF.windows.before.treasury / 1000)}k to ${Math.round(CF.windows.after.treasury / 1000)}k. Neither October upgrade moved them.`);
+const LG = R.large, LW = LG.windows, m1 = v => "$" + (v / 1e6).toFixed(1) + "M";
+text("lgTop", LG.top1);
+text("lgSub", `7-day average of daily volume in 1Click swaps of $10,000 or more (${(100 * LW.event.share_of_oneclick).toFixed(0)}% of 1Click dollars), by the integrating app named in each swap. Next four: ${LG.next4.join(", ")}. Everyone else includes swaps that name no integrator.`);
+text("lgNote", `Large swaps ran ${m1(LW.august.usd_per_day)} a day in August, ${m1(LW.event.usd_per_day)} in the 28 days from the freeze and ${m1(LW.after.usd_per_day)} after the switch. Of ${LG.august_big} integrators that routed $1M or more in August, ${LW.event.august_big_kept_half} kept at least half that volume after the freeze (${LW.event.august_big_still_routing} routed some); together they routed ${(100 * LW.event.august_big_usd_ratio).toFixed(0)}% of it. ${LG.top1} alone is ${(100 * LW.after.top1_share).toFixed(0)}% of the dollars. The next four fell from August, mostly one label (new.intents-referral.near) that had already dropped before the freeze. Individual senders came back less: ${(100 * LG.senders["1"].rate).toFixed(1)}% of addresses with a large swap in the 28 days before the freeze sent another after, against ${(100 * LG.senders["1"].calm_min).toFixed(1)}% to ${(100 * LG.senders["1"].calm_max).toFixed(1)}% in the one calm window the data allows.`);
 const takeaways = [
-  ["The public record left.", `The share of volume visible as public swaps went from ${(100 * R.privacy.windows.after_ga).toFixed(0)}% in the summer to ${(100 * R.privacy.windows.after).toFixed(0)}% by November. From late October public swaps fell while executed intents doubled; why is not identified.`],
+  ["What reaches NEAR is small, and holders' claim on it is unsecured.", `The revenue wallets hold ${(BB.held / 1e6).toFixed(1)}M NEAR and gain ${(100 * BB.coverage_28d).toFixed(0)}% of what NEAR issues (${(LT.supply_growth_yr / 1e6).toFixed(1)}M a year), measured onchain. Covering all of it takes about ${BB.growth_needed.toFixed(1)}× more. None of it is paid out, staked or burned. ${R.control.multisig.needed} of ${R.control.multisig.keys}, ${R.control.oneclick.needed} of ${R.control.oneclick.members} and ${R.control.front_end.needed} of ${R.control.front_end.members} signers can move it; in the front-end fund ${R.control.front_end.policy_needed} vote can change the fund's own rules.`],
+  ["The swaps moved to Confidential Intents.", `The share of volume visible as public swaps went from ${(100 * R.privacy.windows.after_ga).toFixed(0)}% in the summer to ${(100 * R.privacy.windows.after).toFixed(0)}% by November. From 27 Oct 1Click swaps settle confidentially: sampled swaps logging a public swap went from ${sh(TA.public)} to ${sh(TB.public)}, while 1Click volume counted through the Explorer was ${pct(CF.oneclick_after_vs_august, 0)} vs August.`],
   ["The engine is uneven.", `${mon(LT.last_month)} volume was ${usd(LT.last_month_volume)}: ${LT.volume_yoy.toFixed(1)}× a year earlier, when Intents was still ramping, but only ${LT.last_vs_first_peak.toFixed(2)}× its ${mon(LT.first_peak_month)} peak.`],
-  ["Reported volume held; public volume weakened.", `DefiLlama's total: ${pct(H1.stat_pct)} against the model (pre-registered verdict: ${H1.prereg_outcome}). Public onchain volume: ${pct(R.privacy.h1_public_pct)} (p = ${R.privacy.h1_public_p.toFixed(2)}, not significant).`],
+  ["No detectable loss; the size is unknown.", `DefiLlama's total against its model: ${pct(H1.literal.stat_pct)} with the pre-registered comparison venues (p = ${H1.literal.p_placebo_time.toFixed(2)}), ${pct(H1.stat_pct)} with a narrower set (p = ${H1.p_placebo_time.toFixed(2)}). Pre-registered verdict under both: ${H1.prereg_outcome}. Public onchain volume: ${pct(R.privacy.h1_public_pct)} (p = ${R.privacy.h1_public_p.toFixed(2)}, not significant).`],
   ["But the momentum stopped.", `All summer Intents beat its model by ${pct(R.onchain_check.volume.placebo_min_pct, 0)} to ${pct(R.onchain_check.volume.placebo_max_pct, 0)}; in the event window it only matched it. Onchain relayed transactions show the same.`],
   ["No price cuts.", `Take rate ${W0.between.take_rate_bps.toFixed(1)} bps in the three weeks before the shocks, ${W0.event.take_rate_bps.toFixed(1)} bps during them.`],
-  ["The growth target.", `At most ${(100 * LT.buyback_coverage).toFixed(0)}% of new NEAR supply (${(LT.supply_growth_yr / 1e6).toFixed(1)}M a year) could be bought back with today's revenue. Covering all of it takes about ${LT.growth_needed.toFixed(1)}× more (${LT.growth_needed_calm_price.toFixed(0)}× to ${LT.growth_needed_calm_capture.toFixed(0)}× under calm-period price or fee share).`],
-  ["Established accounts pulled back.", `Onchain, ${(100 * R.H5.cohorts.returning.rate).toFixed(0)}% of accounts seen before September came back after the shocks, against ${(100 * R.H5.cohorts.returning.placebo_p50).toFixed(0)}% in calm periods. New and heavy users came back as usual.`],
+  ["Most integrators kept routing; individuals came back less.", `${LW.event.august_big_kept_half} of the ${LG.august_big} integrators routing $1M or more of large 1Click swaps in August kept at least half that volume after the freeze; ${LG.top1} alone is ${(100 * LW.after.top1_share).toFixed(0)}% of the dollars. Onchain, ${(100 * R.H5.cohorts.returning.rate).toFixed(0)}% of self-custody accounts seen before September came back, against ${(100 * R.H5.cohorts.returning.placebo_p50).toFixed(0)}% in calm periods.`],
   [broken.length ? "Tripwire broken." : "All tripwires holding.", broken.length ? `${broken.join(", ")}: ${pct(R.tripwires.find(t => t.status !== "holding").value)} over 28 days, past its ${pct(R.tripwires.find(t => t.status !== "holding").limit)} limit.` : "Order flow, take rate and Zcash balances are all inside their calm-period limits."],
 ];
 for (const [b, p] of takeaways) { const li = h("li"); li.append(h("b", null, b), h("p", null, p)); $("takeaways").appendChild(li); }
@@ -213,7 +258,8 @@ const kv = [
   ["Market cap / revenue", S.mcap_to_revenue.toFixed(0) + "×"],
   ["Take rate, event window", W0.event.take_rate_bps.toFixed(1) + " bps"],
   ["Tripwires holding", `${R.tripwires.length - broken.length} of ${R.tripwires.length}`],
-  ["Buybacks vs new supply", `≤ ${(100 * LT.buyback_coverage).toFixed(0)}%`],
+  ["NEAR in revenue wallets", (BB.held / 1e6).toFixed(2) + "M"],
+  ["Wallet inflow vs new supply", (100 * BB.coverage_28d).toFixed(0) + "%"],
   ["Plan timestamped", "BTC block 975284"],
 ];
 for (const [k, v] of kv) { const tr = $("kv").insertRow(); tr.insertCell().textContent = k; tr.insertCell().textContent = v; }
@@ -285,7 +331,7 @@ function lineChart(id, rows, series, { yFmt, tickFmt, shade, events = [], baseli
     const x = X(Date.parse(e.d));
     row = x - lastX < 100 ? row + 1 : 0; lastX = x;
     el("line", { x1: x, x2: x, y1: m.t, y2: H - m.b, stroke: css("--axis"), "stroke-dasharray": "2 3" }, svg);
-    el("text", { x: x + 4, y: m.t + 10 + 14 * row, class: "lbl" }, svg).textContent = e.label;
+    el("text", { x: e.side === "left" ? x - 4 : x + 4, y: m.t + 10 + 14 * row, class: "lbl", "text-anchor": e.side === "left" ? "end" : "start" }, svg).textContent = e.label;
   }
   const ends = [];
   for (const s of series) {
@@ -402,7 +448,7 @@ function barChart(id, rows, key, color, fmt, height = 220) {
   el("line", { x1: m.l, x2: W - m.r, y1: Y(0), y2: Y(0), stroke: css("--ink") }, svg);
 }
 
-text("bWrong", `Volume came in ${pct(H1.stat_pct)} against the model over 28 days. Zcash holders, the users most exposed to a freeze, did not pull out that month (${pct(R.H4.after_T_28d.zec_pct)}, within normal variation).`);
+text("bWrong", `Counted swap by swap, 1Click volume was ${pct(CF.oneclick_event_vs_august, 0)} against August in the 28 days from the freeze. Against its model, reported volume was ${pct(H1.literal.stat_pct)} with the pre-registered comparison venues and ${pct(H1.stat_pct)} with a narrower set; neither is distinguishable from noise. Zcash holders, the users most exposed to a freeze, did not pull out that month (${pct(R.H4.after_T_28d.zec_pct)}, within normal variation).`);
 text("bRight", `Public onchain volume came in ${pct(R.privacy.h1_public_pct)} against the model (p = ${R.privacy.h1_public_p.toFixed(2)}, not significant). All summer Intents beat its model by ${pct(R.onchain_check.volume.placebo_min_pct, 0)} to ${pct(R.onchain_check.volume.placebo_max_pct, 0)}; in the event window it only matched it. ${(100 * R.H5.cohorts.returning.rate).toFixed(0)}% of accounts that had used Intents before September came back, against ${(100 * R.H5.cohorts.returning.placebo_p50).toFixed(0)}% in calm periods. Zcash balances drained a month later.`);
 const zoomRows = (() => {
   const s = H1.series, out = [];
@@ -414,13 +460,20 @@ function draw() {
   lineChart("cPriv", R.privacy.daily.filter(r => r.d >= "2026-05-01"), [{ key: "share", label: "Public", color: "--s3" }],
     { yFmt: v => (100 * v).toFixed(0) + "%", tickFmt: v => (100 * v).toFixed(0) + "%", shade, height: 280,
       events: [{ d: R.privacy.ga_date, label: "Confidential GA" }, { d: R.events.E0, label: "Forum post" }, { d: R.events.T, label: "Freeze" }] });
-  lineChart("cPrivEv", R.privacy.events.daily, [{ key: "executed", label: "Executed", color: "--s1" }, { key: "transfers", label: "Transfers", color: "--s3" }, { key: "swaps", label: "Public swaps", color: "--s2", dash: true }],
+  lineChart("cConf", CF.daily.filter(r => r.d >= "2026-07-01"), [{ key: "treasury", label: "Treasury", color: "--s1" }, { key: "public", label: "Public swaps", color: "--s3" }],
     { yFmt: v => (v / 1000).toFixed(0) + "k", tickFmt: v => (v / 1000).toFixed(0) + "k", shade, height: 280,
-      events: [{ d: R.events.E0, label: "Forum" }, { d: R.events.T, label: "Freeze" }, ...R.privacy.events.deploys.map(d => ({ d, label: "Upgrade" }))] });
+      events: [{ d: R.events.T, label: "Freeze" }, ...R.privacy.events.deploys.map(d => ({ d, label: "Upgrade" })), { d: CF.switch_date, label: "1Click confidential", side: "left" }] });
+  lineChart("cLg", LG.daily, [{ key: "top1", label: LG.top1, color: "--s1" }, { key: "next4", label: "Next four", color: "--s3" }, { key: "rest", label: "Everyone else", color: "--s2", dash: true }],
+    { yFmt: usdM, tickFmt: v => v === 0 ? "0" : "$" + (v / 1e6).toFixed(0) + "M", shade, events: [{ d: R.events.T, label: "Freeze" }, { d: CF.switch_date, label: "1Click confidential" }], height: 280 });
+  lineChart("cOne", CF.volume_daily, [{ key: "oneclick", label: "1Click", color: "--s1" }, { key: "public", label: "Public", color: "--s3" }, { key: "defillama", label: "DefiLlama", color: "--s2", dash: true }],
+    { yFmt: usdM, tickFmt: v => v === 0 ? "0" : "$" + (v / 1e6).toFixed(0) + "M", shade, height: 300,
+      events: [{ d: R.events.T, label: "Freeze" }, { d: CF.switch_date, label: "1Click confidential" }] });
   lineChart("cZoom", zoomRows, [{ key: "actual", label: "Actual", color: "--s1" }, { key: "predicted", label: "Model", color: "--s2", dash: true }],
     { yFmt: usdM, tickFmt: v => v === 0 ? "0" : "$" + (v / 1e6).toFixed(0) + "M", shade, events: [{ d: R.events.T, label: "Freeze" }, { d: R.events.E2, label: "Exploit" }], height: 300 });
   lineChart("cH5", R.H5.daily.map(r => ({ d: r.d, active: r.active })), [{ key: "active", label: "Active", color: "--s1" }],
     { yFmt: v => v.toFixed(0), tickFmt: v => v.toFixed(0), shade, events: ev, height: 220 });
+  lineChart("cBuy", BB.daily, [{ key: "held", label: "Held", color: "--s1" }],
+    { yFmt: v => (v / 1e6).toFixed(2) + "M", tickFmt: v => v === 0 ? "0" : (v / 1e6).toFixed(0) + "M", events: [{ d: "2026-02-23", label: "Buyback begins" }, { d: R.events.T, label: "Freeze" }], height: 240 });
   barChart("cLtVol", LT.monthly, "volume", "--s1", v => v === 0 ? "0" : "$" + (v / 1e9).toFixed(1) + "B");
   barChart("cLtRev", LT.monthly, "revenue", "--s3", v => v === 0 ? "0" : "$" + (v / 1e6).toFixed(1) + "M");
   lineChart("cBal", balRows, [{ key: "near", label: "NEAR", color: "--s1" }, { key: "zec", label: "ZEC", color: "--s3" }, { key: "rest", label: "Other", color: "--s2", dash: true }],

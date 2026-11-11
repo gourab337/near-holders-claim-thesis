@@ -3,7 +3,7 @@
 Needs the Google Cloud CLI (`bq`), a login (`gcloud auth login`) and a project with billing enabled
 (`gcloud config set project <id>`). The queries scan about 990 GB together, most of it the stablecoin-volume
 query. BigQuery's free tier is 1 TB a month; beyond it, queries cost about $6 per TB.
-Set END_DATE=YYYY-MM-DD to extend every query past the 2026-11-09 snapshot (for scoring PREDICTIONS.md).
+Set END_DATE=YYYY-MM-DD to extend every query past the 2026-11-09 snapshot (for scoring archive/PREDICTIONS-2026-11-10.md).
 Adds or replaces each result's entry in data/raw/MANIFEST.json (query file, run time, SHA-256).
 """
 import hashlib, json, os, subprocess, time
@@ -11,7 +11,7 @@ import hashlib, json, os, subprocess, time
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..")
 RAW = os.path.join(ROOT, "data", "raw")
 END_DATE = os.environ.get("END_DATE", "2026-11-09")
-QUERIES = ["intents_signers_daily", "circulating_supply", "intents_stable_volume_daily", "intents_event_counts_daily", "intents_deploys"]
+QUERIES = ["intents_signers_daily", "circulating_supply", "intents_stable_volume_daily", "intents_event_counts_daily", "intents_deploys", "intents_confidential_daily", "revenue_wallets_daily"]
 
 
 def main():

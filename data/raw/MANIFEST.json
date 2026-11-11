@@ -106,9 +106,9 @@
  "bq_intents_stable_volume_daily": {
   "file": "bq_intents_stable_volume_daily.csv",
   "url": "bigquery:sql/intents_stable_volume_daily.sql",
-  "fetched_at": "2026-11-10T14:55:26Z",
-  "sha256": "3cb7b84ff39f6b067402a932789439436a5506f0b63a46d00a65784a662b4d07",
-  "bytes": 314941
+  "fetched_at": "2026-11-11T05:46:54Z",
+  "sha256": "ecf43dd416ce78c80397ec282a7b397d6fe31715d280cb4f9595bd4e7e708a31",
+  "bytes": 368483
  },
  "bq_intents_event_counts_daily": {
   "file": "bq_intents_event_counts_daily.csv",
@@ -123,5 +123,61 @@
   "fetched_at": "2026-11-10T14:55:35Z",
   "sha256": "c13dd79388661ec60f7e514930ca84a6f694b7c92cc9f533237e02e1e79e198a",
   "bytes": 131
+ },
+ "bq_intents_confidential_daily": {
+  "file": "bq_intents_confidential_daily.csv",
+  "url": "bigquery:sql/intents_confidential_daily.sql",
+  "fetched_at": "2026-11-11T02:10:50Z",
+  "sha256": "5a82ca3c6ad3989df0e36c1babbfdecacf0e6e5c24cb68d217db20e297d9e07e",
+  "bytes": 5585
+ },
+ "explorer_1click_daily": {
+  "file": "explorer_1click_daily.csv",
+  "url": "https://explorer.near-intents.org/api/v0/transactions (statuses=SUCCESS, minUsdPrice=100, summed by day)",
+  "fetched_at": "2026-11-11T03:44:54Z",
+  "sha256": "a698ccacf33c33c69a8d9fc3f79c1a627261f4a0f48dc09611fd7f344962140f",
+  "bytes": 11614
+ },
+ "bq_intents_swap_trace": {
+  "file": "bq_intents_swap_trace.csv",
+  "url": "bigquery:sql/intents_swap_trace.sql",
+  "fetched_at": "2026-11-11T04:35:09Z",
+  "sha256": "762e1c46cb043b01320168b216c28532d5dccbec068daf009b8675868246f3e2",
+  "bytes": 172223
+ },
+ "rpc_wallet_control": {
+  "file": "rpc_wallet_control.json",
+  "url": "https://rpc.mainnet.fastnear.com (get_policy, get_num_confirmations, view_access_key_list)",
+  "fetched_at": "2026-11-11T05:17:41Z",
+  "sha256": "c66f1495c9253477375fd74456b8fff1fd36cf1b6f633f6007898250f09a9ab9",
+  "bytes": 11011
+ },
+ "gov_hsp029": {
+  "file": "gov_hsp029.json",
+  "url": "https://gov.near.org/t/42644.json (first post, tags removed)",
+  "fetched_at": "2026-11-11T05:17:41Z",
+  "sha256": "ee5ea2cb734716272d87563e91d4bd96de96b989e02336f34b1920c54a6a82d6",
+  "bytes": 30123
+ },
+ "explorer_large_daily": {
+  "file": "explorer_large_daily.csv",
+  "url": "https://explorer.near-intents.org/api/v0/transactions (statuses=SUCCESS, minUsdPrice=10000, summed by day and integrating app)",
+  "fetched_at": "2026-11-11T04:26:21Z",
+  "sha256": "9e7e548dfff1f3c9278504f055e119b370f22bb9918ebdf03ed74764f9f8c4f7",
+  "bytes": 103969
+ },
+ "explorer_large_senders": {
+  "file": "explorer_large_senders.json",
+  "url": "https://explorer.near-intents.org/api/v0/transactions (statuses=SUCCESS, minUsdPrice=10000, counts of sender addresses that came back)",
+  "fetched_at": "2026-11-11T04:26:21Z",
+  "sha256": "0ead6b9d7bc594318e2387f81f265315d980f1898afe2a3e2c43bb762892b94a",
+  "bytes": 544
+ },
+ "explorer_trace_sample": {
+  "file": "explorer_trace_sample.json",
+  "url": "https://explorer.near-intents.org/api/v0/transactions (statuses=SUCCESS, seeded sample of 300 a day: NEAR transaction hashes and dollar-weighted shares)",
+  "fetched_at": "2026-11-11T04:35:09Z",
+  "sha256": "d60b8e94bf08ee3d8e43e375fb7c3d0f35f6ae57cd18b0eaee00711884771250",
+  "bytes": 198597
  }
 }

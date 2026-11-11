@@ -22,10 +22,15 @@ class Snapshot(unittest.TestCase):
         self.assertIn(digest, ots)
         self.assertIn(bytes.fromhex("0588960d73d71901"), ots)  # BitcoinBlockHeaderAttestation tag
 
+    def test_rating_rule_is_timestamped(self):
+        """RATING.md is frozen: its timestamp proof must commit to the file as it is now."""
+        ots = pathlib.Path(ROOT, "RATING.md.ots").read_bytes()
+        self.assertIn(hashlib.sha256(pathlib.Path(ROOT, "RATING.md").read_bytes()).digest(), ots)
+
     def test_predictions_are_timestamped(self):
-        """PREDICTIONS.md is frozen: its timestamp proof must commit to the file as it is now."""
-        ots = pathlib.Path(ROOT, "PREDICTIONS.md.ots").read_bytes()
-        self.assertIn(hashlib.sha256(pathlib.Path(ROOT, "PREDICTIONS.md").read_bytes()).digest(), ots)
+        """archive/PREDICTIONS-2026-11-10.md is frozen: its timestamp proof must commit to the file as it is now."""
+        ots = pathlib.Path(ROOT, "archive", "PREDICTIONS-2026-11-10.md.ots").read_bytes()
+        self.assertIn(hashlib.sha256(pathlib.Path(ROOT, "archive", "PREDICTIONS-2026-11-10.md").read_bytes()).digest(), ots)
         self.assertIn(bytes.fromhex("0588960d73d71901"), ots)  # Bitcoin block 975308
 
 
@@ -88,6 +93,7 @@ class Outputs(unittest.TestCase):
     def test_thesis_fully_rendered(self):
         self.assertNotIn("{{", pathlib.Path(ROOT, "THESIS.md").read_text())
         self.assertNotIn("{{", pathlib.Path(ROOT, "README.md").read_text())
+        self.assertNotIn("{{", pathlib.Path(ROOT, "APPENDIX.md").read_text())
         page = pathlib.Path(ROOT, "docs", "thesis.html").read_text()
         self.assertNotIn("{{", page)
         self.assertIn("<h1>", page)
