@@ -4,7 +4,7 @@ NEAR HACKATHON 2026 · Investment Thesis track · data snapshot to {{last_day}} 
 
 The thesis is written to be read in a few minutes. Everything it leaves out is here.
 
-- **Part B, the detail behind the thesis.** B1 the rating in full; B2 what is at stake and the tripwires; B3 to B5 the full tables and caveats for Parts 1 to 3; B6 the evidence against, in full; B7 every deviation from the pre-registration.
+- **Part B, the detail behind the thesis.** B1 the rating in full; B2 what is at stake and the tripwires; B3 to B5 the full tables and caveats for Parts 1 to 4; B6 the evidence against, in full; B7 every deviation from the pre-registration.
 - **Part A, the pre-registered event study.** The study this repository began as: five hypotheses about the freeze and the exploit, with rules written before the daily series were downloaded. Its primary result is an underpowered null, so it supports Part 1 rather than leading it. Sections A1 to A5 were planned; A6 and A7 are exploratory.
 
 ## Part B. The detail behind the thesis
@@ -172,7 +172,7 @@ NEAR Intents' changelog, 27 October 2026: "From October 27, 2026, 1Click swaps s
 - Coverage: the Explorer series counts successful 1Click swaps of $100 or more, 98.8–99.5% of 1Click dollars on four days pulled in full. 1Click is part of Intents' volume, not all of it.
 - **What this cannot show.** Why NEAR Intents switched, and whether it will publish the confidential volume elsewhere.
 
-### B5. Detail for Part 3: what reaches NEAR, and who controls it
+### B5. Detail for Parts 3 and 4: what reaches NEAR, and who controls it
 
 This thesis judges NEAR by what NEAR Intents sends back to it: cross-chain swap revenue that arrives as NEAR in three wallets, labelled a buyback since 23 February 2026. DefiLlama credits it to NEAR's holders, and it can be measured onchain. I do not test whether NEAR's price follows it; the claim is narrower, that a holder's case for years rests on that revenue lasting and growing.
 

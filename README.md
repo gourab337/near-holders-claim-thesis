@@ -11,15 +11,15 @@ NEAR HACKATHON 2026 · **Investment Thesis track** · **Live dashboard:** https:
 | | |
 |---|---|
 | **Rating** | **Hold**, to the end of 2029. Keep NEAR you own, staked; do not add yet. |
-| **The number** | 16% of NEAR's new supply comes back from NEAR Intents into three wallets. None is paid to holders, staked or burned. |
-| **The trigger** | Buy when the wallets take in 21,700 NEAR a day for three months (now 15,486). Avoid if the wallets shrink or the flow breaks. |
+| **The number** | NEAR Intents sends back 16% as much NEAR as NEAR issues. None of it is paid to holders, staked or burned. |
+| **The trigger** | Buy when the wallets that receive Intents' revenue take in 21,700 NEAR a day for three months (the last three averaged 15,486). Avoid if the wallets shrink or two of three warning measures break. |
 
 NEAR's market value is 213 times a year of one business's revenue: NEAR Intents, which swaps tokens across blockchains. That price needs the business to keep going and holders to share in it. The first is true. The second, so far, is not.
 
-1. **The business is resilient.** Within a month Intents froze users' funds and was hacked for $3.8M. Counted swap by swap, its 1Click volume in the four weeks after was -5% against August, and 17 of 25 large integrating apps kept at least half their volume.
+1. **The business is resilient.** Within a month Intents froze users' funds and was hacked for $3.8M. Counted swap by swap, volume on 1Click (the swap service apps plug into) in the four weeks after was -5% against August, and 17 of 25 large integrating apps kept at least half their volume.
 2. **One number looked like a loss. It was not.** Public swaps on NEAR's chain fell from 119,511 a day to 24,689. The swaps had not left: since 27 October 1Click settles on a permissioned instance of NEAR with no public networking. Of the swaps I sampled, 98% left a public record in August and 7% in November. The business was fine, but it became harder to check.
-3. **Holders get little of it.** The wallets that receive Intents' revenue gain 13,571 NEAR a day; NEAR issues 86,966. That is 16%, and it would have to grow about 6.4× to cover all of it. By month it has run from 6% to 22% with no steady rise.
-4. **And no rule protects even that.** None of it is paid to holders, staked or burned. 2 of 4, 2 of 4 and 2 of 5 signers can move it, and the front-end fund's policy sets the threshold for changing its own rules at 1 vote (read from the contract, not tested).
+3. **Holders get little of it.** NEAR creates 86,966 new tokens a day, which dilutes holders. The wallets that receive Intents' revenue take in 13,571 a day: 16% as much. To match all the new supply, the inflow would have to grow about 6.4×. By month it has run from 6% to 22% with no steady rise.
+4. **And no rule protects even that.** None of it is paid to holders, staked or burned. A few signers can move it (2 of 4, 2 of 4 and 2 of 5 across the three wallets), and the front-end fund's policy sets the threshold for changing its own rules at 1 vote (read from the contract, not tested).
 
 So: a resilient business is a reason not to sell, and a small share that nobody guarantees is a reason not to buy more. Hold.
 
@@ -83,7 +83,7 @@ Requires [uv](https://docs.astral.sh/uv/) (it installs Python 3.12 and the pinne
 | Three predictions to 2027-03-31 (first version, `archive/PREDICTIONS-2026-11-10.md`; carried into `RATING.md` as P1 to P3) | Yes: scored only on later data | Bitcoin block 975308, 2026-11-10 |
 | The rating rule and two more calls, C1 and C2 (`RATING.md`) | Calls yes; the rule was written after seeing the wallet data | OpenTimestamps, 2026-11-11 |
 | The rating itself | No. Long on 2026-11-10, Hold on 2026-11-11 after the wallets were measured (appendix B7, deviation 7) | |
-| Parts 1 to 3 of the thesis (integrators, the confidential switch, wallets) and appendix A6 and A7 | No. Added after seeing results (appendix B7, deviation 5) | |
+| Parts 1 to 4 of the thesis (integrators, the confidential switch, wallets, wallet control) and appendix A6 and A7 | No. Added after seeing results (appendix B7, deviation 5) | |
 
 ## Data notes
 

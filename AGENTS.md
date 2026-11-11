@@ -2,7 +2,7 @@
 
 NEAR HACKATHON 2026, Investment Thesis track. This repo is an investment thesis on NEAR. Rating: Hold. The argument, in order: (1) NEAR Intents is a resilient business: its flow held after it froze user funds (2026-09-29) and was exploited (2026-10-01); (2) the fall in public swaps on the chain was not a loss: 1Click swaps settle confidentially since 2026-10-27, which also makes the volume harder to check; (3) but NEAR holders get little of what it earns: three public wallets take in about a sixth of new supply, none is paid to holders, and a few signers control it.
 
-- `THESIS.md` is the argument, about 2,500 words: the claim, evidence for (Parts 1 to 3), evidence against, what would change the author's mind.
+- `THESIS.md` is the argument, about 2,500 words: the claim, evidence for (Parts 1 to 4), evidence against, what would change the author's mind.
 - `APPENDIX.md` holds everything else: Part B is the full tables, caveats and deviations behind the thesis; Part A is the pre-registered event study the project began as, planned in `PREREGISTRATION.md`.
 - `RATING.md` is the rating rule and five dated predictions.
 
