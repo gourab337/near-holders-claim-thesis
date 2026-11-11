@@ -1,4 +1,6 @@
-# Hold NEAR. Intents came through its worst month, but holders have a small, unsecured claim on what it earns.
+# Hold NEAR. Intents is a resilient business, but NEAR holders get little of what it earns so far.
+
+*It came through a freeze and a hack with its volume intact. But only {{buyback.coverage_28d|share0}} of new supply comes back, none of it is paid to holders, and no rule in code protects it.*
 
 [![check](https://github.com/gourab337/near-holders-claim-thesis/actions/workflows/check.yml/badge.svg)](https://github.com/gourab337/near-holders-claim-thesis/actions/workflows/check.yml) (on every push GitHub rebuilds every number from the committed data on Linux, checks it reproduces the committed thesis, and runs the tests)
 

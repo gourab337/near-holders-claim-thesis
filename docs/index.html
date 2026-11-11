@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Hold NEAR: a small, unsecured claim on Intents</title>
-<meta name="description" content="Investment thesis on NEAR: Intents came through a freeze and an exploit, but holders have a small, unsecured claim on what it earns, and it is getting harder to check.">
+<title>Hold NEAR: a resilient business, little of it for holders so far</title>
+<meta name="description" content="Investment thesis on NEAR: Intents is a resilient business, but NEAR holders get little of what it earns so far, no rule in code protects it, and it is getting harder to check.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Mona+Sans:wght@400..800&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -226,7 +226,7 @@ text("litStat", pct(R.H1.literal.stat_pct));
 text("bShareA", (100 * R.privacy.windows.after_ga).toFixed(0) + "%");
 text("bShareB", (100 * R.privacy.windows.after).toFixed(0) + "%");
 text("stCov", (100 * BB.coverage_28d).toFixed(0) + "%");
-text("h1", "Hold NEAR. Intents came through its worst month, but holders have a small, unsecured claim on what it earns.");
+text("h1", "Hold NEAR. Intents is a resilient business, but NEAR holders get little of what it earns so far.");
 text("stBuy", Math.round(R.rating.need_per_day).toLocaleString());
 text("buyTitle", `What reaches NEAR: the revenue wallets gain ${(100 * BB.coverage_28d).toFixed(0)}% of issuance, and none of it is paid out`);
 text("buyNote", `The wallets held ${(BB.held / 1e6).toFixed(2)}M NEAR on ${BB.as_of}, none staked. Over the last 28 days they gained ${Math.round(BB.in_28d_per_day).toLocaleString()} NEAR a day against ${Math.round(BB.issued_per_day).toLocaleString()} issued: ${(100 * BB.coverage_28d).toFixed(0)}% (the gain matches DefiLlama's revenue to ${(100 * BB.wallets_vs_defillama).toFixed(0)}%). ${(100 * BB.front_end_share_28d).toFixed(0)}% of the gain went to the front-end fund; without it coverage is ${(100 * BB.coverage_28d_core).toFixed(0)}%. Nothing is paid out or burned. By month the inflow has run from ${(100 * R.rating.month_min).toFixed(0)}% to ${(100 * R.rating.month_max).toFixed(0)}% of issuance with no steady rise. The wallets are moved by ${R.control.multisig.needed} of ${R.control.multisig.keys} keys, ${R.control.oneclick.needed} of ${R.control.oneclick.members} and ${R.control.front_end.needed} of ${R.control.front_end.members} members. HSP-029 lowers maximum issuance from ${(100 * R.hsp029.rate_from).toFixed(1)}% to ${(100 * R.hsp029.rate_to).toFixed(1)}% over ${R.hsp029.months} months; at that target the same inflow is ${(100 * R.hsp029.coverage_28d_at_target).toFixed(0)}% of issuance. The balance fell on ${BB.outflow_days} of ${BB.days} days.`);

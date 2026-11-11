@@ -1,4 +1,6 @@
-# Hold NEAR. Intents came through its worst month, but holders have a small, unsecured claim on what it earns.
+# Hold NEAR. Intents is a resilient business, but NEAR holders get little of what it earns so far.
+
+*It came through a freeze and a hack with its volume intact. But only 16% of new supply comes back, none of it is paid to holders, and no rule in code protects it.*
 
 NEAR HACKATHON 2026 · Investment Thesis track · data to 2026-11-09 · about ten minutes to read · full tables, method and caveats: [`APPENDIX.md`](APPENDIX.md)
 
@@ -74,7 +76,7 @@ This matters because of where the headline number comes from. The Intents volume
 
 I have no evidence that the reported number is wrong. The point is narrower: a holder can no longer check most of it without relying on the operator. The part I can still count swap by swap, 1Click, is only part of Intents' volume, so it cannot confirm the total either way. The sampled swaps came from ordinary deposits, so this was a change in how 1Click settles, not users choosing privacy. Why NEAR Intents made the change, I cannot say.
 
-### Part 3. Why not Avoid: the business came through its worst month
+### Part 3. Why not Avoid: the business held up through a freeze and a hack
 
 A small claim is only worth holding if the business behind it lasts. This autumn it was tested twice.
 
