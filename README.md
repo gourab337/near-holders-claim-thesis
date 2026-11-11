@@ -4,13 +4,13 @@
 
 NEAR HACKATHON 2026 · **Investment Thesis track** · **Live dashboard:** https://gourab337.github.io/near-intents-freeze-thesis/ · **Demo video (96 s, narrated):** [`docs/demo.mp4`](docs/demo.mp4)
 
-> **In 30 seconds.** In September NEAR Intents showed it can freeze users' funds. If users cared most about trustlessness, they should have left. They didn't: reported volume held (+1.0% against a model of rival venues). What changed is what anyone can check: the share of volume visible as public swaps on NEAR's chain fell from 59% in the summer to 19% by November, and on that public slice the same model reads -28.6% (not significant). **Position: Long, one tripwire broken.** That is my judgment, not a pre-registered output; its two exits are timestamped in Bitcoin before the data that will test them exists.
+> **In 30 seconds.** In September NEAR Intents showed it can freeze users' funds. If users cared most about trustlessness, they should have left. They didn't: reported volume held (+1.0% against a model of rival venues). What changed is what anyone can check: the share of volume visible as public swaps on NEAR's chain fell from 59% in the summer to 19% by November, and on that public slice the same model reads -28.6% (not significant). **Position: Long, one tripwire broken.** That is my judgment, not a pre-registered output; its exit rules and three dated predictions are timestamped in Bitcoin (`PREDICTIONS.md`), and the predictions are scored only on data from after that timestamp.
 
 - **The bear case.** A cross-chain venue whose operator can freeze funds is not trustless, so users will leave the first time it uses that power.
 - **The test.** Two freeze stories reached the public three weeks apart: a Zcash user's $589k held for 50 days (2026-09-08), then SHIELD blocking more than $50M of transfers tied to the Bitget hackers and freezing $503k mid-swap (reported 2026-09-29). Then a $3.8M exploit paused the contract (2026-10-01; funds returned the next day).
 - **The result.** Total volume held: +1.0% against a model built from rival venues and the market, and deposits dipped 12.2%. Its public record did not. On NEAR's chain (BigQuery) the share of volume visible as public swaps went from 59% in the summer to 19% by November; from late October public swap events fell to a fifth of August's level while executed intents doubled.
 - **The catch.** Total volume is DefiLlama's figure, and most of it can no longer be checked onchain: run after the fact on public onchain volume, the same model gives -28.6% (p = 0.20, not significant). Why the swaps left public view is not identified: Confidential Intents, contract upgrades (2026-10-02, 2026-10-07) and solver settlement all fit. Intents' summer momentum stopped, and Zcash balances drained a month later.
-- **The bet.** The freeze bears were wrong about the reported flow; my reading is that being trusted, not trustless, is NEAR's edge. But most of Intents' volume can no longer be checked on the chain, and revenue must still grow about 5.2× for buybacks to offset new NEAR supply. **Position: Long, one tripwire broken; neutral if a second breaks, or if Intents sets no new monthly volume record by 2027-03-31.**
+- **The bet.** The freeze bears were wrong about the reported flow; my reading is that being trusted, not trustless, is NEAR's edge. But most of Intents' volume can no longer be checked on the chain, and revenue must still grow about 5.2× for buybacks to offset new NEAR supply. **Position: Long, one tripwire broken; neutral if a second breaks, or if Intents sets no new monthly volume record from December 2026 to March 2027 (prediction P2).**
 
 The tests and decision rules are in [`PREREGISTRATION.md`](PREREGISTRATION.md). Its OpenTimestamps proof anchors it in Bitcoin block 975284 (10:15 UTC, 2026-11-10), half an hour after the data download began. The thesis states exactly what that proves and what it does not.
 
@@ -18,10 +18,10 @@ The tests and decision rules are in [`PREREGISTRATION.md`](PREREGISTRATION.md). 
 - **Predictions:** [`PREDICTIONS.md`](PREDICTIONS.md), three dated calls to 2027-03-31, scored on future data only and timestamped in Bitcoin block 975308
 - **Live dashboard:** https://gourab337.github.io/near-intents-freeze-thesis/ (source: [`docs/index.html`](docs/index.html), a static page that reads `docs/data.js`)
 
-## The evidence (snapshot to 2026-11-09)
+## The evidence (data to 2026-11-09, the last full day)
 
 - **The public record shrank (onchain).** Public swap events: 119,511 a day in August, 78,240 after the first freeze story, 24,689 from late October. Executed intents: 46,107 to 89,934. Deposits: 29,216 to 25,665 (-12.2%). The clear split (swaps falling while executed intents double) starts in late October, with no contract deploy then; Confidential Intents had opened to every app in July.
-- **No collapse.** 28-day volume was +1.0% against the model (placebo p = 0.50). The pre-registered verdict is "no collapse, but too imprecise to clear the 25% bar": a loss would need to reach about 29.5% to be detected. The position is my judgment beyond that, listed as a deviation.
+- **No collapse.** 28-day volume was +1.0% against the model (placebo p = 0.50). The pre-registered verdict is "no collapse, but too imprecise to clear the 25% bar": a loss of about 29.5% would be detected only about half the time. The position is my judgment beyond that, listed as a deviation.
 - **The momentum stopped.** BigQuery data covers 44 calm windows since 2026-03-01. In all of them Intents beat its model by +7% to +26%; the event window ranks below every one, for volume and for onchain relayed transactions.
 - **No outperformance.** Against the 28 days before the shocks, Intents changed -16% and the rival median -33%. Against August, before rivals' much bigger September rally, Intents changed +47% and the rival median +89%. The model, which controls for rivals, says Intents kept pace.
 - **Prices held.** The take rate was 16.4 bps in the three weeks before the shocks and 16.2 bps during them. The fee premium over the model predates the shocks.
@@ -54,7 +54,7 @@ Requires [uv](https://docs.astral.sh/uv/) (it installs Python 3.12 and the pinne
 | `src/fetch_bigquery.py`, `sql/` | The NEAR chain queries (BigQuery) and the script that runs them |
 | `src/build.py` | All analysis. Every number in the thesis and on the dashboard comes from here |
 | `THESIS.template.md`, `README.template.md` | The write-ups with placeholders; `build.py` fills every number from `results.json` |
-| `data/raw/` | Snapshot of 2026-11-10 (DefiLlama, CoinGecko, NEAR BigQuery) |
+| `data/raw/` | Snapshot downloaded 2026-11-10, covering data to 2026-11-09 (DefiLlama, CoinGecko, NEAR BigQuery) |
 | `docs/` | Dashboard and thesis page |
 
 The thesis lists every deviation from the pre-registration, and separately everything added after seeing results.

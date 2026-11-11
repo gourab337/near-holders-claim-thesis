@@ -195,13 +195,14 @@ Each is recomputed on every build, over the latest 28 days, with limits fixed by
 3. **On-chain sample (H5) replaced.** The keyless block archive was too slow for the planned random block sample. H5 instead uses every transaction to `intents.near` from NEAR's public BigQuery dataset, which is a census rather than a sample. The 2-day and 5-day user tiers are post hoc. The withdrawal-to-deposit ratio was not computed.
 4. **Scroll and Plasma** are not reported by DefiLlama, so H3 uses nine of the eleven paused networks.
 5. **Added after seeing results:** the robustness grid, the NEAR/ZEC/other balance decomposition, the long-term section, the public-visibility analysis (section 7), the rival comparison, the hack-date sensitivity, the new/returning account split, the valuation multiple, the fee-timing check in H2 and the tripwires. None of these change a pre-registered verdict.
-6. **Position.** `PREDICTIONS.md` names `make fetch && make fetch-bq && make` as its scorer; scoring later also needs the end date set: `make fetch && END_DATE=2027-03-31 make fetch-bq && LAST_DAY=2027-03-31 make` (only `make fetch` is strictly required, since P1 to P3 use DefiLlama). It also contains one error that cannot be edited without breaking its timestamp: P2's failure note says growth would have "stalled for 18 months"; if P2 fails in March 2027, the last record will be six months old and the first peak sixteen. The pre-registration maps outcomes to a position only when the detection threshold is under 25%. It was not, so the position (Long, one tripwire broken), its tripwire rule and the predictions in `PREDICTIONS.md` are my judgment, set after seeing the results.
+6. **Position.** `PREDICTIONS.md` names `make fetch && make fetch-bq && make` as its scorer; scoring later also needs the end date set: `make fetch && END_DATE=2027-03-31 make fetch-bq && LAST_DAY=2027-03-31 make` (only `make fetch` is strictly required, since P1 to P3 use DefiLlama). It also contains one error that cannot be edited without breaking its timestamp: P2's failure note says growth would have "stalled for 18 months"; if P2 fails in March 2027, the last record will be six months old and the first peak sixteen. Its first line also says "Written 2026-11-11", but its timestamp is 14:41 UTC on 2026-11-10: the date is wrong, and the timestamp is the date that counts. The pre-registration maps outcomes to a position only when the detection threshold is under 25%. It was not, so the position (Long, one tripwire broken), its tripwire rule and the predictions in `PREDICTIONS.md` are my judgment, set after seeing the results.
 
 ## Reproduce
 
 ```bash
 make            # rebuild every number, THESIS.md and the dashboard data from data/raw/ (offline)
 make test       # sanity checks on the data and the method
+make check      # rebuild, then confirm it reproduces the committed thesis (results.json to 1e-9: Linux rounds differently)
 make fetch      # optional: re-download data/raw/ (no API keys; numbers will move)
 make fetch-bq   # optional: re-run sql/ on NEAR's BigQuery dataset (needs gcloud and a billing project; about 990 GB, roughly the 1 TB monthly free tier)
 ```
