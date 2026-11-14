@@ -92,6 +92,12 @@ Requires [uv](https://docs.astral.sh/uv/) (it installs Python 3.12 and the pinne
 - **Explorer API data and its terms.** The track's starter prompt asks for a pull from the NEAR Intents Explorer API. The 1Click API terms (section 4.1(e)) limit storing API data to 24 hours. So this repository holds no swap records, amounts or addresses from the API: `src/fetch_explorer.py` keeps them in memory and saves daily totals by integrating app, counts of sender addresses that came back, and, for the 1,500 sampled swaps, their public NEAR transaction hashes with dollar-weighted shares. Re-pulling needs a partner token.
 - **Reported volume.** DefiLlama's Intents volume is read from a dataset NEAR publishes on Dune. The thesis uses it and says where it cannot be checked from outside.
 
+## Hackathon disclosures
+
+- **Other submission by the same person (rule Q-015):**
+  [near-privacy-rings](https://github.com/gourab337/near-privacy-rings), a zero-knowledge
+  privacy pool live on NEAR mainnet. The two projects are independent and share no code or data.
+
 ## License
 
 MIT, see [`LICENSE`](LICENSE).
